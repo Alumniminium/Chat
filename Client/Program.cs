@@ -10,9 +10,6 @@ namespace Client
 {
     public static class Program
     {
-        public static User User = new User();
-        public const string SERVER_IP = "192.168.0.5";
-        public const ushort SERVER_PORT = 65534;
 
         public static async Task Main()
         {
@@ -23,12 +20,12 @@ namespace Client
             FastConsole.Title = "CLIENT APP";
             LoadConfig();
             
-            User.ConnectAsync(SERVER_IP, SERVER_PORT);
+            Core.Client.ConnectAsync(Core.SERVER_IP, Core.SERVER_PORT);
 
-            while (!User.Socket.IsConnected)
+            while (!Core.Client.Socket.IsConnected)
                 await Task.Delay(1);
 
-            User.Send(MsgLogin.Create("user", "pass"));
+            Core.Client.Send(MsgLogin.Create("user", "pass"));
 
             while (true)
                 FastConsole.ReadLine();
@@ -37,7 +34,7 @@ namespace Client
         private static void LoadConfig()
         {
             if (File.Exists("config.json"))
-                User = JsonConvert.DeserializeObject<User>(File.ReadAllText("config.json"));
+                Core.Client = JsonConvert.DeserializeObject<Client>(File.ReadAllText("config.json"));
             else
                 FastConsole.WriteLine("No config.json was found at " + Environment.CurrentDirectory + "/.config.json");
         }
