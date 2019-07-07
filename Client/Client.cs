@@ -13,7 +13,7 @@ namespace Client
     {
         [JsonIgnore]
         public ClientSocket Socket;
-        public string Ip = "192.168.0.3";
+        public string Ip = "192.168.0.5";
         public ushort Port = 65534;
         public List<VirtualServer> Servers = new List<VirtualServer>();
 

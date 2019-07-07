@@ -12,7 +12,7 @@ namespace AlumniSocketCore.Client
         public string IP;
         public ushort Port;
         public bool ShouldRetryConnecting;
-        public int ReconnectWaitSeconds;
+        public int ReconnectWaitSeconds = 3;
         public Action OnConnected, OnDisconnect;
 
         public Socket Socket;
@@ -42,6 +42,9 @@ namespace AlumniSocketCore.Client
 
         public void ConnectAsync(string host, ushort port)
         {
+            IP=host;
+            Port=port;
+
             try
             {
                 if (IsConnected)
