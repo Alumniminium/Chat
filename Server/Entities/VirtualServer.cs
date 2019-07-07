@@ -7,13 +7,13 @@ namespace Client.Entities
         public int Id { get; set; }
         public int OwnerId { get; set; }
         public string Name { get; set; }
-        public Dictionary<int, User> Members { get; set; }
+        public List<int> Members { get; set; }
         public Dictionary<int, Channel> Channels { get; set; }
 
 
         public VirtualServer()
         {
-            Members = new Dictionary<int, User>();
+            Members = new List<int>();
             Channels = new Dictionary<int, Channel>();
         }
     }

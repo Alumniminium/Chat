@@ -4,53 +4,102 @@ using Newtonsoft.Json;
 using Client.Entities;
 using System.Collections.Generic;
 using Client.Database.Entities;
+using System.Runtime.InteropServices;
+using System;
 
 namespace Client.Database
 {
     public class JsonDb : IDb
     {
-        const string VIRTUAL_SERVERS_FILE = "VirtualServers.json";
-        const string USERS_FILE = "Users.json";
-        
+        static string VServersFile { get; set; }
+        static string UsersFile { get; set; }
+        static string SettingsFile { get; set; }
+
         public void EnsureDbReady()
         {
-            if (File.Exists(USERS_FILE))
+            //	pathRoot = ApplicationData Windows = C:\Users\PLOPKOEK\AppData\Roaming\
+            //	pathRoot = ApplicationData Linux   = ~/.config/
+            var pathRoot = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var programFolder = Path.Combine(pathRoot, "Chat");
+            var serverFolder = Path.Combine(programFolder, "Server");
+
+            Directory.CreateDirectory(programFolder);
+            Directory.CreateDirectory(serverFolder);
+
+            // serverFolder Windows = C:\Users\PLOPKOEK\AppData\Roaming\Chat\Server\
+            // serverFolder Linux   = ~/.config/Chat/Server/
+            UsersFile = Path.Combine(serverFolder, "Users.json");
+            VServersFile = Path.Combine(serverFolder, "VirtualServers.json");
+            SettingsFile = Path.Combine(serverFolder, "Settings.json");
+
+            if (File.Exists(SettingsFile))
             {
-                var usersJson = File.ReadAllText(USERS_FILE);
+                var settingsJson = File.ReadAllText(SettingsFile);
+                Core.Settings = JsonConvert.DeserializeObject<ServerSettings>(settingsJson);
+            }
+            if (File.Exists(UsersFile))
+            {
+                var usersJson = File.ReadAllText(UsersFile);
                 Collections.Users = JsonConvert.DeserializeObject<ConcurrentDictionary<int, User>>(usersJson);
             }
-            if (File.Exists(VIRTUAL_SERVERS_FILE))
+            if (File.Exists(VServersFile))
             {
-                var serversJson = File.ReadAllText(VIRTUAL_SERVERS_FILE);
+                var serversJson = File.ReadAllText(VServersFile);
                 Collections.Users = JsonConvert.DeserializeObject<ConcurrentDictionary<int, User>>(serversJson);
             }
 
-            if(Collections.VirtualServers.Count==0)
+            CreateDemoData();
+        }
+
+        private static void CreateDemoData()
+        {
+            if (Collections.VirtualServers.Count == 0)
             {
                 var demoServer = new VirtualServer();
-                demoServer.Id=0;
-                demoServer.Name="Demo Server";
+                demoServer.Id = 0;
+                demoServer.Name = "Demo Server";
                 demoServer.OwnerId = 0;
                 var channels = new Channel[2];
-                for(var i = 0; i < channels.Length; i++)
+                for (var i = 0; i < channels.Length; i++)
                 {
                     channels[i] = new Channel();
                     channels[i].Id = i;
-                    channels[i].Name = "Demo Channel "+i;
-                    channels[i].Messages=new List<Message>();
-                    demoServer.Channels.Add(channels[i].Id,channels[i]);
-                }  
+                    channels[i].Name = "Demo Channel " + i;
+                    channels[i].Messages = new List<Message>();
+                    
+                    var message = new Message();
+                    message.Id=i;
+                    message.AuthorId=0;
+                    message.Timestamp = DateTime.Now;
+                    message.Text = "Hello World!";
+
+                    channels[i].Messages.Add(message);
+
+
+                    demoServer.Channels.Add(channels[i].Id, channels[i]);
+                }
 
                 var demoUser = new User();
-                demoUser.Id=0;
-                demoUser.Username="demo";
-                demoUser.Password="demo";
-                demoUser.VirtualServers.Add(demoServer.Id,demoServer);
+                demoUser.Id = 0;
+                demoUser.Username = "demo";
+                demoUser.Password = "demo";
+                demoUser.VirtualServers.Add(demoServer.Id);
 
-                demoServer.Members.Add(demoUser.Id,demoUser);
+                demoServer.Members.Add(demoUser.Id);
 
-                Collections.Users.TryAdd(demoUser.Id,demoUser);
-                Collections.VirtualServers.TryAdd(demoServer.Id,demoServer);
+                Collections.Users.TryAdd(demoUser.Id, demoUser);
+                Collections.VirtualServers.TryAdd(demoServer.Id, demoServer);
+
+                var defaultSettings = new ServerSettings();
+                defaultSettings.Port = 65535;
+                defaultSettings.PerUserCreateServerAllowance = 3;
+                defaultSettings.MaxMessagesPerUserPerSecond = 3;
+                defaultSettings.MaxLoginAttempts = 3;
+                defaultSettings.AutobanDurationSeconds = 5;
+                defaultSettings.DeleteInactiveServersAfter = TimeSpan.FromDays(356);
+                defaultSettings.DeleteInactiveUsersAfter = TimeSpan.FromDays(180);
+
+                Core.Settings = defaultSettings;
             }
         }
 
@@ -84,10 +133,12 @@ namespace Client.Database
 
         public void Save()
         {
-            var userJson = JsonConvert.SerializeObject(Collections.Users);
-            var serverJson = JsonConvert.SerializeObject(Collections.VirtualServers);
-            File.WriteAllText(USERS_FILE,userJson);
-            File.WriteAllText(VIRTUAL_SERVERS_FILE,serverJson);
+            var userJson = JsonConvert.SerializeObject(Collections.Users, Formatting.Indented);
+            var serverJson = JsonConvert.SerializeObject(Collections.VirtualServers, Formatting.Indented);
+            var settingsJson = JsonConvert.SerializeObject(Core.Settings, Formatting.Indented);
+            File.WriteAllText(UsersFile, userJson);
+            File.WriteAllText(VServersFile, serverJson);
+            File.WriteAllText(SettingsFile, settingsJson);
         }
     }
 }

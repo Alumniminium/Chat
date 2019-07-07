@@ -22,7 +22,7 @@ namespace Client
 
             ReceiveQueue.Start(PacketHandler.Handle);
 
-            ServerSocket.Start(65534);
+            ServerSocket.Start(Core.Settings.Port);
 
             FastConsole.WriteLine("Online");
 

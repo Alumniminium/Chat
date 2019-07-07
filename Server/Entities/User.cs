@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using AlumniSocketCore.Client;
+using Newtonsoft.Json;
 
 namespace Client.Entities
 {
@@ -11,14 +12,15 @@ namespace Client.Entities
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public Dictionary<int,VirtualServer> VirtualServers { get; set; }
-        public Dictionary<int,User> Friends { get; set; }
+        public List<int> VirtualServers { get; set; }
+        public List<int> Friends { get; set; }
+        [JsonIgnore]
         public ClientSocket Socket;
 
         public User()
         {
-            VirtualServers = new Dictionary<int,VirtualServer>();
-            Friends = new Dictionary<int,User>();
+            VirtualServers = new List<int>();
+            Friends = new List<int>();
         }
 
         public void Send(byte[] packet) => Socket?.Send(packet);
