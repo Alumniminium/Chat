@@ -3,21 +3,22 @@ using System.Diagnostics;
 using Packets;
 using Packets.Enums;
 using AlumniSocketCore.Client;
-using Server.Entities;
+using Client.Entities;
+using Client.IO.FastConsole;
 
-namespace Server.Networking
+namespace Client.Networking
 {
     public static class PacketHandler
     {
-        public static ClientSocket ClientSocket;
+        public static ClientSocket Socket;
         public static User User;
         public static Stopwatch Stopwatch = new Stopwatch();
 
-        public static void Handle(ClientSocket client, byte[] packet)
+        public static void Handle(ClientSocket socket, byte[] packet)
         {
             var id = (PacketType)BitConverter.ToUInt16(packet, 4);
-            ClientSocket = client;
-            User = (User)client.StateObject;
+            Socket = socket;
+            User = (User)socket.StateObject;
             Stopwatch.Restart();
 
             switch (id)
@@ -26,8 +27,8 @@ namespace Server.Networking
                     ProcessLogin(packet);
                     break;
                 default:
-                    Console.WriteLine("Invalid packet received from " + client.Socket.RemoteEndPoint);
-                    client.Disconnect();
+                    FastConsole.WriteLine("Invalid packet received from " + socket.Socket.RemoteEndPoint);
+                    socket.Disconnect();
                     break;
             }
         }
@@ -39,7 +40,7 @@ namespace Server.Networking
                 var msgLogin = (MsgLogin*)p;
                 var (user, pass) = msgLogin->GetUserPass();
                 var id = msgLogin->UniqueId;
-                Console.WriteLine(user + " " + pass + " " + id);
+                FastConsole.WriteLine(user + " " + pass + " " + id);
 
                 User = new User
                 {
@@ -47,8 +48,8 @@ namespace Server.Networking
                     Password = pass
                 };
 
-                ClientSocket.StateObject = User;
-                User.Socket = ClientSocket;
+                Socket.StateObject = User;
+                User.Socket = Socket;
 
                 if (Core.Db.Authenticate(ref User))
                     msgLogin->UniqueId = (uint)User.Id;
@@ -57,7 +58,7 @@ namespace Server.Networking
 
                 User.Send(*msgLogin);
                 
-                Console.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
+                FastConsole.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
             }
         }
     }

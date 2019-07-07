@@ -3,11 +3,16 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace AlumniSocketCore.Client
 {
     public class ClientSocket
     {
+        public string IP;
+        public ushort Port;
+        public bool ShouldRetryConnecting;
+        public int ReconnectWaitSeconds;
         public Action OnConnected, OnDisconnect;
 
         public Socket Socket;
@@ -120,7 +125,7 @@ namespace AlumniSocketCore.Client
             else
                 Disconnect();
         }
-        public void Disconnect()
+        public async void Disconnect()
         {
             try
             {
@@ -130,7 +135,17 @@ namespace AlumniSocketCore.Client
             finally
             {
                 OnDisconnect?.Invoke();
+                if(ShouldRetryConnecting)
+                {
+                    await ReconnectAsync();
+                }
             }
+        }
+
+        private async Task ReconnectAsync()
+        {
+            await Task.Delay(ReconnectWaitSeconds * 1000);
+            ConnectAsync(IP, Port);
         }
     }
 }

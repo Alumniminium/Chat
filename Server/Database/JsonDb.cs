@@ -1,9 +1,9 @@
 using System.Collections.Concurrent;
 using System.IO;
 using Newtonsoft.Json;
-using Server.Entities;
+using Client.Entities;
 
-namespace Server.Database
+namespace Client.Database
 {
     public class JsonDb : IDb
     {

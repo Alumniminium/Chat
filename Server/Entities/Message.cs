@@ -1,6 +1,6 @@
 using System;
 
-namespace Server.Database.Entities
+namespace Client.Database.Entities
 {
     public class Message
     {

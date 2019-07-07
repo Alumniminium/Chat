@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Server.Entities
+namespace Client.Entities
 {
     public class VirtualServer
     {

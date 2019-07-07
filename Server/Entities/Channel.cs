@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Server.Database.Entities;
+using Client.Database.Entities;
 
-namespace Server.Entities
+namespace Client.Entities
 {
     public class Channel
     {

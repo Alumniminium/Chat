@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
-using Server.Database;
-using Server.Networking;
+using Client.Database;
+using Client.Networking;
 using AlumniSocketCore.Queues;
 using AlumniSocketCore.Server;
 using System.Threading.Tasks;
+using Client.IO.FastConsole;
 
-namespace Server
+namespace Client
 {
     public static class Program
     {
         public static void Main()
         {
-            Console.Title = "SERVER APP";
+            FastConsole.Title = "SERVER APP";
 
             SetupCountermeasuresForShitCode();
 
@@ -23,11 +24,11 @@ namespace Server
 
             ServerSocket.Start(65534);
 
-            Console.WriteLine("Online");
+            FastConsole.WriteLine("Online");
 
             while (true)
             {
-                var cmd = Console.ReadLine();
+                var cmd = FastConsole.ReadLine();
                 switch (cmd)
                 {
                     case "exit":
@@ -44,15 +45,15 @@ namespace Server
         {
             TaskScheduler.UnobservedTaskException += (_, exception) =>
             {
-                Console.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
-                Console.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
                 exception.SetObserved();
                 Debugger.Break();
             };
             AppDomain.CurrentDomain.UnhandledException += (_, exception) =>
             {
-                Console.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).Message}");
-                Console.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).StackTrace}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).Message}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).StackTrace}");
                 Debugger.Break();
             };
         }

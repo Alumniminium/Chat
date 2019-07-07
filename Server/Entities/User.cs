@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using AlumniSocketCore.Client;
 
-namespace Server.Entities
+namespace Client.Entities
 {
     public class User
     {

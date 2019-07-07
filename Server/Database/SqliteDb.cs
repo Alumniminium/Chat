@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Server.Entities;
+using Client.Entities;
 
-namespace Server.Database
+namespace Client.Database
 {
     public class SqliteDb : IDb
     {

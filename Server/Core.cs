@@ -1,6 +1,6 @@
-using Server.Database;
+using Client.Database;
 
-namespace Server
+namespace Client
 {
     public static class Core
     {

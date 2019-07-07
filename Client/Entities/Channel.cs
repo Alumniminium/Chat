@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-namespace AlumniClient.Models
+namespace Client.Entities
 {
-    public class User
+    public class Channel
     {
         public ulong Id;
         public string Name;
-        public bool Online;
+
         public List<Message> Messages;
     }
 }

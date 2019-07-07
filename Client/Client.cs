@@ -1,36 +1,45 @@
-﻿using System.Collections.Generic;
-using AlumniClient.Models;
-using AlumniClient.Networking;
+﻿using System;
+using System.Collections.Generic;
+using Client.Entities;
+using Client.Networking;
 using AlumniSocketCore.Client;
 using AlumniSocketCore.Queues;
 using Newtonsoft.Json;
+using Client.IO.FastConsole;
 
-namespace AlumniClient
+namespace Client
 {
-    public class Client
+    public class User
     {
         [JsonIgnore]
         public ClientSocket Socket;
-        public bool IsConnected;
         public string Ip = "192.168.0.3";
         public ushort Port = 65534;
-        public List<Server> Servers = new List<Server>();
+        public List<VirtualServer> Servers = new List<VirtualServer>();
 
 
         public void ConnectAsync(string ip, ushort port)
         {
             ReceiveQueue.Start(OnPacket);
             Socket = new ClientSocket(this);
+            Socket.ShouldRetryConnecting=true;
             Socket.OnDisconnect += Disconnected;
             Socket.OnConnected += Connected;
             Socket.ConnectAsync(ip, port);
         }
 
-        private void Connected() => IsConnected=true;
+        private void Connected() 
+        {
+            FastConsole.WriteLine("Connected!");
+        }
 
-        private void Disconnected() => ConnectAsync(Ip, Port);
+        private void Disconnected() 
+        {
+            FastConsole.WriteLine("Disconnected!");
+            ConnectAsync(Ip, Port);
+        }
 
-        private void OnPacket(ClientSocket client, byte[] buffer) => PacketHandler.Handle((Client)client.StateObject, buffer);
+        private void OnPacket(ClientSocket client, byte[] buffer) => PacketHandler.Handle((User)client.StateObject, buffer);
 
         public void Send(byte[] packet) => Socket.Send(packet);
     }

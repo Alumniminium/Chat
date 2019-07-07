@@ -1,6 +1,6 @@
 using System;
 
-namespace AlumniClient.Models
+namespace Client.Entities
 {
     public class Message
     {

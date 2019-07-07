@@ -1,13 +1,13 @@
 ﻿using System;
-using AlumniClient.Models;
+using Client.IO.FastConsole;
 using Packets;
 using Packets.Enums;
 
-namespace AlumniClient.Networking
+namespace Client.Networking
 {
     public static class PacketHandler
     {
-        public static void Handle(Client client, byte[] buffer)
+        public static void Handle(User client, byte[] buffer)
         {
             var packetId = (PacketType)BitConverter.ToUInt16(buffer, 4);
             switch (packetId)
@@ -17,14 +17,14 @@ namespace AlumniClient.Networking
                         var msgLogin = (MsgLogin)buffer;
                         var uniqueId = msgLogin.UniqueId;
                         if (uniqueId != 0)
-                            Console.WriteLine("Authentication successful. Your user Id is: " + uniqueId);
+                            FastConsole.WriteLine("Authentication successful. Your user Id is: " + uniqueId);
                         else
-                            Console.WriteLine("Authentication failed.");
+                            FastConsole.WriteLine("Authentication failed.");
                         break;
                     }
                 default:
                     {
-                        Console.WriteLine("Unknown Packet ID: "+packetId);
+                        FastConsole.WriteLine("Unknown Packet ID: "+packetId);
                         break;
                     }
             }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace AlumniClient.Models
+namespace Client.Entities
 {
-    public class Server
+    public class VirtualServer
     {
         public ulong Id;
         public string Name = "";

@@ -1,6 +1,6 @@
-using Server.Entities;
+using Client.Entities;
 
-namespace Server.Database
+namespace Client.Database
 {
     public interface IDb
     {
