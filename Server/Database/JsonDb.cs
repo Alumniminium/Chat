@@ -2,13 +2,15 @@ using System.Collections.Concurrent;
 using System.IO;
 using Newtonsoft.Json;
 using Client.Entities;
+using System.Collections.Generic;
+using Client.Database.Entities;
 
 namespace Client.Database
 {
     public class JsonDb : IDb
     {
-        const string VIRTUAL_SERVERS_FILE = "../../../../VirtualServers.json";
-        const string USERS_FILE = "../../../../Users.json";
+        const string VIRTUAL_SERVERS_FILE = "VirtualServers.json";
+        const string USERS_FILE = "Users.json";
         
         public void EnsureDbReady()
         {
@@ -21,6 +23,34 @@ namespace Client.Database
             {
                 var serversJson = File.ReadAllText(VIRTUAL_SERVERS_FILE);
                 Collections.Users = JsonConvert.DeserializeObject<ConcurrentDictionary<int, User>>(serversJson);
+            }
+
+            if(Collections.VirtualServers.Count==0)
+            {
+                var demoServer = new VirtualServer();
+                demoServer.Id=0;
+                demoServer.Name="Demo Server";
+                demoServer.OwnerId = 0;
+                var channels = new Channel[2];
+                for(var i = 0; i < channels.Length; i++)
+                {
+                    channels[i] = new Channel();
+                    channels[i].Id = i;
+                    channels[i].Name = "Demo Channel "+i;
+                    channels[i].Messages=new List<Message>();
+                    demoServer.Channels.Add(channels[i].Id,channels[i]);
+                }  
+
+                var demoUser = new User();
+                demoUser.Id=0;
+                demoUser.Username="demo";
+                demoUser.Password="demo";
+                demoUser.VirtualServers.Add(demoServer.Id,demoServer);
+
+                demoServer.Members.Add(demoUser.Id,demoUser);
+
+                Collections.Users.TryAdd(demoUser.Id,demoUser);
+                Collections.VirtualServers.TryAdd(demoServer.Id,demoServer);
             }
         }
 
