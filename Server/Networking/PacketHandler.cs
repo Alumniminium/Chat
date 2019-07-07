@@ -10,14 +10,14 @@ namespace Server.Networking
     public static class PacketHandler
     {
         public static ClientSocket ClientSocket;
-        public static User Client;
+        public static User User;
         public static Stopwatch Stopwatch = new Stopwatch();
 
         public static void Handle(ClientSocket client, byte[] packet)
         {
             var id = (PacketType)BitConverter.ToUInt16(packet, 4);
             ClientSocket = client;
-            Client = (User)client.StateObject;
+            User = (User)client.StateObject;
             Stopwatch.Restart();
 
             switch (id)
@@ -41,23 +41,23 @@ namespace Server.Networking
                 var id = msgLogin->UniqueId;
                 Console.WriteLine(user + " " + pass + " " + id);
 
-                Client = new User
+                User = new User
                 {
                     Username = user,
                     Password = pass
                 };
 
-                ClientSocket.StateObject = Client;
-                Client.Socket = ClientSocket;
+                ClientSocket.StateObject = User;
+                User.Socket = ClientSocket;
 
-                if (Core.Db.Authenticate(ref Client))
-                    msgLogin->UniqueId = (uint)Client.Id;
-                else if (Core.Db.AddUser(Client))
-                    msgLogin->UniqueId = (uint)Client.Id;
+                if (Core.Db.Authenticate(ref User))
+                    msgLogin->UniqueId = (uint)User.Id;
+                else if (Core.Db.AddUser(User))
+                    msgLogin->UniqueId = (uint)User.Id;
 
-                Client.Send(*msgLogin);
+                User.Send(*msgLogin);
                 
-                Console.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.00000") + "ms");
+                Console.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
             }
         }
     }

@@ -13,16 +13,30 @@ namespace Server
         public static void Main()
         {
             Console.Title = "SERVER APP";
+
             SetupCountermeasuresForShitCode();
 
+            Core.Db = new JsonDb();
             Core.Db.EnsureDbReady();
 
             ReceiveQueue.Start(PacketHandler.Handle);
+
             ServerSocket.Start(65534);
+
             Console.WriteLine("Online");
+
             while (true)
             {
-                Console.ReadLine();
+                var cmd = Console.ReadLine();
+                switch (cmd)
+                {
+                    case "exit":
+                        Core.Db.Save();
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

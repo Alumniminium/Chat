@@ -8,7 +8,8 @@ namespace Server.Database
         bool UserExists(User user);
         bool AddUser(User user);
         bool Authenticate(ref User user);
-        uint GetNextUniqueId();
-        uint GetNextServerUniqueId();
+        int GetNextUserId();
+        int GetNextServerId();
+        void Save();
     }
 }

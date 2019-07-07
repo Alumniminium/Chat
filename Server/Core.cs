@@ -1,4 +1,3 @@
-using System;
 using Server.Database;
 
 namespace Server

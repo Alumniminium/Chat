@@ -26,7 +26,7 @@ namespace Server.Database
             {
                 if (UserExists(user))
                     return false;
-                user.Id = GetNextUniqueId();
+                user.Id = GetNextUserId();
                 db.Users.Add(user);
                 db.SaveChanges();
             }
@@ -50,16 +50,21 @@ namespace Server.Database
             return false;
         }
 
-        public uint GetNextUniqueId()
+        public int GetNextUserId()
         {
             lock (db)
-                return (uint)(db.Users.Count() + 1);
+                return (db.Users.Count() + 1);
         }
 
-        public uint GetNextServerUniqueId()
+        public int GetNextServerId()
         {
             lock (db)
-                return (uint)db.VirtualServers.Count() + 1;
+                return db.VirtualServers.Count() + 1;
+        }
+
+        public void Save()
+        {
+            
         }
     }
 }
