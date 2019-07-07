@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using Packets;
-using Server.Database;
-using Server.Database.Models;
 using Packets.Enums;
 using AlumniSocketCore.Client;
+using Server.Entities;
 
 namespace Server.Networking
 {
@@ -51,10 +50,10 @@ namespace Server.Networking
                 ClientSocket.StateObject = Client;
                 Client.Socket = ClientSocket;
 
-                if (Db.Authenticate(ref Client))
-                    msgLogin->UniqueId = (uint)Client.UniqueId;
-                else if (Db.AddUser(Client))
-                    msgLogin->UniqueId = (uint)Client.UniqueId;
+                if (Core.Db.Authenticate(ref Client))
+                    msgLogin->UniqueId = (uint)Client.Id;
+                else if (Core.Db.AddUser(Client))
+                    msgLogin->UniqueId = (uint)Client.Id;
 
                 Client.Send(*msgLogin);
                 

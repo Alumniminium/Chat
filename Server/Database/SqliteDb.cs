@@ -1,41 +1,41 @@
 ﻿using System.Linq;
-using Server.Database.Models;
+using Server.Entities;
 
 namespace Server.Database
 {
-    public static class Db
+    public class SqliteDb : IDb
     {
-        private static readonly SquigglyContext db = new SquigglyContext();
-        internal static void EnsureDb()
+        private readonly SquigglyContext db = new SquigglyContext();
+        public void EnsureDbReady()
         {
-            lock(db)
+            lock (db)
                 db.Database.EnsureCreated();
         }
 
-        public static bool UserExists(User user)
+        public bool UserExists(User user)
         {
-            lock(db)
+            lock (db)
             {
                 var dbUser = db.Users.AsQueryable().FirstOrDefault(c => c.Username == user.Username);
                 return dbUser != null;
             }
         }
-        public static bool AddUser(User user)
+        public bool AddUser(User user)
         {
-            lock(db)
+            lock (db)
             {
                 if (UserExists(user))
                     return false;
-                user.UniqueId = GetNextUniqueId();
+                user.Id = GetNextUniqueId();
                 db.Users.Add(user);
                 db.SaveChanges();
             }
 
             return true;
         }
-        public static bool Authenticate(ref User user)
+        public bool Authenticate(ref User user)
         {
-            lock(db)
+            lock (db)
             {
                 var username = user.Username;
                 var dbUser = db.Users.AsQueryable().FirstOrDefault(c => c.Username == username);
@@ -50,17 +50,16 @@ namespace Server.Database
             return false;
         }
 
-        public static ulong GetNextUniqueId()
+        public uint GetNextUniqueId()
         {
-            lock(db)
-                return (ulong)(db.Users.Count() + 1);
+            lock (db)
+                return (uint)(db.Users.Count() + 1);
         }
 
-        public static int GetNextSubdomainUniqueId()
+        public uint GetNextServerUniqueId()
         {
-            lock(db)
-                return db.VirtualServers.Count() + 1;
+            lock (db)
+                return (uint)db.VirtualServers.Count() + 1;
         }
-
     }
 }

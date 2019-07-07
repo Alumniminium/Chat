@@ -15,7 +15,7 @@ namespace Server
             Console.Title = "SERVER APP";
             SetupCountermeasuresForShitCode();
 
-            Db.EnsureDb();
+            Core.Db.EnsureDbReady();
 
             ReceiveQueue.Start(PacketHandler.Handle);
             ServerSocket.Start(65534);

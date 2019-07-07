@@ -4,29 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using AlumniSocketCore.Client;
 
-namespace Server.Database.Models
+namespace Server.Entities
 {
     public class User
     {
-        [Key]
-        public ulong UniqueId { get; set; }
+        public uint Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public List<ulong> Servers { get; set; }
-
-        [NotMapped]
+        public Dictionary<uint,VirtualServer> VirtualServers { get; set; }
+        public Dictionary<uint,User> Friends { get; set; }
         public ClientSocket Socket;
 
         public User()
         {
-            Servers = new List<ulong>();
+            VirtualServers = new Dictionary<uint,VirtualServer>();
+            Friends = new Dictionary<uint,User>();
         }
 
-        public void Send(byte[] packet)
-        {
-            Socket?.Send(packet);
-        }
-
+        public void Send(byte[] packet) => Socket?.Send(packet);
         public string GetIp() => ((IPEndPoint) Socket.Socket.RemoteEndPoint).Address.ToString();
     }
 }
