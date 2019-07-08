@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AlumniSocketCore.Client;
 using Universal.Packets;
 using Universal.Packets.Enums;

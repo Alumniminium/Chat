@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Universal
+﻿namespace Universal
 {
     public class Class1
     {

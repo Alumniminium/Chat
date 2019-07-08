@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Universal.IO.FastConsole;
-using Universal.Packets;
 
 namespace Client
 {
@@ -20,12 +19,7 @@ namespace Client
             LoadConfig();
             
             Core.Client.ConnectAsync(Core.SERVER_IP, Core.SERVER_PORT);
-
-            while (!Core.Client.Socket.IsConnected)
-                await Task.Delay(1);
-
-            Core.Client.Send(MsgLogin.Create("demo", "demo"));
-
+            
             while (true)
                 FastConsole.ReadLine();
         }
