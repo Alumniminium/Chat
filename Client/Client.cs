@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Client.Entities;
 using Client.Networking;
 using AlumniSocketCore.Client;
 using AlumniSocketCore.Queues;
 using Newtonsoft.Json;
-using Client.IO.FastConsole;
+using Universal.IO.FastConsole;
 
 namespace Client
 {
@@ -21,10 +20,12 @@ namespace Client
         public void ConnectAsync(string ip, ushort port)
         {
             ReceiveQueue.Start(OnPacket);
-            Socket = new ClientSocket(this);
-            Socket.ShouldRetryConnecting=true;
+
+            Socket = new ClientSocket(this) {ShouldRetryConnecting = true};
+
             Socket.OnDisconnect += Disconnected;
             Socket.OnConnected += Connected;
+
             Socket.ConnectAsync(ip, port);
         }
 

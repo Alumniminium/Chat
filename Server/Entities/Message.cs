@@ -1,12 +1,12 @@
 using System;
 
-namespace Client.Database.Entities
+namespace Server.Entities
 {
     public class Message
     {
-        public int Id;
-        public int AuthorId;
-        public string Text;
-        public DateTime Timestamp;
+        public int Id { get; set; }
+        public int AuthorId { get; set; }
+        public string Text { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
-using Client.IO.FastConsole;
-using Packets;
-using Packets.Enums;
+using Universal.IO.FastConsole;
+using Universal.Packets;
+using Universal.Packets.Enums;
 
 namespace Client.Networking
 {

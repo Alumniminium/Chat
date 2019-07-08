@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
 
    <ItemGroup>
      <ProjectReference Include="..\AlumniSocketCore\AlumniSocketCore.csproj" />
-     <ProjectReference Include="..\Packets\Packets.csproj" />
+     <ProjectReference Include="..\Universal\Universal.csproj" />
    </ItemGroup>
 
 </Project>

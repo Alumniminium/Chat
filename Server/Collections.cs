@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using Client.Entities;
+using Server.Entities;
 
-namespace Client
+namespace Server
 {
     public static class Collections
     {

@@ -1,7 +1,7 @@
-using Client.Database;
-using Client.Entities;
+using Server.Database;
+using Server.Entities;
 
-namespace Client
+namespace Server
 {
     public static class Core
     {

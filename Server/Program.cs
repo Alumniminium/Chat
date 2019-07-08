@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using Client.Database;
-using Client.Networking;
+using System.Threading.Tasks;
 using AlumniSocketCore.Queues;
 using AlumniSocketCore.Server;
-using System.Threading.Tasks;
-using Client.IO.FastConsole;
+using Server.Database;
+using Server.Networking;
+using Universal.IO.FastConsole;
 
-namespace Client
+namespace Server
 {
     public static class Program
     {
@@ -52,8 +52,8 @@ namespace Client
             };
             AppDomain.CurrentDomain.UnhandledException += (_, exception) =>
             {
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).Message}");
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception).StackTrace}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.Message}");
+                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.StackTrace}");
                 Debugger.Break();
             };
         }

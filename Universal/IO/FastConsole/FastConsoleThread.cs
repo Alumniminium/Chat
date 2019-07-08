@@ -1,20 +1,18 @@
 using System;
-using System.Threading;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Threading;
 
-namespace Client.IO.FastConsole
+namespace Universal.IO.FastConsole
 {
     public static class FastConsoleThread
     {
-        internal static Thread WorkerThread;
-        internal static ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
-        internal static AutoResetEvent Block = new AutoResetEvent(false);
+        internal static readonly Thread WorkerThread;
+        internal static readonly ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
+        internal static readonly AutoResetEvent Block = new AutoResetEvent(false);
 
         static FastConsoleThread()
         {
-            WorkerThread =new Thread(WorkLoop);
-            WorkerThread.IsBackground=true;
+            WorkerThread = new Thread(WorkLoop) {IsBackground = true};
             WorkerThread.Start();
         }
         

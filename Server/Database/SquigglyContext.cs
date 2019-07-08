@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Client.Entities;
+using Server.Entities;
 
-namespace Client.Database
+namespace Server.Database
 {
     public class SquigglyContext : DbContext
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Client.IO.FastConsole
+namespace Universal.IO.FastConsole
 {
     public static class FastConsole
     {

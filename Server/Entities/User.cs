@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using AlumniSocketCore.Client;
 using Newtonsoft.Json;
 
-namespace Client.Entities
+namespace Server.Entities
 {
     public class User
     {
@@ -15,7 +13,7 @@ namespace Client.Entities
         public List<int> VirtualServers { get; set; }
         public List<int> Friends { get; set; }
         [JsonIgnore]
-        public ClientSocket Socket;
+        public ClientSocket Socket { get; set; }
 
         public User()
         {

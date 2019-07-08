@@ -1,19 +1,17 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using Client.Entities;
-using System.Collections.Generic;
-using Client.Database.Entities;
-using System.Runtime.InteropServices;
-using System;
+using Server.Entities;
 
-namespace Client.Database
+namespace Server.Database
 {
     public class JsonDb : IDb
     {
-        static string VServersFile { get; set; }
-        static string UsersFile { get; set; }
-        static string SettingsFile { get; set; }
+        private static string VServersFile { get; set; }
+        private static string UsersFile { get; set; }
+        private static string SettingsFile { get; set; }
 
         public void EnsureDbReady()
         {
@@ -51,74 +49,58 @@ namespace Client.Database
             CreateDemoData();
         }
 
-        private static void CreateDemoData()
+        private void CreateDemoData()
         {
-            if (Collections.VirtualServers.Count == 0)
+            if (Collections.VirtualServers.Count != 0)
+                return;
+
+            var demoServer = new VirtualServer {Id = GetNextServerId(), Name = "Demo Server", OwnerId = 0};
+            var channels = new Channel[2];
+
+            for (var i = 0; i < channels.Length; i++)
             {
-                var demoServer = new VirtualServer();
-                demoServer.Id = 0;
-                demoServer.Name = "Demo Server";
-                demoServer.OwnerId = 0;
-                var channels = new Channel[2];
-                for (var i = 0; i < channels.Length; i++)
-                {
-                    channels[i] = new Channel();
-                    channels[i].Id = i;
-                    channels[i].Name = "Demo Channel " + i;
-                    channels[i].Messages = new List<Message>();
-                    
-                    var message = new Message();
-                    message.Id=i;
-                    message.AuthorId=0;
-                    message.Timestamp = DateTime.Now;
-                    message.Text = "Hello World!";
+                channels[i] = new Channel {Id = i, Name = "Demo Channel " + i, Messages = new List<Message>()};
+                var message = new Message {Id = i, AuthorId = 0, Timestamp = DateTime.Now, Text = "Hello World!"};
 
-                    channels[i].Messages.Add(message);
-
-
-                    demoServer.Channels.Add(channels[i].Id, channels[i]);
-                }
-
-                var demoUser = new User();
-                demoUser.Id = 0;
-                demoUser.Username = "demo";
-                demoUser.Password = "demo";
-                demoUser.VirtualServers.Add(demoServer.Id);
-
-                demoServer.Members.Add(demoUser.Id);
-
-                Collections.Users.TryAdd(demoUser.Id, demoUser);
-                Collections.VirtualServers.TryAdd(demoServer.Id, demoServer);
-
-                var defaultSettings = new ServerSettings();
-                defaultSettings.Port = 65535;
-                defaultSettings.PerUserCreateServerAllowance = 3;
-                defaultSettings.MaxMessagesPerUserPerSecond = 3;
-                defaultSettings.MaxLoginAttempts = 3;
-                defaultSettings.AutobanDurationSeconds = 5;
-                defaultSettings.DeleteInactiveServersAfter = TimeSpan.FromDays(356);
-                defaultSettings.DeleteInactiveUsersAfter = TimeSpan.FromDays(180);
-
-                Core.Settings = defaultSettings;
+                channels[i].Messages.Add(message);
+                demoServer.Channels.Add(channels[i].Id, channels[i]);
             }
+
+            var demoUser = new User {Id = GetNextUserId(), Username = "demo", Password = "demo"};
+
+            demoUser.VirtualServers.Add(demoServer.Id);
+            demoServer.Members.Add(demoUser.Id);
+
+            Collections.Users.TryAdd(demoUser.Id, demoUser);
+            Collections.VirtualServers.TryAdd(demoServer.Id, demoServer);
+
+            var defaultSettings = new ServerSettings
+            {
+                Port = 65535,
+                PerUserCreateServerAllowance = 3,
+                MaxMessagesPerUserPerSecond = 3,
+                MaxLoginAttempts = 3,
+                AutobanDurationSeconds = 5,
+                DeleteInactiveServersAfter = TimeSpan.FromDays(356),
+                DeleteInactiveUsersAfter = TimeSpan.FromDays(180)
+            };
+
+            Core.Settings = defaultSettings;
         }
 
         public bool UserExists(User user) => Collections.Users.ContainsKey(user.Id);
         public bool AddUser(User user) => Collections.Users.TryAdd(user.Id, user);
         public bool Authenticate(ref User user)
         {
-            if (UserExists(user))
-            {
-                var dbUser = Collections.Users[user.Id];
-                if (dbUser.Username == user.Username)
-                {
-                    if (dbUser.Password == user.Password)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            if (!UserExists(user))
+                return false;
+
+            var dbUser = Collections.Users[user.Id];
+
+            if (dbUser.Username != user.Username)
+                return false;
+
+            return dbUser.Password == user.Password;
         }
 
         public int GetNextUserId()

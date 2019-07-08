@@ -1,15 +1,15 @@
 using System;
 
-namespace Client.Entities
+namespace Server.Entities
 {
     public class ServerSettings
     {
-        public ushort Port;
-        public byte PerUserCreateServerAllowance;
-        public TimeSpan DeleteInactiveServersAfter;
-        public TimeSpan DeleteInactiveUsersAfter;
-        public byte MaxMessagesPerUserPerSecond;
-        public byte MaxLoginAttempts;
-        public byte AutobanDurationSeconds;
+        public ushort Port { get; set; }
+        public byte PerUserCreateServerAllowance { get; set; }
+        public TimeSpan DeleteInactiveServersAfter { get; set; }
+        public TimeSpan DeleteInactiveUsersAfter { get; set; }
+        public byte MaxMessagesPerUserPerSecond { get; set; }
+        public byte MaxLoginAttempts { get; set; }
+        public byte AutobanDurationSeconds { get; set; }
     }
 }

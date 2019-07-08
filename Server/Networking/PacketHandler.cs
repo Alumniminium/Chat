@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
-using Packets;
-using Packets.Enums;
 using AlumniSocketCore.Client;
-using Client.Entities;
-using Client.IO.FastConsole;
+using Universal.Packets;
+using Universal.Packets.Enums;
+using Server.Entities;
+using Universal.Extensions;
+using Universal.IO.FastConsole;
 
-namespace Client.Networking
+namespace Server.Networking
 {
     public static class PacketHandler
     {
+        public static readonly Stopwatch Stopwatch = new Stopwatch();
         public static ClientSocket Socket;
         public static User User;
-        public static Stopwatch Stopwatch = new Stopwatch();
 
         public static void Handle(ClientSocket socket, byte[] packet)
         {
-            var id = (PacketType)BitConverter.ToUInt16(packet, 4);
             Socket = socket;
             User = (User)socket.StateObject;
             Stopwatch.Restart();
 
-            switch (id)
+            switch (packet.GetPacketType())
             {
                 case PacketType.MsgLogin:
                     ProcessLogin(packet);

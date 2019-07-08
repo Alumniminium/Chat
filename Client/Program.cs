@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Client.IO.FastConsole;
 using Newtonsoft.Json;
-using Packets;
+using Universal.IO.FastConsole;
+using Universal.Packets;
 
 namespace Client
 {
@@ -13,11 +13,10 @@ namespace Client
 
         public static async Task Main()
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, a) =>
-            {
-                Debugger.Break();
-            };
             FastConsole.Title = "CLIENT APP";
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, a) => Debugger.Break();
+
             LoadConfig();
             
             Core.Client.ConnectAsync(Core.SERVER_IP, Core.SERVER_PORT);
@@ -25,7 +24,7 @@ namespace Client
             while (!Core.Client.Socket.IsConnected)
                 await Task.Delay(1);
 
-            Core.Client.Send(MsgLogin.Create("user", "pass"));
+            Core.Client.Send(MsgLogin.Create("demo", "demo"));
 
             while (true)
                 FastConsole.ReadLine();
