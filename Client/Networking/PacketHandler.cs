@@ -55,7 +55,7 @@ namespace Client.Networking
                         break;
                     }
 
-                case PacketType.MsgFriend:
+                case PacketType.MsgUser:
                     {
                         break;
                     }
