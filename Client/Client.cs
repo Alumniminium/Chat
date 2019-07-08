@@ -13,7 +13,6 @@ namespace Client
     {
         public string Ip = "192.168.0.5";
         public ushort Port = 65534;
-        public readonly Dictionary<int,VirtualServer> Servers = new Dictionary<int, VirtualServer>();
 
         [JsonIgnore]
         public ClientSocket Socket;

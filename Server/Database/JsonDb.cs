@@ -55,13 +55,13 @@ namespace Server.Database
             if (Collections.VirtualServers.Count != 0)
                 return;
 
-            var demoServer = new VirtualServer {Id = GetNextServerId(), Name = "Demo Server", OwnerId = 0, IconUrl = "https://h.img.alumni.re/img/1.jpg"};
+            var demoServer = new VirtualServer {Id = GetNextServerId(), Name = "Demo Server", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/1.jpg" };
             var channels = new Channel[2];
 
             for (var i = 0; i < channels.Length; i++)
             {
                 channels[i] = new Channel {Id = i, Name = "Demo Channel " + i, Messages = new List<Message>()};
-                var message = new Message {Id = i, AuthorId = 0, Timestamp = DateTime.Now, Text = "Hello World!"};
+                var message = new Message {Id = i, AuthorId = 0, Timestamp = DateTime.UtcNow, Text = "Hello World!"};
 
                 channels[i].Messages.Add(message);
                 demoServer.Channels.Add(channels[i].Id, channels[i]);

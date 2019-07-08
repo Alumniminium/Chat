@@ -14,7 +14,7 @@ namespace Universal.Packets
         public int ServerId { get; set; }
         public int ChannelId { get; set; }
         public int AuthorId { get; set; }
-        public DateTime SentTime { get; set; }
+        public long SentTime { get; set; }
 
         public fixed byte Text[2048];
 
@@ -40,7 +40,7 @@ namespace Universal.Packets
             msg->ServerId = serverId;
             msg->AuthorId = authorId;
             msg->ChannelId = channelId;
-            msg->SentTime = createdTime;
+            msg->SentTime = createdTime.Ticks;
 
             msg->SetText(text);
 
@@ -55,7 +55,7 @@ namespace Universal.Packets
             msg->UniqueId = uniqueId;
             msg->AuthorId = authorId;
             msg->ChannelId = channelId;
-            msg->SentTime = createdTime;
+            msg->SentTime = createdTime.Ticks;
 
             msg->SetText(text);
 

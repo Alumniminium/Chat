@@ -4,9 +4,9 @@ namespace Client.Entities
 {
     public class Message
     {
-        public ulong Id;
-        public ulong AuthorId;
+        public int Id;
+        public int AuthorId;
         public string Text;
-        public DateTime Timestamp;
+        public ulong Timestamp;
     }
 }

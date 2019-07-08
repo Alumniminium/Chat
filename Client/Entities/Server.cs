@@ -6,8 +6,14 @@ namespace Client.Entities
     {
         public int Id;
         public string Name = "";
-        public List<User> Users;
-        public List<Channel> Channels;
         public string IconUrl { get; set; }
+        public Dictionary<int, User> Users;
+        public Dictionary<int,Channel> Channels;
+
+        public VirtualServer()
+        {
+            Users = new Dictionary<int, User>();
+            Channels=new Dictionary<int, Channel>();
+        }
     }
 }

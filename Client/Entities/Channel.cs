@@ -8,5 +8,10 @@ namespace Client.Entities
         public string Name;
 
         public List<Message> Messages;
+
+        public Channel()
+        {
+            Messages=new List<Message>();
+        }
     }
 }

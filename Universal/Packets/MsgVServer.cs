@@ -11,8 +11,8 @@ namespace Universal.Packets
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastActivity { get; set; }
+        public long Created { get; set; }
+        public long LastActivity { get; set; }
 
         public fixed byte ServerName[16];
         public fixed byte ServerIconUrl[64];
@@ -49,8 +49,8 @@ namespace Universal.Packets
             msg->Id = PacketType.MsgVServer;
 
             msg->UniqueId = serverId;
-            msg->Created = created;
-            msg->LastActivity = lastActivity;
+            msg->Created = created.Ticks;
+            msg->LastActivity = lastActivity.Ticks;
             msg->SetServerName(name);
             msg->SetServerIconUrl(url);
 
