@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using Server.Entities;
 
@@ -88,19 +90,23 @@ namespace Server.Database
             Core.Settings = defaultSettings;
         }
 
-        public bool UserExists(User user) => Collections.Users.ContainsKey(user.Id);
+        public bool UserExists(User user)
+        {
+            return Collections.Users.Values.FirstOrDefault(u => u.Username == user.Username) != null;
+        }
         public bool AddUser(User user) => Collections.Users.TryAdd(user.Id, user);
         public bool Authenticate(ref User user)
         {
-            if (!UserExists(user))
+            var username = user.Username;
+            var dbUser = Collections.Users.Values.FirstOrDefault(u => u.Username == username);
+            if (dbUser == null)
                 return false;
 
-            var dbUser = Collections.Users[user.Id];
+            dbUser.Socket = user.Socket;
+            user = dbUser;
+            user.Socket.StateObject = dbUser;
 
-            if (dbUser.Username != user.Username)
-                return false;
-
-            return dbUser.Password == user.Password;
+            return true;
         }
 
         public int GetNextUserId()
