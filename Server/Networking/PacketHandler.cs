@@ -26,8 +26,8 @@ namespace Server.Networking
                     ProcessDataRequest(user, packet);
                     break;
                 default:
-                    FastConsole.WriteLine("Invalid packet received from " + user.Socket.IP);
-                    user.Socket.Disconnect();
+                    FastConsole.WriteLine("Invalid packet received from " + user.Username);
+                    user.Socket.Disconnect("Server.PacketHandler.Handle() Invalid packet received");
                     break;
             }
         }
@@ -36,7 +36,8 @@ namespace Server.Networking
         {
             var msg = (MsgDataRequest)packet;
             FastConsole.WriteLine($"MsgDataRequest: {Oracle.GetUserFromId(msg.UserId)} requests {msg.Type} on {msg.TargetId} with param {msg.Param}");
-
+            if (user == null)
+                return;
             switch (msg.Type)
             {
                 case MsgDataRequestType.Friends:
@@ -56,7 +57,7 @@ namespace Server.Networking
                     foreach (var serverId in user.VirtualServers)
                     {
                         var server = Oracle.GetServerFromId(serverId);
-                        user.Send(MsgVServer.Create(server.Id, server.Name,server.IconUrl, server.CreatedTime,server.LastActivity));
+                        user.Send(MsgVServer.Create(server.Id, server.Name, server.IconUrl, server.CreatedTime, server.LastActivity));
                     }
                     user.Send(msg);
                     break;
@@ -77,11 +78,11 @@ namespace Server.Networking
                     user.Send(msg);
                     break;
                 default:
-                    FastConsole.WriteLine("Invalid packet received from " + user.Socket.IP);
-                    user.Socket.Disconnect();
+                    FastConsole.WriteLine("Invalid packet received from " + user.Username);
+                    user.Socket.Disconnect("Server.PacketHandler.ProcessDataRequest() Invalid packet received");
                     break;
             }
-            
+
             FastConsole.WriteLine($"MsgDataRequest: {Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
 
@@ -97,7 +98,7 @@ namespace Server.Networking
             user.Username = username;
             user.Password = password;
 
-            if (Core.Db.Authenticate(username,password))
+            if (Core.Db.Authenticate(username, password))
             {
                 Core.Db.LoadUser(user);
                 msgLogin.UniqueId = user.Id;

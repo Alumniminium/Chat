@@ -16,7 +16,7 @@ namespace AlumniSocketCore
             return Span<byte>.Empty;
         }
 
-        public NeutralBuffer(int receiveBufferSize = 300, int sendBufferSize = 300)
+        public NeutralBuffer(int receiveBufferSize = 3072, int sendBufferSize = 3072)
         {
             ReceiveBuffer = new byte[receiveBufferSize];
             SendBuffer = new byte[sendBufferSize];

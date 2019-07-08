@@ -9,10 +9,6 @@ namespace AlumniSocketCore.Client
 {
     public class ClientSocket
     {
-        public string IP;
-        public ushort Port;
-        public bool ShouldRetryConnecting;
-        public int ReconnectWaitSeconds = 3;
         public Action OnConnected, OnDisconnect;
 
         public Socket Socket;
@@ -42,13 +38,10 @@ namespace AlumniSocketCore.Client
 
         public void ConnectAsync(string host, ushort port)
         {
-            IP=host;
-            Port=port;
-
             try
             {
                 if (IsConnected)
-                    Disconnect();
+                    Disconnect("ConnectAsync() IsConnected == true");
 
                 Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 var connectArgs = new SocketAsyncEventArgs
@@ -59,9 +52,9 @@ namespace AlumniSocketCore.Client
                 if (!Socket.ConnectAsync(connectArgs))
                     Connected(null, connectArgs);
             }
-            catch
+            catch (Exception e)
             {
-                Disconnect();
+                Disconnect("ConnectAsync() Catch: " + e.Message + " #### " + e.StackTrace);
             }
         }
 
@@ -76,20 +69,20 @@ namespace AlumniSocketCore.Client
                     if (!Socket.ReceiveAsync(ReceiveArgs))
                         Received(null, ReceiveArgs);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Disconnect();
+                    Disconnect("ClientSocket.Connected() Catch: " + ex.Message + " #### " + ex.StackTrace);
                 }
             }
             else
-                Disconnect();
+                Disconnect("ClientSocket.Connected() e.SocketError != SocketError.Success");
         }
 
         private void Received(object sender, SocketAsyncEventArgs e)
         {
             if (e.SocketError != SocketError.Success || e.BytesTransferred == 0)
             {
-                Disconnect();
+                Disconnect("ClientSocket.Received() if (e.SocketError != SocketError.Success || e.BytesTransferred == 0)");
                 return;
             }
 
@@ -100,9 +93,9 @@ namespace AlumniSocketCore.Client
                 if (!Socket.ReceiveAsync(e))
                     Received(null, e);
             }
-            catch
+            catch (Exception ex)
             {
-                Disconnect();
+                Disconnect("ClientSocket.Received() Catch: " + ex.Message + " #### " + ex.StackTrace);
             }
         }
         public void Send(byte[] packet)
@@ -115,9 +108,9 @@ namespace AlumniSocketCore.Client
                 if (!Socket.SendAsync(SendArgs))
                     Sent(null, SendArgs);
             }
-            catch
+            catch (Exception e)
             {
-                Disconnect();
+                Disconnect("ClientSocket.Send() Catch: " + e.Message + " #### " + e.StackTrace);
             }
         }
 
@@ -126,29 +119,20 @@ namespace AlumniSocketCore.Client
             if (e.SocketError == SocketError.Success)
                 SendSync.Set();
             else
-                Disconnect();
+                Disconnect("ClientSocket.Sent() e.SocketError != SocketError.Success");
         }
-        public async void Disconnect()
+        public void Disconnect(string reason)
         {
             try
             {
+                Console.WriteLine("Disconnecting: " + reason);
                 IsConnected = false;
                 Socket?.Dispose();
             }
             finally
             {
                 OnDisconnect?.Invoke();
-                if(ShouldRetryConnecting)
-                {
-                    await ReconnectAsync();
-                }
             }
-        }
-
-        private async Task ReconnectAsync()
-        {
-            await Task.Delay(ReconnectWaitSeconds * 1000);
-            ConnectAsync(IP, Port);
         }
     }
 }

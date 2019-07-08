@@ -53,6 +53,8 @@ namespace AlumniSocketCore.Queues
             while (true)
             {
                 var connection = (ClientSocket)e.UserToken;
+                if(connection == null)
+                break;
                 _destOffset = connection.Buffer.BytesInBuffer;
                 _recOffset = connection.Buffer.BytesProcessed;
 

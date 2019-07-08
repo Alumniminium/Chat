@@ -6,29 +6,24 @@ using AlumniSocketCore.Queues;
 using Newtonsoft.Json;
 using Universal.IO.FastConsole;
 using Universal.Packets;
+using System.Threading;
 
 namespace Client
 {
     public class Client
     {
-        public string Ip = "192.168.0.5";
-        public ushort Port = 65534;
-
         [JsonIgnore]
         public ClientSocket Socket;
 
-        public User Me;
-
-        public void ConnectAsync(string ip, ushort port)
+        public void ConnectAsync()
         {
             ReceiveQueue.Start(OnPacket);
 
-            Socket = new ClientSocket(this) { ShouldRetryConnecting = true };
-
+            Socket = new ClientSocket(this);
             Socket.OnDisconnect += Disconnected;
             Socket.OnConnected += Connected;
 
-            Socket.ConnectAsync(ip, port);
+            Socket.ConnectAsync(Core.SERVER_IP, Core.SERVER_PORT);
         }
 
         private void Connected()
@@ -40,7 +35,11 @@ namespace Client
         private void Disconnected()
         {
             FastConsole.WriteLine("Disconnected!");
-            ConnectAsync(Ip, Port);
+            Socket.OnConnected-=Connected;
+            Socket.OnDisconnect-=Disconnected;
+            Socket.Socket.Dispose();
+            Thread.Sleep(5000);
+            ConnectAsync();
         }
 
         private void OnPacket(ClientSocket client, byte[] buffer) => PacketHandler.Handle((Client)client.StateObject, buffer);

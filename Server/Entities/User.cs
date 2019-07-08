@@ -30,6 +30,6 @@ namespace Server.Entities
         public void Send(byte[] packet) => Socket?.Send(packet);
         public string GetIp() => ((IPEndPoint) Socket.Socket.RemoteEndPoint).Address.ToString();
 
-        public override string ToString() => $"UserId: {Id} | Name: {Username} | Password: {Password} | Online: {Socket.IsConnected}";
+        public override string ToString() => $"UserId: {Id} | Name: {Username} | Password: {Password} | Online: {Socket != null && Socket.IsConnected}";
     }
 }
