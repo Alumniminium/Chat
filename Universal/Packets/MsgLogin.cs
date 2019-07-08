@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Universal.Packets.Enums;
 
 namespace Universal.Packets
 {
@@ -8,15 +9,15 @@ namespace Universal.Packets
     public unsafe struct MsgLogin
     {
         public int Length;
-        public ushort Id;
-        public uint UniqueId;
+        public PacketType Id;
+        public int UniqueId;
         public fixed byte Username[32];
         public fixed byte Password[32];
 
         public string GetUsername()
         {
             fixed (byte* p = Username)
-                return Encoding.ASCII.GetString(p,64).Trim('\0');
+                return Encoding.ASCII.GetString(p, 32).Trim('\0');
         }
         public string GetPassword()
         {
@@ -30,7 +31,7 @@ namespace Universal.Packets
             var pair = ValueTuple.Create(string.Empty, string.Empty);
             for (int i = 0; i < 64; i++)
             {
-                if(i == 32)
+                if (i == 32)
                 {
                     pair.Item1 = stringBuilder.ToString().Trim('\0');
                     stringBuilder.Clear();
@@ -56,7 +57,7 @@ namespace Universal.Packets
         {
             var msg = stackalloc MsgLogin[1];
             msg->Length = sizeof(MsgLogin);
-            msg->Id = 1000;
+            msg->Id = PacketType.MsgLogin;
 
             msg->SetUsername(user);
             msg->SetPassword(pass);

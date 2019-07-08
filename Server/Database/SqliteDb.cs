@@ -12,42 +12,40 @@ namespace Server.Database
                 _db.Database.EnsureCreated();
         }
 
-        public bool UserExists(User user)
+        public bool UserExists(string user)
         {
             lock (_db)
             {
-                var dbUser = _db.Users.AsQueryable().FirstOrDefault(c => c.Username == user.Username);
-                return dbUser != null;
+                return _db.Users.AsQueryable().Any(c => c.Username == user);
             }
         }
         public bool AddUser(User user)
         {
             lock (_db)
             {
-                if (UserExists(user))
+                if (UserExists(user.Username))
                     return false;
-                user.Id = GetNextUserId();
+
                 _db.Users.Add(user);
+
                 _db.SaveChanges();
             }
 
             return true;
         }
-        public bool Authenticate(ref User user)
+        public bool Authenticate(string username, string password)
         {
             lock (_db)
             {
-                var username = user.Username;
-                var dbUser = _db.Users.AsQueryable().FirstOrDefault(c => c.Username == username);
-
-                if (dbUser == null || dbUser.Password != user.Password)
-                    return false;
-
-                dbUser.Socket = user.Socket;
-                user = dbUser;
-                user.Socket.StateObject = dbUser;
-                return true;
+                return _db.Users.AsQueryable().Any(c => c.Username == username && c.Password == password);
             }
+        }
+        public User GetDbUser(string username)
+        {
+            if (!UserExists(username))
+                return null;
+            lock (_db)
+                return _db.Users.First(u => u.Username == username);
         }
 
         public int GetNextUserId()
@@ -63,6 +61,11 @@ namespace Server.Database
         }
 
         public void Save()
+        {
+            
+        }
+
+        public void LoadUser(User user)
         {
             
         }

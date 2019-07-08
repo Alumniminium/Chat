@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using Server.Entities;
@@ -90,34 +91,25 @@ namespace Server.Database
             Core.Settings = defaultSettings;
         }
 
-        public bool UserExists(User user)
-        {
-            return Collections.Users.Values.FirstOrDefault(u => u.Username == user.Username) != null;
-        }
+        public bool UserExists(string user) => Collections.Users.Values.Any(u => u.Username == user);
         public bool AddUser(User user) => Collections.Users.TryAdd(user.Id, user);
-        public bool Authenticate(ref User user)
+        public bool Authenticate(string username,string password) => Collections.Users.Values.Any(u => u.Username == username && u.Password == password);
+        public User GetDbUser(string username) => Collections.Users.Values.First(u => u.Username == username);
+
+        public void LoadUser(User user)
         {
-            var username = user.Username;
-            var dbUser = Collections.Users.Values.FirstOrDefault(u => u.Username == username);
-            if (dbUser == null)
-                return false;
+            var dbUser = GetDbUser(user.Username);
 
-            dbUser.Socket = user.Socket;
-            user = dbUser;
-            user.Socket.StateObject = dbUser;
-
-            return true;
+            user.Id = dbUser.Id;
+            user.Friends = dbUser.Friends;
+            user.VirtualServers = dbUser.VirtualServers;
+            user.Socket.StateObject = user;
+            user.Socket = user.Socket;
         }
 
-        public int GetNextUserId()
-        {
-            return Collections.Users.Count + 1;
-        }
 
-        public int GetNextServerId()
-        {
-            return Collections.VirtualServers.Count + 1;
-        }
+        public int GetNextUserId() => Collections.Users.Count + 1;
+        public int GetNextServerId() => Collections.VirtualServers.Count + 1;
 
         public void Save()
         {

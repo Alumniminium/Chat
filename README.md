@@ -19,17 +19,17 @@ else
 # Loading sequence:
 
 ## Friends:
-* Client  ->    Send MsgFriendList       ->  Server      // Type: RequestList
+* Client  ->    Send MsgDataRequest       ->  Server      // Type: RequestFriendList
 
 ### for each friend
-* Server  ->      Send MsgFriend         ->  Client      // Type: Info
-* Client  ->    MsgRequestMessages       ->  Server      // Type: Offline, AuthorId: friend.id
+* Server  ->      Send MsgFriend          ->  Client      // Type: Info
+* Client  ->      MsgDataRequest          ->  Server      // Type: Message, TargetId: friend.id
 #### for each offline message
-* Server  ->         MsgText             ->  Client      // Type: Offline, AuthorId: friend.id or Type.NoOfflineMessages
+* Server  ->         MsgText              ->  Client      // Type: Offline, AuthorId: friend.id
+
 
 ## Servers:
-* Client  ->    Send MsgVServerList      ->  Server      // Type: RequestList
-
+* Client  ->    Send MsgDataRequest       ->  Server      // Type: RequestVServerList
 ### for each server
-* Server  ->      Send MsgVServer        ->  Server      // One or more packets.
+* Server  ->      Send MsgVServer         ->  Server      // One or more packets.
 
