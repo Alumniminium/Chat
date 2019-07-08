@@ -105,18 +105,19 @@ namespace Sockets.Client
             SendSync.WaitOne();
 
             using (var stream = new MemoryStream())
-            using(var compression = new DeflateStream(stream,CompressionLevel.Optimal))
+            using (var compression = new DeflateStream(stream, CompressionLevel.Optimal))
             {
                 compression.Write(packet);
-                compression.Close();
+                compression.Flush();
 
-                var compressedPacket = new byte[stream.Length+4];
+                var compressedPacket = new byte[stream.Length + 4];
                 var compressedData = stream.ToArray();
-                var compressedLengthBytes = BitConverter.GetBytes(stream.Length+4);
-                Array.Copy(compressedData,0,compressedPacket,4,compressedPacket.Length);
-                Array.Copy(compressedLengthBytes,0, compressedPacket,0,compressedLengthBytes.Length);
+                var compressedLengthBytes = BitConverter.GetBytes((short)(compressedPacket.Length));
 
-                Console.WriteLine("Compression Efficiency: " + packet.Length / (float)compressedPacket.Length * 100);
+                System.Buffer.BlockCopy(compressedLengthBytes, 0, compressedPacket, 0, compressedLengthBytes.Length);
+                System.Buffer.BlockCopy(compressedData, 0, compressedPacket, 4, compressedData.Length);
+
+                Console.WriteLine($"Compression Efficiency for {BitConverter.ToUInt16(packet, 4)} ({packet.Length} vs {compressedPacket.Length} bytes) Ratio: " + compressedPacket.Length / (float)packet.Length * 100);
             }
 
             SendArgs.SetBuffer(packet, 0, packet.Length);
