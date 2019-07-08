@@ -1,15 +1,16 @@
-# Login sequence:                                                     // Establish a connection and get authenticated with the server.
+# Login sequence:                        // Establish a connection and get authenticated with the server.
 
-* Client  ->              Connect                     ->  Server      // Socket.Connect(ServerIp,ServerPort);
+* Client  ->        Connect              ->  Server      // Socket.Connect(ServerIp,ServerPort);
  if connected
-* Client  ->              Send MsgLogin               ->  Server      // MsgLogin with Username and Password set.
+* Client  ->     Send MsgLogin           ->  Server      // MsgLogin with Username and Password set.
  else
 * Sleep 5s and retry
 
-* Server  ->              Send MsgLogin               ->  Client      // Returns MsgLogin with UniqueId for Client.
+* Server  ->     Send MsgLogin           ->  Client      // Returns MsgLogin with UniqueId for Client.
 
 if MsgLogin.UniqueId != 0
 * You are now logged in.
+
 else
 * Wrong user/Password
 
@@ -18,16 +19,17 @@ else
 # Loading sequence:
 
 ## Friends:
-* Client  ->              Send MsgFriendList          ->  Server      // Type: RequestList
-for each friend
-* Server  ->                Send MsgFriend            ->  Client      // Type: Info
-* Client  ->              MsgRequestMessages          ->  Server      // Type: Offline, AuthorId: friend.id
-* Server  ->                    MsgText               ->  Client      // Type: Offline, AuthorId: friend.id or Type.NoOfflineMessages
-end loop
+* Client  ->    Send MsgFriendList       ->  Server      // Type: RequestList
+
+### for each friend
+* Server  ->      Send MsgFriend         ->  Client      // Type: Info
+* Client  ->    MsgRequestMessages       ->  Server      // Type: Offline, AuthorId: friend.id
+#### for each offline message
+* Server  ->         MsgText             ->  Client      // Type: Offline, AuthorId: friend.id or Type.NoOfflineMessages
 
 ## Servers:
-* Client  ->             Send MsgVServerList          ->  Server      // Type: RequestList
-for each server
-* Server  ->                Send MsgVServer           ->  Server      // One or more packets.
+* Client  ->    Send MsgVServerList      ->  Server      // Type: RequestList
 
+### for each server
+* Server  ->      Send MsgVServer        ->  Server      // One or more packets.
 
