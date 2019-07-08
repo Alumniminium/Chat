@@ -15,5 +15,13 @@ namespace Server.Networking
             Collections.VirtualServers.TryGetValue(id, out var server);
             return server;
         }
+
+        public static Channel GetServerChannelFromId(int serverId, int channelId)
+        {
+            if (!Collections.VirtualServers.TryGetValue(serverId, out var server))
+                return null;
+
+            return server.Channels.TryGetValue(channelId,out var channel) ? channel : null;
+        }
     }
 }

@@ -56,8 +56,7 @@ namespace Server.Networking
                     foreach (var serverId in user.VirtualServers)
                     {
                         var server = Oracle.GetServerFromId(serverId);
-                        #warning JULIAN UNCOMMENT AND MAKE IT WORK
-                        //user.Send(MsgVServer.Create(server.Id, server.Name, server.OwnerId));
+                        user.Send(MsgVServer.Create(server.Id, server.Name,server.IconUrl, server.CreatedTime,server.LastActivity));
                     }
                     user.Send(msg);
                     break;
@@ -65,13 +64,12 @@ namespace Server.Networking
                     var dbServer = Oracle.GetServerFromId(msg.TargetId);
                     foreach (var channelId in dbServer.Channels)
                     {
-                        #warning JULIAN UNCOMMENT AND MAKE IT WORK
-                        //user.Send(MsgChannel.Create(server.Id, id, server.OwnerId));
+                        user.Send(MsgChannel.Create(channelId.Key, dbServer.Id, channelId.Value.Name));
                     }
                     user.Send(msg);
                     break;
                 case MsgDataRequestType.Messages:
-                    var dbChannel = Oracle.GetServerFromId(msg.TargetId).Channels[msg.Param];
+                    var dbChannel = Oracle.GetServerChannelFromId(msg.TargetId, msg.Param);
                     foreach (var message in dbChannel.Messages)
                     {
                         user.Send(MsgText.Create(message.Id, message.AuthorId, message.Text, msg.TargetId, dbChannel.Id, message.Timestamp));

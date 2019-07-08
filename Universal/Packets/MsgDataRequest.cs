@@ -45,19 +45,18 @@ namespace Universal.Packets
 
             return *msg;
         }
-        public static MsgDataRequest CreateChannelMessageRequest(int userId,int serverId,int channelId)
+        public static byte[] CreateServerChannelListRequest(int userId, int serverId)
         {
             var msg = stackalloc MsgDataRequest[1];
             msg->Length = sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->TargetId = serverId;
-            msg->Param = channelId;
-            msg->Type = MsgDataRequestType.VServers;
+            msg->Type = MsgDataRequestType.Channels;
 
             return *msg;
         }
-        public static MsgDataRequest CreateOfflineMessageRequest(int userId, int friendId)
+        public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int friendId)
         {
             var msg = stackalloc MsgDataRequest[1];
             msg->Length = sizeof(MsgDataRequest);
@@ -87,5 +86,6 @@ namespace Universal.Packets
                 return *(MsgDataRequest*)p;
         }
         public static implicit operator MsgDataRequest(byte* msg) => *(MsgDataRequest*)msg;
+
     }
 }

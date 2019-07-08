@@ -37,9 +37,19 @@ namespace Client.Networking
                         {
                             case MsgDataRequestType.Friends:
                                 FastConsole.WriteLine("Stage Completed: Sync Friendlist");
+                                foreach (var friend in client.Me.Friends)
+                                {
+                                    var request = MsgDataRequest.CreateRequestMissedMessagesPacket(client.Me.Id, friend.Key);
+                                    client.Send(request);
+                                }
                                 break;
                             case MsgDataRequestType.VServers:
                                 FastConsole.WriteLine("Stage Completed: Sync VServers");
+                                foreach (var server in client.Me.Servers)
+                                {
+                                    var request = MsgDataRequest.CreateServerChannelListRequest(client.Me.Id, server.Key);
+                                    client.Send(request);
+                                }
                                 break;
                             case MsgDataRequestType.Channels:
                                 FastConsole.WriteLine("Stage Completed: Sync Channels of " + client.Servers[msgDataRequest.TargetId].Name);

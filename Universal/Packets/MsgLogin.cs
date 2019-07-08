@@ -8,9 +8,9 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgLogin
     {
-        public int Length;
-        public PacketType Id;
-        public int UniqueId;
+        public int Length { get; private set; }
+        public PacketType Id { get; private set; }
+        public int UniqueId { get; set; }
         public fixed byte Username[32];
         public fixed byte Password[32];
 
