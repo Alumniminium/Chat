@@ -40,12 +40,43 @@ namespace Server.Networking
             switch (msg.Type)
             {
                 case MsgDataRequestType.Friends:
+                    foreach (var friendId in user.Friends)
+                    {
+                        var friend = Oracle.GetUserFromId(friendId);
+
+                        var online = false;
+                        if (friend.Socket != null)
+                            online = friend.Socket.IsConnected;
+
+                        user.Send(MsgUser.Create(friend.Id, friend.Nickname, friend.AvatarUrl, friend.Email, online));
+                    }
+                    user.Send(msg);
                     break;
                 case MsgDataRequestType.VServers:
+                    foreach (var serverId in user.VirtualServers)
+                    {
+                        var server = Oracle.GetServerFromId(serverId);
+                        #warning JULIAN UNCOMMENT AND MAKE IT WORK
+                        //user.Send(MsgVServer.Create(server.Id, server.Name, server.OwnerId));
+                    }
+                    user.Send(msg);
                     break;
                 case MsgDataRequestType.Channels:
+                    var dbServer = Oracle.GetServerFromId(msg.TargetId);
+                    foreach (var channelId in dbServer.Channels)
+                    {
+                        #warning JULIAN UNCOMMENT AND MAKE IT WORK
+                        //user.Send(MsgChannel.Create(server.Id, id, server.OwnerId));
+                    }
+                    user.Send(msg);
                     break;
                 case MsgDataRequestType.Messages:
+                    var dbChannel = Oracle.GetServerFromId(msg.TargetId).Channels[msg.Param];
+                    foreach (var message in dbChannel.Messages)
+                    {
+                        user.Send(MsgText.Create(message.Id, message.AuthorId, message.Text, msg.TargetId, dbChannel.Id, message.Timestamp));
+                    }
+                    user.Send(msg);
                     break;
                 default:
                     FastConsole.WriteLine("Invalid packet received from " + user.Socket.IP);

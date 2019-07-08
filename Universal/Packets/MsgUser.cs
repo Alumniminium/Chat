@@ -7,21 +7,16 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgUser
     {
-        public int Length;
-        public PacketType Id;
-        public int UniqueId;
+        public int Length { get; private set; }
+        public PacketType Id { get; private set; }
+        public int UniqueId { get; set; }
+        public bool Online { get; set; }
         public fixed byte Nickname[32];
-        public fixed byte Email[32];
         public fixed byte AvatarUrl[64];
 
         public string GetNickname()
         {
             fixed (byte* p = Nickname)
-                return Encoding.ASCII.GetString(p, 32).Trim('\0');
-        }
-        public string GetEmail()
-        {
-            fixed (byte* p = Email)
                 return Encoding.ASCII.GetString(p, 32).Trim('\0');
         }
         public string GetAvatarUrl()
@@ -35,26 +30,22 @@ namespace Universal.Packets
             for (var i = 0; i < nickname.Length; i++)
                 Nickname[i] = (byte)nickname[i];
         }
-        public void SetEmail(string email)
-        {
-            for (var i = 0; i < email.Length; i++)
-                Email[i] = (byte)email[i];
-        }
         public void SetAvatarUrl(string url)
         {
             for (var i = 0; i < url.Length; i++)
                 AvatarUrl[i] = (byte)url[i];
         }
 
-        public static MsgUser Create(string nickname, string avatarUrl,string email)
+        public static MsgUser Create(int uniqueId,string nickname, string avatarUrl, string email,bool online)
         {
             var msg = stackalloc MsgUser[1];
             msg->Length = sizeof(MsgUser);
-            msg->Id = PacketType.MsgLogin;
+            msg->Id = PacketType.MsgUser;
 
+            msg->UniqueId = uniqueId;
+            msg->Online = online;
             msg->SetNickname(nickname);
             msg->SetAvatarUrl(avatarUrl);
-            msg->SetEmail(email);
             return *msg;
         }
         public static implicit operator byte[] (MsgUser msg)

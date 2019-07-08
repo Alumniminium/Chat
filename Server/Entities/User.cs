@@ -9,13 +9,17 @@ namespace Server.Entities
     public class User
     {
         public int Id { get; set; }
+        public string Nickname { get; set; }
+        public string AvatarUrl { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
         public List<int> VirtualServers { get; set; }
         public List<int> Friends { get; set; }
 
         [NotMapped][JsonIgnore]
         public ClientSocket Socket { get; set; }
+
 
         public User()
         {

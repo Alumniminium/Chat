@@ -57,6 +57,13 @@ namespace Client.Networking
 
                 case PacketType.MsgUser:
                     {
+                        var msgUser = (MsgUser)buffer;
+                        var user = new User();
+                        user.Id = msgUser.UniqueId;
+                        user.Name = msgUser.GetNickname();
+                        user.AvatarUrl = msgUser.GetAvatarUrl();
+                        user.Online = msgUser.Online;
+                        client.Me.Friends.TryAdd(user.Id, user);
                         break;
                     }
                 case PacketType.MsgVServer:
