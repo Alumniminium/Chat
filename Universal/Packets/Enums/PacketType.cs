@@ -6,6 +6,7 @@ namespace Universal.Packets.Enums
         MsgDataRequest = 1001,
         MsgUser = 1002,
         MsgVServer = 1003,
-        MsgText = 1004,
+        MsgChannel = 1004,
+        MsgText = 1005,
     }
 }

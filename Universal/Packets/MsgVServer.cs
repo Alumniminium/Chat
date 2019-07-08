@@ -9,13 +9,14 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgVServer
     {
-        public int Length;
-        public PacketType Id;
-        public int ServerId;
+        public int Length { get; private set; }
+        public PacketType Id { get; private set; }
+        public int ServerId { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastActivity { get; set; }
+
         public fixed byte ServerName[16];
         public fixed byte ServerIconUrl[64];
-        public DateTime Created;
-        public DateTime LastActivity;
 
 
         public string GetServerName()
@@ -49,10 +50,10 @@ namespace Universal.Packets
             msg->Id = PacketType.MsgVServer;
 
             msg->ServerId = id;
-            msg->SetServerName(name);
-            msg->SetServerIconUrl(url);
             msg->Created = created;
             msg->LastActivity = lastActivity;
+            msg->SetServerName(name);
+            msg->SetServerIconUrl(url);
 
             return *msg;
         }

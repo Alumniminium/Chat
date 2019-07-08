@@ -15,6 +15,7 @@ namespace Universal.Packets
         public int ChannelId { get; set; }
         public int AuthorId { get; set; }
         public DateTime SentTime { get; set; }
+
         public fixed byte Text[2048];
 
         public string GetText()
