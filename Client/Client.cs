@@ -9,7 +9,7 @@ using Client.IO.FastConsole;
 
 namespace Client
 {
-    public class User
+    public class Client
     {
         [JsonIgnore]
         public ClientSocket Socket;
@@ -39,7 +39,7 @@ namespace Client
             ConnectAsync(Ip, Port);
         }
 
-        private void OnPacket(ClientSocket client, byte[] buffer) => PacketHandler.Handle((User)client.StateObject, buffer);
+        private void OnPacket(ClientSocket client, byte[] buffer) => PacketHandler.Handle((Client)client.StateObject, buffer);
 
         public void Send(byte[] packet) => Socket.Send(packet);
     }

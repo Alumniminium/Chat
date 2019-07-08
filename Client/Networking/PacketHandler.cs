@@ -7,7 +7,7 @@ namespace Client.Networking
 {
     public static class PacketHandler
     {
-        public static void Handle(User client, byte[] buffer)
+        public static void Handle(Client client, byte[] buffer)
         {
             var packetId = (PacketType)BitConverter.ToUInt16(buffer, 4);
             switch (packetId)
