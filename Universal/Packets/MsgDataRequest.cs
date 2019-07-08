@@ -56,13 +56,25 @@ namespace Universal.Packets
 
             return *msg;
         }
+        public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int serverId, int channelId)
+        {
+            var msg = stackalloc MsgDataRequest[1];
+            msg->Length = sizeof(MsgDataRequest);
+            msg->Id = PacketType.MsgDataRequest;
+            msg->UserId = userId;
+            msg->TargetId = serverId;
+            msg->Param = channelId;
+            msg->Type = MsgDataRequestType.Messages;
+
+            return *msg;
+        }
         public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int friendId)
         {
             var msg = stackalloc MsgDataRequest[1];
             msg->Length = sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
-            msg->TargetId = friendId;
+            msg->Param = friendId;
             msg->Type = MsgDataRequestType.Messages;
 
             return *msg;

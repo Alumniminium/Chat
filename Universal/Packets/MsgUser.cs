@@ -10,7 +10,9 @@ namespace Universal.Packets
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
+        public int ServerId { get; set; }
         public bool Online { get; set; }
+
         public fixed byte Nickname[32];
         public fixed byte AvatarUrl[64];
 
@@ -36,7 +38,20 @@ namespace Universal.Packets
                 AvatarUrl[i] = (byte)url[i];
         }
 
-        public static MsgUser Create(int uniqueId,string nickname, string avatarUrl, string email,bool online)
+        public static MsgUser Create(int uniqueId, int serverId, string nickname, string avatarUrl, string email, bool online)
+        {
+            var msg = stackalloc MsgUser[1];
+            msg->Length = sizeof(MsgUser);
+            msg->Id = PacketType.MsgUser;
+
+            msg->UniqueId = uniqueId;
+            msg->ServerId = serverId;
+            msg->Online = online;
+            msg->SetNickname(nickname);
+            msg->SetAvatarUrl(avatarUrl);
+            return *msg;
+        }
+        public static MsgUser Create(int uniqueId, string nickname, string avatarUrl, string email, bool online)
         {
             var msg = stackalloc MsgUser[1];
             msg->Length = sizeof(MsgUser);

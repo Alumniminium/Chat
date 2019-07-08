@@ -55,7 +55,7 @@ namespace Server.Database
             if (Collections.VirtualServers.Count != 0)
                 return;
 
-            var demoServer = new VirtualServer {Id = GetNextServerId(), Name = "Demo Server", OwnerId = 0};
+            var demoServer = new VirtualServer {Id = GetNextServerId(), Name = "Demo Server", OwnerId = 0, IconUrl = "https://h.img.alumni.re/img/1.jpg"};
             var channels = new Channel[2];
 
             for (var i = 0; i < channels.Length; i++)

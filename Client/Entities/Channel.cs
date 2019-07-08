@@ -4,7 +4,7 @@ namespace Client.Entities
 {
     public class Channel
     {
-        public ulong Id;
+        public int Id;
         public string Name;
 
         public List<Message> Messages;

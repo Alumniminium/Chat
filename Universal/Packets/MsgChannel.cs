@@ -29,7 +29,7 @@ namespace Universal.Packets
         {
             var msg = stackalloc MsgChannel[1];
             msg->Length = sizeof(MsgChannel);
-            msg->Id = PacketType.MsgLogin;
+            msg->Id = PacketType.MsgChannel;
             msg->UniqueId = uniqueId;
             msg->ServerId = serverId;
             msg->SetName(name);

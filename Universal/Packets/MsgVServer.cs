@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Universal.Packets.Enums;
@@ -11,7 +10,7 @@ namespace Universal.Packets
     {
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
-        public int ServerId { get; set; }
+        public int UniqueId { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastActivity { get; set; }
 
@@ -43,13 +42,13 @@ namespace Universal.Packets
                 ServerIconUrl[i] = (byte)url[i];
         }
 
-        public static MsgVServer Create(int id, string name, string url, DateTime created, DateTime lastActivity)
+        public static MsgVServer Create(int serverId, string name, string url, DateTime created, DateTime lastActivity)
         {
             var msg = stackalloc MsgVServer[1];
             msg->Length = sizeof(MsgVServer);
             msg->Id = PacketType.MsgVServer;
 
-            msg->ServerId = id;
+            msg->UniqueId = serverId;
             msg->Created = created;
             msg->LastActivity = lastActivity;
             msg->SetServerName(name);

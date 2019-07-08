@@ -36,14 +36,22 @@ namespace Client.Networking
                         switch (msgDataRequest.Type)
                         {
                             case MsgDataRequestType.Friends:
+                            {
                                 FastConsole.WriteLine("Stage Completed: Sync Friendlist");
+
                                 foreach (var friend in client.Me.Friends)
                                 {
                                     var request = MsgDataRequest.CreateRequestMissedMessagesPacket(client.Me.Id, friend.Key);
                                     client.Send(request);
                                 }
+
+                                var request2 = MsgDataRequest.CreateServerListRequest(client.Me.Id);
+                                client.Send(request2);
                                 break;
+                            }
+
                             case MsgDataRequestType.VServers:
+                            {
                                 FastConsole.WriteLine("Stage Completed: Sync VServers");
                                 foreach (var server in client.Me.Servers)
                                 {
@@ -51,8 +59,18 @@ namespace Client.Networking
                                     client.Send(request);
                                 }
                                 break;
+                            }
+
                             case MsgDataRequestType.Channels:
                                 FastConsole.WriteLine("Stage Completed: Sync Channels of " + client.Servers[msgDataRequest.TargetId].Name);
+                                foreach (var server in client.Me.Servers.Values)
+                                {
+                                    foreach (var channel in server.Channels)
+                                    {
+                                        var request = MsgDataRequest.CreateRequestMissedMessagesPacket(client.Me.Id, server.Id, channel.Id);
+                                        client.Send(request);
+                                    }
+                                }
                                 break;
                             case MsgDataRequestType.Messages:
                                 FastConsole.WriteLine("Stage Completed: Sync Messages of " + client.Servers[msgDataRequest.TargetId].Channels[msgDataRequest.Param].Name);
@@ -74,10 +92,18 @@ namespace Client.Networking
                         user.AvatarUrl = msgUser.GetAvatarUrl();
                         user.Online = msgUser.Online;
                         client.Me.Friends.TryAdd(user.Id, user);
+                        FastConsole.WriteLine($"Received Friend info for {user.Name}!");
                         break;
                     }
                 case PacketType.MsgVServer:
                     {
+                        var msgVServer = (MsgVServer)buffer;
+                        var server = new VirtualServer();
+                        server.Id = msgVServer.UniqueId;
+                        server.Name = msgVServer.GetServerName();
+                        server.IconUrl = msgVServer.GetServerIconUrl();
+                        client.Me.Servers.TryAdd(server.Id, server);
+                        FastConsole.WriteLine($"Received Server info for {server.Name}!");
                         break;
                     }
                 case PacketType.MsgText:
