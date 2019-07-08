@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AlumniSocketCore.Client;
+using Sockets.Client;
 using Universal.Packets;
 using Universal.Packets.Enums;
 using Server.Entities;

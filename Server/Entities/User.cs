@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
-using AlumniSocketCore.Client;
+using Sockets.Client;
 using Newtonsoft.Json;
 
 namespace Server.Entities

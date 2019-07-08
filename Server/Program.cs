@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using AlumniSocketCore.Queues;
-using AlumniSocketCore.Server;
+using Sockets.Queues;
+using Sockets.Server;
 using Server.Database;
 using Server.Networking;
 using Universal.IO.FastConsole;
