@@ -1,6 +1,6 @@
 using System;
 
-namespace AlumniSocketCore
+namespace Sockets
 {
     public class NeutralBuffer
     {

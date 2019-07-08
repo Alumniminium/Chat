@@ -10,29 +10,16 @@ namespace Client
     public static class Program
     {
 
-        public static async Task Main()
+        public static void Main()
         {
             FastConsole.Title = "CLIENT APP";
 
             SetupCountermeasuresForShitCode();
 
-            await LoadConfigAsync();
-
             Core.Client.ConnectAsync();
 
             while (true)
                 FastConsole.ReadLine();
-        }
-
-        private static async Task LoadConfigAsync()
-        {
-            await Task.Run(() =>
-            {
-                if (File.Exists("config.json"))
-                    Core.Client = JsonConvert.DeserializeObject<Client>(File.ReadAllText("config.json"));
-                else
-                    FastConsole.WriteLine("No config.json was found at " + Environment.CurrentDirectory + "/config.json");
-            });
         }
         private static void SetupCountermeasuresForShitCode()
         {

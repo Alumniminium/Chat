@@ -1,9 +1,9 @@
-﻿using AlumniSocketCore.Client;
+﻿using Sockets.Client;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace AlumniSocketCore.Queues
+namespace Sockets.Queues
 {
 
     public static class SendQueue

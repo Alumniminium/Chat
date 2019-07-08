@@ -1,4 +1,4 @@
-﻿namespace AlumniSocketCore.Monitoring
+﻿namespace Sockets.Monitoring
 {
     public enum TrafficMode
     {

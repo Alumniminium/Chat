@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
-using AlumniSocketCore.Client;
+using Sockets.Client;
 
-namespace AlumniSocketCore.Queues
+namespace Sockets.Queues
 {
     public static class ReceiveQueue
     {

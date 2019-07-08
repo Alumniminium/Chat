@@ -1,11 +1,13 @@
-﻿using AlumniSocketCore.Queues;
+﻿using Sockets.Queues;
 using System;
+using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AlumniSocketCore.Client
+namespace Sockets.Client
 {
     public class ClientSocket
     {
@@ -101,6 +103,22 @@ namespace AlumniSocketCore.Client
         public void Send(byte[] packet)
         {
             SendSync.WaitOne();
+
+            using (var stream = new MemoryStream())
+            using(var compression = new DeflateStream(stream,CompressionLevel.Optimal))
+            {
+                compression.Write(packet);
+                compression.Close();
+
+                var compressedPacket = new byte[stream.Length+4];
+                var compressedData = stream.ToArray();
+                var compressedLengthBytes = BitConverter.GetBytes(stream.Length+4);
+                Array.Copy(compressedData,0,compressedPacket,4,compressedPacket.Length);
+                Array.Copy(compressedLengthBytes,0, compressedPacket,0,compressedLengthBytes.Length);
+
+                Console.WriteLine("Compression Efficiency: " + packet.Length / (float)compressedPacket.Length * 100);
+            }
+
             SendArgs.SetBuffer(packet, 0, packet.Length);
 
             try
@@ -127,7 +145,6 @@ namespace AlumniSocketCore.Client
             {
                 Console.WriteLine("Disconnecting: " + reason);
                 IsConnected = false;
-                Socket?.Dispose();
             }
             finally
             {

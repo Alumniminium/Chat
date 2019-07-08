@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace AlumniSocketCore.Monitoring
+namespace Sockets.Monitoring
 {
     public class NetworkMonitor
     {

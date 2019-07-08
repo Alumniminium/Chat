@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using AlumniSocketCore.Client;
-using AlumniSocketCore.Queues;
+using Sockets.Client;
+using Sockets.Queues;
 
-namespace AlumniSocketCore.Server
+namespace Sockets.Server
 {
 
     public static class ServerSocket

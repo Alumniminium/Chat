@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace AlumniSocketCore.Pools
+namespace Sockets.Pools
 {
     public static class SocketAsyncEventArgsPool
     {
