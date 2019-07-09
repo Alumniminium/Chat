@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
-using Sockets.Client;
+using Universal.IO.Sockets.Client;
 
-namespace Sockets.Queues
+namespace Universal.IO.Sockets.Queues
 {
     public static class ReceiveQueue
     {
@@ -26,13 +26,13 @@ namespace Sockets.Queues
             if (!_workerThread.IsAlive)
                 _workerThread.Start();
         }
-        
+
         public static void Add(SocketAsyncEventArgs e)
         {
             Queue.Enqueue(e);
             Sync.Set();
         }
-        
+
         private static void WorkLoop()
         {
             while (true)
@@ -53,8 +53,8 @@ namespace Sockets.Queues
             while (true)
             {
                 var connection = (ClientSocket)e.UserToken;
-                if(connection == null)
-                break;
+                if (connection == null)
+                    break;
                 _destOffset = connection.Buffer.BytesInBuffer;
                 _recOffset = connection.Buffer.BytesProcessed;
 

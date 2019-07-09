@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Sockets.Queues;
-using Sockets.Server;
+using Universal.IO.Sockets.Queues;
+using Universal.IO.Sockets.Server;
 using Server.Database;
 using Server.Networking;
 using Universal.IO.FastConsole;

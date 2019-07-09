@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Sockets.Client;
-using Sockets.Queues;
+using Universal.IO.Sockets.Client;
+using Universal.IO.Sockets.Queues;
 
-namespace Sockets.Server
+namespace Universal.IO.Sockets.Server
 {
 
     public static class ServerSocket
@@ -72,7 +72,7 @@ namespace Sockets.Server
                 }
                 catch (Exception exception)
                 {
-                Console.WriteLine(exception);
+                    Console.WriteLine(exception);
                     CloseClientSocket(e);
                 }
             }

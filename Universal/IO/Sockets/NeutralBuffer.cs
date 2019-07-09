@@ -1,6 +1,6 @@
 using System;
 
-namespace Sockets
+namespace Universal.IO.Sockets
 {
     public class NeutralBuffer
     {

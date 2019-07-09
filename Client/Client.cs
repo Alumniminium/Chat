@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Client.Entities;
 using Client.Networking;
-using Sockets.Client;
-using Sockets.Queues;
+using Universal.IO.Sockets.Client;
+using Universal.IO.Sockets.Queues;
 using Newtonsoft.Json;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -35,8 +35,8 @@ namespace Client
         private void Disconnected()
         {
             FastConsole.WriteLine("Disconnected!");
-            Socket.OnConnected-=Connected;
-            Socket.OnDisconnect-=Disconnected;
+            Socket.OnConnected -= Connected;
+            Socket.OnDisconnect -= Disconnected;
             Thread.Sleep(5000);
             ConnectAsync();
         }

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Sockets.Client;
+using Universal.IO.Sockets.Client;
 using Universal.Packets;
 using Universal.Packets.Enums;
 using Server.Entities;

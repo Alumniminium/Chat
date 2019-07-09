@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace Sockets.Pools
+namespace Universal.IO.Sockets.Pools
 {
     public static class SocketAsyncEventArgsPool
     {
@@ -15,7 +15,7 @@ namespace Sockets.Pools
 
         public static SocketAsyncEventArgs Get()
         {
-            if(Pool.Count == 0)
+            if (Pool.Count == 0)
                 Fill();
             return Pool.Dequeue();
         }

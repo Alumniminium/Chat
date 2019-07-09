@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace Sockets.Pools
+namespace Universal.IO.Sockets.Pools
 {
     public class BufferPool
     {

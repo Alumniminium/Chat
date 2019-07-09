@@ -1,4 +1,4 @@
-﻿namespace Sockets.Monitoring
+﻿namespace Universal.IO.Sockets.Monitoring
 {
     public enum TrafficMode
     {

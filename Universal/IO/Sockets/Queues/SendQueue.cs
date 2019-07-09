@@ -1,9 +1,9 @@
-﻿using Sockets.Client;
+﻿using Universal.IO.Sockets.Client;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Sockets.Queues
+namespace Universal.IO.Sockets.Queues
 {
 
     public static class SendQueue

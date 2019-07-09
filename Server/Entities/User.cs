@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
-using Sockets.Client;
+using Universal.IO.Sockets.Client;
 using Newtonsoft.Json;
 
 namespace Server.Entities
@@ -17,7 +17,8 @@ namespace Server.Entities
         public List<int> VirtualServers { get; set; }
         public List<int> Friends { get; set; }
 
-        [NotMapped][JsonIgnore]
+        [NotMapped]
+        [JsonIgnore]
         public ClientSocket Socket { get; set; }
 
 
@@ -28,7 +29,7 @@ namespace Server.Entities
         }
 
         public void Send(byte[] packet) => Socket?.Send(packet);
-        public string GetIp() => ((IPEndPoint) Socket.Socket.RemoteEndPoint).Address.ToString();
+        public string GetIp() => ((IPEndPoint)Socket.Socket.RemoteEndPoint).Address.ToString();
 
         public override string ToString() => $"UserId: {Id} | Name: {Username} | Password: {Password} | Online: {Socket != null && Socket.IsConnected}";
     }

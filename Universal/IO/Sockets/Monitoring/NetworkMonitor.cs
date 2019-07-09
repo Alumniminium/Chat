@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Sockets.Monitoring
+namespace Universal.IO.Sockets.Monitoring
 {
     public class NetworkMonitor
     {
@@ -37,7 +37,7 @@ namespace Sockets.Monitoring
             Thread.Sleep(500);
             _packetPerSecondTimer.Elapsed += (sender, args) =>
             {
-                Console.Title = $"Packets per sec: Out: {PPSOut} In: {PPSIn} | DL: {DownloadSpeedAverage/1024} UL: {UploadSpeedAverage / 1024}";
+                Console.Title = $"Packets per sec: Out: {PPSOut} In: {PPSIn} | DL: {DownloadSpeedAverage / 1024} UL: {UploadSpeedAverage / 1024}";
                 PPSOut = 0;
                 PPSIn = 0;
             };
