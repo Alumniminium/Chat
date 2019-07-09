@@ -65,7 +65,7 @@ namespace Server.Database
             
         }
 
-        public void LoadUser(User user)
+        public void LoadUser(ref User user)
         {
             
         }

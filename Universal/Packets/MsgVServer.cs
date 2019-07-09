@@ -8,26 +8,28 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgVServer
     {
+        public const int MAX_SERVER_NAME_LENGTH = 32;
+        public const int MAX_SERVER_ICON_LENGTH = 64;
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public long Created { get; set; }
         public long LastActivity { get; set; }
 
-        public fixed byte ServerName[16];
-        public fixed byte ServerIconUrl[64];
+        public fixed byte ServerName[MAX_SERVER_NAME_LENGTH];
+        public fixed byte ServerIconUrl[MAX_SERVER_ICON_LENGTH];
 
 
         public string GetServerName()
         {
             fixed (byte* p = ServerName)
-                return Encoding.ASCII.GetString(p, 16).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_SERVER_NAME_LENGTH).Trim('\0');
         }
 
         public string GetServerIconUrl()
         {
             fixed (byte* p = ServerIconUrl)
-                return Encoding.ASCII.GetString(p, 64).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_SERVER_ICON_LENGTH).Trim('\0');
         }
 
         public void SetServerName(string serverName)

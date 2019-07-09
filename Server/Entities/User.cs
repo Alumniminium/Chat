@@ -26,6 +26,8 @@ namespace Server.Entities
         {
             VirtualServers = new List<int>();
             Friends = new List<int>();
+
+            VirtualServers.Add(0);
         }
 
         public void Send(byte[] packet) => Socket?.Send(packet);

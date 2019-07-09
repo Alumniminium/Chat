@@ -12,6 +12,6 @@ namespace Server.Database
         int GetNextUserId();
         int GetNextServerId();
         void Save();
-        void LoadUser(User user);
+        void LoadUser(ref User user);
     }
 }

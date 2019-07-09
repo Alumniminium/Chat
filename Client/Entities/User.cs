@@ -19,6 +19,9 @@ namespace Client.Entities
         {
             Friends = new ConcurrentDictionary<int, User>();
             Servers = new ConcurrentDictionary<int, VirtualServer>();
+            Servers.TryAdd(0, new VirtualServer());
+            Servers[0].Name = "Direct";
+            Servers[0].IconUrl = AvatarUrl;
         }
 
         public VirtualServer GetServer(int serverId)
@@ -28,6 +31,8 @@ namespace Client.Entities
         }
         public User GetFriend(int friendId)
         {
+            if (friendId == Id)
+                return this;
             Friends.TryGetValue(friendId, out var friend);
             return friend;
         }

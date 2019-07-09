@@ -44,12 +44,14 @@ namespace Server.Networking
                     foreach (var friendId in user.Friends)
                     {
                         var friend = Oracle.GetUserFromId(friendId);
+                        if (friend != null)
+                        {
+                            var online = false;
+                            if (friend.Socket != null)
+                                online = friend.Socket.IsConnected;
 
-                        var online = false;
-                        if (friend.Socket != null)
-                            online = friend.Socket.IsConnected;
-
-                        user.Send(MsgUser.Create(friend.Id, friend.Nickname, friend.AvatarUrl, friend.Email, online));
+                            user.Send(MsgUser.Create(friend.Id, friend.Nickname, friend.AvatarUrl, friend.Email, online));
+                        }
                     }
                     user.Send(msg);
                     break;
@@ -57,24 +59,36 @@ namespace Server.Networking
                     foreach (var serverId in user.VirtualServers)
                     {
                         var server = Oracle.GetServerFromId(serverId);
-                        user.Send(MsgVServer.Create(server.Id, server.Name, server.IconUrl, server.CreatedTime, server.LastActivity));
+                        if (server != null)
+                        {
+                            user.Send(MsgVServer.Create(server.Id, server.Name, server.IconUrl, server.CreatedTime, server.LastActivity));
+                        }
                     }
                     user.Send(msg);
                     break;
                 case MsgDataRequestType.Channels:
                     var dbServer = Oracle.GetServerFromId(msg.TargetId);
-                    foreach (var channelId in dbServer.Channels)
+                    if (dbServer != null)
                     {
-                        user.Send(MsgChannel.Create(channelId.Key, dbServer.Id, channelId.Value.Name));
+                        foreach (var channelId in dbServer.Channels)
+                        {
+                            user.Send(MsgChannel.Create(channelId.Key, dbServer.Id, channelId.Value.Name));
+                        }
                     }
+
                     user.Send(msg);
                     break;
                 case MsgDataRequestType.Messages:
                     var dbChannel = Oracle.GetServerChannelFromId(msg.TargetId, msg.Param);
-                    foreach (var message in dbChannel.Messages)
+                    if (dbChannel != null)
                     {
-                        user.Send(MsgText.Create(message.Id, message.AuthorId, message.Text, msg.TargetId, dbChannel.Id, message.Timestamp));
+                        foreach (var message in dbChannel.Messages)
+                        {
+                            user.Send(MsgText.Create(message.Id, message.AuthorId, message.Text, msg.TargetId,
+                                dbChannel.Id, message.Timestamp));
+                        }
                     }
+
                     user.Send(msg);
                     break;
                 default:
@@ -100,7 +114,7 @@ namespace Server.Networking
 
             if (Core.Db.Authenticate(username, password))
             {
-                Core.Db.LoadUser(user);
+                Core.Db.LoadUser(ref user);
                 msgLogin.UniqueId = user.Id;
             }
             else if (Core.Db.AddUser(user))
@@ -109,6 +123,17 @@ namespace Server.Networking
             }
 
             user.Send(msgLogin);
+            var userInfoPacket = MsgUser.Create(user.Id, user.Nickname, user.AvatarUrl, user.Email, true);
+            foreach (var friendId in user.Friends)
+            {
+                var friend = Oracle.GetUserFromId(friendId);
+                if (friend.Socket!=null && friend.Socket.IsConnected)
+                {
+                    friend.Send(userInfoPacket);
+                }
+
+            }
+            user.Send(userInfoPacket);
 
             FConsole.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
         }

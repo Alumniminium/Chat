@@ -8,7 +8,7 @@ namespace Client.Entities
     {
         public int UniqueId { get; private set; }
         public string Name { get; private set; }
-        private List<Message> Messages { get; set; }
+        public List<Message> Messages { get; set; }
 
         public Action<Message> OnMessage { get; set; }
 
