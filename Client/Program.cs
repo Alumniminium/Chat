@@ -58,8 +58,8 @@ namespace Client
                 if (server.Channels.Count == 0)
                     Console.WriteLine($"| -   |--- No channels.");
             }
-
-            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+            Console.WriteLine();
+            //Console.SetCursorPosition(0, Console.BufferHeight - 1);
         }
     }
 }
