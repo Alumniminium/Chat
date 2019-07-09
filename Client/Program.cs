@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
+using Universal.Extensions;
 using Universal.IO.FastConsole;
 
 namespace Client
@@ -13,9 +12,9 @@ namespace Client
         public static void Main()
         {
             FConsole.Title = "CLIENT APP";
-            SetupCountermeasuresForShitCode();
+            GlobalExceptionHandler.Setup();
             Core.Client.ConnectAsync();
-            
+
             while (true)
             {
                 DrawUI();
@@ -56,28 +55,11 @@ namespace Client
                     if (channel.Messages.Count == 0)
                         Console.WriteLine($"| -   |--- {channel.Name} ---> No new messages.");
                 }
-                if(server.Channels.Count ==0)
+                if (server.Channels.Count == 0)
                     Console.WriteLine($"| -   |--- No channels.");
             }
 
-            Console.SetCursorPosition(0, Console.WindowHeight-1);
-        }
-
-        private static void SetupCountermeasuresForShitCode()
-        {
-            TaskScheduler.UnobservedTaskException += (_, exception) =>
-            {
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
-                exception.SetObserved();
-                Debugger.Break();
-            };
-            AppDomain.CurrentDomain.UnhandledException += (_, exception) =>
-            {
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.Message}");
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.StackTrace}");
-                Debugger.Break();
-            };
+            Console.SetCursorPosition(0, Console.WindowHeight - 1);
         }
     }
 }

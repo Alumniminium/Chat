@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Text;
 using System.Threading;
 
 namespace Universal.IO.FastConsole
@@ -9,13 +10,13 @@ namespace Universal.IO.FastConsole
         internal static readonly Thread WorkerThread;
         internal static readonly ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
         internal static readonly AutoResetEvent Block = new AutoResetEvent(false);
-
+        internal static readonly StringBuilder Builder = new StringBuilder();
         static FastConsoleThread()
         {
-            WorkerThread = new Thread(WorkLoop) {IsBackground = true};
+            WorkerThread = new Thread(WorkLoop) { IsBackground = true };
             WorkerThread.Start();
         }
-        
+
         public static void Add(string msg)
         {
             Queue.Enqueue(msg);
@@ -24,13 +25,16 @@ namespace Universal.IO.FastConsole
 
         private static void WorkLoop()
         {
-            while(true)
+            while (true)
             {
+                Builder.Clear();
                 Block.WaitOne();
-                while(Queue.TryDequeue(out var msg))
+
+                while (Queue.TryDequeue(out var msg))
                 {
-                    Console.WriteLine(msg);
+                    Builder.AppendLine(msg);
                 }
+                Console.WriteLine(Builder.ToString());
             }
         }
     }
