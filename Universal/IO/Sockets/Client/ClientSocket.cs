@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
+using Universal.IO.FastConsole;
 
 namespace Universal.IO.Sockets.Client
 {
@@ -104,23 +104,25 @@ namespace Universal.IO.Sockets.Client
         {
             SendSync.WaitOne();
 
-            using (var stream = new MemoryStream())
-            using (var compression = new DeflateStream(stream, CompressionLevel.Optimal))
+            byte[] cPacket;
+
+            using (var ms = new MemoryStream())
+            using (var cp = new DeflateStream(ms, CompressionMode.Compress))
             {
-                compression.Write(packet);
-                compression.Flush();
+                cp.Write(packet);
+                cp.Flush();
 
-                var compressedPacket = new byte[stream.Length + 4];
-                var compressedData = stream.ToArray();
-                var compressedLengthBytes = BitConverter.GetBytes((short)(compressedPacket.Length));
+                cPacket = new byte[ms.Length + 4];
+                var cData = ms.ToArray();
+                var cLengthBytes = BitConverter.GetBytes((short)(cPacket.Length));
 
-                System.Buffer.BlockCopy(compressedLengthBytes, 0, compressedPacket, 0, compressedLengthBytes.Length);
-                System.Buffer.BlockCopy(compressedData, 0, compressedPacket, 4, compressedData.Length);
+                System.Buffer.BlockCopy(cLengthBytes, 0, cPacket, 0, cLengthBytes.Length);
+                System.Buffer.BlockCopy(cData, 0, cPacket, 4, cData.Length);
 
-                Console.WriteLine($"Compression Efficiency for {BitConverter.ToUInt16(packet, 4)} ({packet.Length} vs {compressedPacket.Length} bytes) Ratio: " + compressedPacket.Length / (float)packet.Length * 100);
+                FConsole.WriteLine($"Compression Efficiency for {BitConverter.ToUInt16(packet, 4)} ({packet.Length} vs {cPacket.Length} bytes) Ratio: " + cPacket.Length / (float)packet.Length * 100);
             }
 
-            SendArgs.SetBuffer(packet, 0, packet.Length);
+            SendArgs.SetBuffer(cPacket, 0, cPacket.Length);
 
             try
             {
@@ -144,7 +146,7 @@ namespace Universal.IO.Sockets.Client
         {
             try
             {
-                Console.WriteLine("Disconnecting: " + reason);
+                FConsole.WriteLine("Disconnecting: " + reason);
                 IsConnected = false;
             }
             finally

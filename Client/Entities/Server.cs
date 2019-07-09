@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Client.Entities
 {
@@ -7,13 +8,49 @@ namespace Client.Entities
         public int Id;
         public string Name = "";
         public string IconUrl { get; set; }
-        public Dictionary<int, User> Users;
-        public Dictionary<int,Channel> Channels;
+        public readonly Dictionary<int, User> Users;
+        public readonly Dictionary<int, Channel> Channels;
+
+        public Action<Channel> OnChannelAdded;
+        public Action<Channel> OnChannelRemoved;
+        public Action<User> OnUserAdded;
+        public Action<User> OnUserRemoved;
 
         public VirtualServer()
         {
             Users = new Dictionary<int, User>();
-            Channels=new Dictionary<int, Channel>();
+            Channels = new Dictionary<int, Channel>();
+        }
+
+        public void AddUser(User user)
+        {
+            Users.Add(user.Id, user);
+            OnUserAdded?.Invoke(user);
+        }
+        public void RemoveUser(User user)
+        {
+            Users.Remove(user.Id, out user);
+            OnUserRemoved?.Invoke(user);
+        }
+        public void AddChannel(Channel channel)
+        {
+            Channels.Add(channel.UniqueId, channel);
+            OnChannelAdded?.Invoke(channel);
+        }
+        public void RemoveChannel(Channel channel)
+        {
+            Channels.Remove(channel.UniqueId, out channel);
+            OnChannelRemoved?.Invoke(channel);
+        }
+
+
+        public User GetUser(int id)
+        {
+            return Users[id];
+        }
+        public Channel GetChannel(int id)
+        {
+            return Channels[id];
         }
     }
 }

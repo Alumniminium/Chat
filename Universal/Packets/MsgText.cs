@@ -11,8 +11,8 @@ namespace Universal.Packets
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
-        public int ServerId { get; set; }
-        public int ChannelId { get; set; }
+        public int ServerId { get; set; } // 0 == Direct Message
+        public int ChannelId { get; set; }// if ServerId == 0  then  ChannelId = FriendId
         public int AuthorId { get; set; }
         public long SentTime { get; set; }
 
@@ -29,6 +29,8 @@ namespace Universal.Packets
             for (var i = 0; i < text.Length; i++)
                 Text[i] = (byte)text[i];
         }
+
+        public int FriendId => ChannelId;
 
         public static byte[] Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)
         {
@@ -62,14 +64,14 @@ namespace Universal.Packets
             return *msg;
         }
 
-        public static implicit operator byte[] (MsgText msg)
+        public static implicit operator byte[](MsgText msg)
         {
             var buffer = new byte[sizeof(MsgText)];
             fixed (byte* p = buffer)
                 *(MsgText*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte* (MsgText msg)
+        public static implicit operator byte*(MsgText msg)
         {
             var buffer = stackalloc byte[sizeof(MsgText)];
             *(MsgText*)buffer = msg;

@@ -13,7 +13,7 @@ namespace Client.Networking
             {
                 case MsgDataRequestType.Friends:
                     {
-                        FastConsole.WriteLine("Stage Completed: Sync Friendlist");
+                        FConsole.WriteLine("Stage Completed: Sync Friendlist");
 
                         foreach (var friend in Core.MyUser.Friends)
                         {
@@ -28,7 +28,7 @@ namespace Client.Networking
 
                 case MsgDataRequestType.VServers:
                     {
-                        FastConsole.WriteLine("Stage Completed: Sync VServers");
+                        FConsole.WriteLine("Stage Completed: Sync VServers");
                         foreach (var server in Core.MyUser.Servers)
                         {
                             var request = MsgDataRequest.CreateServerChannelListRequest(Core.MyUser.Id, server.Key);
@@ -38,7 +38,7 @@ namespace Client.Networking
                     }
 
                 case MsgDataRequestType.Channels:
-                    FastConsole.WriteLine("Stage Completed: Sync Channels of " + Core.MyUser.Servers[msgDataRequest.TargetId].Name);
+                    FConsole.WriteLine("Stage Completed: Sync Channels of " + Core.MyUser.Servers[msgDataRequest.TargetId].Name);
                     foreach (var server in Core.MyUser.Servers.Values)
                     {
                         foreach (var channel in server.Channels)
@@ -49,10 +49,10 @@ namespace Client.Networking
                     }
                     break;
                 case MsgDataRequestType.Messages:
-                    FastConsole.WriteLine("Stage Completed: Sync Messages of " + Core.MyUser.Servers[msgDataRequest.TargetId].Channels[msgDataRequest.Param].Name);
+                    FConsole.WriteLine("Stage Completed: Sync Messages of " + Core.MyUser.Servers[msgDataRequest.TargetId].Channels[msgDataRequest.Param].Name);
                     break;
                 default:
-                    FastConsole.WriteLine("Invalid stage.");
+                    FConsole.WriteLine("Invalid stage.");
                     break;
             }
 

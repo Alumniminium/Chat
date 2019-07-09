@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 
 namespace Client.Entities
@@ -12,11 +13,23 @@ namespace Client.Entities
         public string AvatarUrl { get; set; }
         public ConcurrentDictionary<int, User> Friends { get; set; }
         public ConcurrentDictionary<int, VirtualServer> Servers { get; set; }
+        public DateTime LastActivity { get; set; }
 
         public User()
         {
             Friends = new ConcurrentDictionary<int, User>();
             Servers = new ConcurrentDictionary<int, VirtualServer>();
+        }
+
+        public VirtualServer GetServer(int serverId)
+        {
+            Servers.TryGetValue(serverId, out var server);
+            return server;
+        }
+        public User GetFriend(int friendId)
+        {
+            Friends.TryGetValue(friendId, out var friend);
+            return friend;
         }
     }
 }

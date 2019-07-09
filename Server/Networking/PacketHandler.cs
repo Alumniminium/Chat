@@ -26,7 +26,7 @@ namespace Server.Networking
                     ProcessDataRequest(user, packet);
                     break;
                 default:
-                    FastConsole.WriteLine("Invalid packet received from " + user.Username);
+                    FConsole.WriteLine("Invalid packet received from " + user.Username);
                     user.Socket.Disconnect("Server.PacketHandler.Handle() Invalid packet received");
                     break;
             }
@@ -35,7 +35,7 @@ namespace Server.Networking
         private static void ProcessDataRequest(User user, byte[] packet)
         {
             var msg = (MsgDataRequest)packet;
-            FastConsole.WriteLine($"MsgDataRequest: {Oracle.GetUserFromId(msg.UserId)} requests {msg.Type} on {msg.TargetId} with param {msg.Param}");
+            FConsole.WriteLine($"MsgDataRequest: {Oracle.GetUserFromId(msg.UserId)} requests {msg.Type} on {msg.TargetId} with param {msg.Param}");
             if (user == null)
                 return;
             switch (msg.Type)
@@ -78,18 +78,18 @@ namespace Server.Networking
                     user.Send(msg);
                     break;
                 default:
-                    FastConsole.WriteLine("Invalid packet received from " + user.Username);
+                    FConsole.WriteLine("Invalid packet received from " + user.Username);
                     user.Socket.Disconnect("Server.PacketHandler.ProcessDataRequest() Invalid packet received");
                     break;
             }
 
-            FastConsole.WriteLine($"MsgDataRequest: {Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgDataRequest: {Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
 
         private static void ProcessLogin(ClientSocket userSocket, byte[] packet)
         {
             var msgLogin = (MsgLogin)packet;
-            FastConsole.WriteLine($"MsgLogin: {msgLogin.GetUsername()} with password {msgLogin.GetPassword()} requesting login...");
+            FConsole.WriteLine($"MsgLogin: {msgLogin.GetUsername()} with password {msgLogin.GetPassword()} requesting login...");
             var (username, password) = msgLogin.GetUserPass();
 
             var user = new User();
@@ -110,7 +110,7 @@ namespace Server.Networking
 
             user.Send(msgLogin);
 
-            FastConsole.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
+            FConsole.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
         }
     }
 }

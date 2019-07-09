@@ -13,7 +13,7 @@ namespace Server
     {
         public static void Main()
         {
-            FastConsole.Title = "SERVER APP";
+            FConsole.Title = "SERVER APP";
 
             SetupCountermeasuresForShitCode();
 
@@ -24,11 +24,11 @@ namespace Server
 
             ServerSocket.Start(Core.Settings.Port);
 
-            FastConsole.WriteLine("Online");
+            FConsole.WriteLine("Online");
 
             while (true)
             {
-                var cmd = FastConsole.ReadLine();
+                var cmd = FConsole.ReadLine();
                 switch (cmd)
                 {
                     case "exit":
@@ -45,15 +45,15 @@ namespace Server
         {
             TaskScheduler.UnobservedTaskException += (_, exception) =>
             {
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
+                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
+                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
                 exception.SetObserved();
                 Debugger.Break();
             };
             AppDomain.CurrentDomain.UnhandledException += (_, exception) =>
             {
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.Message}");
-                FastConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.StackTrace}");
+                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.Message}");
+                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.StackTrace}");
                 Debugger.Break();
             };
         }

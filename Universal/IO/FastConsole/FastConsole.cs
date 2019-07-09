@@ -2,9 +2,9 @@ using System;
 
 namespace Universal.IO.FastConsole
 {
-    public static class FastConsole
+    public static class FConsole
     {
-        public static string Title { get => Console.Title; set=>Console.Title=value;}
+        public static string Title { get => Console.Title; set => Console.Title = value; }
 
         public static void WriteLine(string msg)
         {

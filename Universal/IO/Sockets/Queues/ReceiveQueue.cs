@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.IO;
+using System.IO.Compression;
 using System.Net.Sockets;
 using System.Threading;
 using Universal.IO.Sockets.Client;
@@ -87,7 +89,35 @@ namespace Universal.IO.Sockets.Queues
 
                 if (connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired && connection.Buffer.BytesRequired > 6)
                 {
-                    _onPacket(connection, connection.Buffer.MergeBuffer);
+                    if (true)
+                    {
+                        byte[] compressedArray = new byte[connection.Buffer.BytesRequired];
+                        Array.Copy(connection.Buffer.MergeBuffer, compressedArray, compressedArray.Length);
+                        byte[] decompressedArray = null;
+
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            using (MemoryStream compressedStream = new MemoryStream(compressedArray))
+                            {
+                                using (DeflateStream decompressedStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                                {
+                                    decompressedStream.CopyTo(ms);
+                                }
+                            }
+                            decompressedArray = ms.ToArray();
+
+                            var ucPacket = new byte[ms.Length + 4];
+                            var ucData = ms.ToArray();
+                            var ucLengthBytes = BitConverter.GetBytes((short)(ucPacket.Length));
+
+                            System.Buffer.BlockCopy(ucLengthBytes, 0, ucPacket, 0, ucLengthBytes.Length);
+                            System.Buffer.BlockCopy(ucData, 0, ucPacket, 4, ucData.Length);
+                            _onPacket(connection, ucPacket);
+                        }
+                    }
+                    else
+                        _onPacket(connection, connection.Buffer.MergeBuffer);
+
                     connection.Buffer.BytesInBuffer = 0;
                 }
 

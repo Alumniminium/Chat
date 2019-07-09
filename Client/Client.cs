@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Client.Entities;
-using Client.Networking;
+﻿using Client.Networking;
 using Universal.IO.Sockets.Client;
 using Universal.IO.Sockets.Queues;
-using Newtonsoft.Json;
 using Universal.IO.FastConsole;
 using Universal.Packets;
 using System.Threading;
@@ -12,9 +9,7 @@ namespace Client
 {
     public class Client
     {
-        [JsonIgnore]
         public ClientSocket Socket;
-
         public void ConnectAsync()
         {
             ReceiveQueue.Start(OnPacket);
@@ -28,13 +23,13 @@ namespace Client
 
         private void Connected()
         {
-            FastConsole.WriteLine("Connected!");
+            FConsole.WriteLine("Connected!");
             Core.Client.Send(MsgLogin.Create("demo", "demo"));
         }
 
         private void Disconnected()
         {
-            FastConsole.WriteLine("Disconnected!");
+            FConsole.WriteLine("Disconnected!");
             Socket.OnConnected -= Connected;
             Socket.OnDisconnect -= Disconnected;
             Thread.Sleep(5000);

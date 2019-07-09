@@ -1,6 +1,6 @@
 ﻿using Server.Entities;
 
-namespace Server.Networking
+namespace Server
 {
     public static class Oracle
     {
@@ -21,7 +21,7 @@ namespace Server.Networking
             if (!Collections.VirtualServers.TryGetValue(serverId, out var server))
                 return null;
 
-            return server.Channels.TryGetValue(channelId,out var channel) ? channel : null;
+            return server.Channels.TryGetValue(channelId, out var channel) ? channel : null;
         }
     }
 }

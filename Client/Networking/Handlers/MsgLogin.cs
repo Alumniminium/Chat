@@ -1,4 +1,3 @@
-using System;
 using Client.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -14,12 +13,12 @@ namespace Client.Networking.Handlers
                 Core.MyUser = new User();
                 Core.MyUser.Username = msgLogin.GetUsername();
                 Core.MyUser.Password = msgLogin.GetPassword();
-                 FastConsole.WriteLine("Authentication successful. Your user Id is: " + Core.MyUser.Id);
+                FConsole.WriteLine("Authentication successful. Your user Id is: " + Core.MyUser.Id);
                 var msgDataRequest = MsgDataRequest.CreateFriendListRequest(Core.MyUser.Id);
                 Core.Client.Send(msgDataRequest);
             }
             else
-                FastConsole.WriteLine("Authentication failed.");
+                FConsole.WriteLine("Authentication failed.");
         }
     }
 }
