@@ -16,6 +16,7 @@ namespace Universal.IO.Sockets.Client
         public Socket Socket;
         public object StateObject;
         public bool IsConnected;
+        public bool UseCompression { get; set; }
 
         internal readonly NeutralBuffer Buffer;
         internal readonly AutoResetEvent SendSync = new AutoResetEvent(true);
@@ -23,10 +24,11 @@ namespace Universal.IO.Sockets.Client
         internal readonly SocketAsyncEventArgs ReceiveArgs;
         internal readonly SocketAsyncEventArgs SendArgs;
 
-        public ClientSocket(object stateObject)
+        public ClientSocket(object stateObject, bool useCompression=true)
         {
             Buffer = new NeutralBuffer();
             StateObject = stateObject;
+            UseCompression = useCompression;
 
             SendArgs = new SocketAsyncEventArgs();
             SendArgs.Completed += Sent;
@@ -36,6 +38,7 @@ namespace Universal.IO.Sockets.Client
             ReceiveArgs.Completed += Received;
             ReceiveArgs.UserToken = this;
         }
+
 
 
         public void ConnectAsync(string host, ushort port)

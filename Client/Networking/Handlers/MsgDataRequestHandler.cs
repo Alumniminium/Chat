@@ -2,9 +2,9 @@ using Universal.IO.FastConsole;
 using Universal.Packets;
 using Universal.Packets.Enums;
 
-namespace Client.Networking
+namespace Client.Networking.Handlers
 {
-    internal class MsgDataRequestHandler
+    public static class MsgDataRequestHandler
     {
         public static void Process(MsgDataRequest msgDataRequest)
         {

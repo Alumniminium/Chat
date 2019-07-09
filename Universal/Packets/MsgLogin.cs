@@ -29,7 +29,7 @@ namespace Universal.Packets
         {
             var stringBuilder = new StringBuilder();
             var pair = ValueTuple.Create(string.Empty, string.Empty);
-            for (int i = 0; i < 64; i++)
+            for (var i = 0; i < 64; i++)
             {
                 if (i == 32)
                 {

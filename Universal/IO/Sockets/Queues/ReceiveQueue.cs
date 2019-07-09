@@ -89,22 +89,21 @@ namespace Universal.IO.Sockets.Queues
 
                 if (connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired && connection.Buffer.BytesRequired > 6)
                 {
-                    if (true)
+                    if (connection.UseCompression)
                     {
-                        byte[] compressedArray = new byte[connection.Buffer.BytesRequired];
+                        var compressedArray = new byte[connection.Buffer.BytesRequired];
                         Array.Copy(connection.Buffer.MergeBuffer, 4, compressedArray, 0, compressedArray.Length-4);
-                        byte[] decompressedArray = null;
 
-                        using (MemoryStream decompressedStream = new MemoryStream())
+                        using (var decompressedStream = new MemoryStream())
                         {
-                            using (MemoryStream compressedStream = new MemoryStream(compressedArray))
+                            using (var compressedStream = new MemoryStream(compressedArray))
                             {
-                                using (DeflateStream deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                                using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
                                 {
                                     deflateStream.CopyTo(decompressedStream);
                                 }
                             }
-                            decompressedArray = decompressedStream.ToArray();
+                            var decompressedArray = decompressedStream.ToArray();
                             _onPacket(connection, decompressedArray);
                         }
                     }
