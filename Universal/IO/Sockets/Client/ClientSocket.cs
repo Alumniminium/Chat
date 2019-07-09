@@ -118,8 +118,6 @@ namespace Universal.IO.Sockets.Client
 
                 System.Buffer.BlockCopy(cLengthBytes, 0, cPacket, 0, cLengthBytes.Length);
                 System.Buffer.BlockCopy(cData, 0, cPacket, 4, cData.Length);
-
-                FConsole.WriteLine($"Compression Efficiency for {BitConverter.ToUInt16(packet, 4)} ({packet.Length} vs {cPacket.Length} bytes) Ratio: " + cPacket.Length / (float)packet.Length * 100);
             }
 
             SendArgs.SetBuffer(cPacket, 0, cPacket.Length);

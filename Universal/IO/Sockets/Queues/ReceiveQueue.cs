@@ -92,27 +92,20 @@ namespace Universal.IO.Sockets.Queues
                     if (true)
                     {
                         byte[] compressedArray = new byte[connection.Buffer.BytesRequired];
-                        Array.Copy(connection.Buffer.MergeBuffer, compressedArray, compressedArray.Length);
+                        Array.Copy(connection.Buffer.MergeBuffer, 4, compressedArray, 0, compressedArray.Length-4);
                         byte[] decompressedArray = null;
 
-                        using (MemoryStream ms = new MemoryStream())
+                        using (MemoryStream decompressedStream = new MemoryStream())
                         {
                             using (MemoryStream compressedStream = new MemoryStream(compressedArray))
                             {
-                                using (DeflateStream decompressedStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                                using (DeflateStream deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
                                 {
-                                    decompressedStream.CopyTo(ms);
+                                    deflateStream.CopyTo(decompressedStream);
                                 }
                             }
-                            decompressedArray = ms.ToArray();
-
-                            var ucPacket = new byte[ms.Length + 4];
-                            var ucData = ms.ToArray();
-                            var ucLengthBytes = BitConverter.GetBytes((short)(ucPacket.Length));
-
-                            System.Buffer.BlockCopy(ucLengthBytes, 0, ucPacket, 0, ucLengthBytes.Length);
-                            System.Buffer.BlockCopy(ucData, 0, ucPacket, 4, ucData.Length);
-                            _onPacket(connection, ucPacket);
+                            decompressedArray = decompressedStream.ToArray();
+                            _onPacket(connection, decompressedArray);
                         }
                     }
                     else
