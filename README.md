@@ -13,7 +13,7 @@ This is a custom binary based protocol, parsing and creating is unsafe code. I'm
 
 Here's the packet layout.
 
-```
+```C
 STRUCT
 {
     SHORT LENGTH;
@@ -62,12 +62,17 @@ In C# that looks like this:
         }
 ```
 
-Now, how about Serialization and Deserialization, that's usually alot of code... lets dig in..
+It's essential to read the first two bytes and read them as an 16 bit integer `BitConverter.ToInt16(array,0);` for example, that value will be the amount of bytes required for this packet. Then, if compression is enabled, run a deflate stream over it to decompress it. It's important that the deflate stream skips the header, so the first two bytes, as they represent the length of the compressed chunk and obviously aren't compressed.
 
-```
+Now you got your complete packet assembled and ready to go, read the next byte - the third byte - this will give you the packet Id. 
+
+Based on the third byte, you route the packet to the relevant packet handler.
+
+Now, inside the packet handler you gotta start thinking about Serialization and Deserialization, that's usually alot of code... so lets dig in..
+
+```cs
 
         // Serialization :)
-
         public static implicit operator byte[] (MsgDataRequest msg)
         {
             var buffer = new byte[sizeof(MsgDataRequest)];
@@ -84,6 +89,30 @@ Now, how about Serialization and Deserialization, that's usually alot of code...
         }
 
 ```
+I swear that's it. 
+
+A typical use case would be something like
+```cs
+
+byte[] buffer = Socket.Receive();
+LoginPacketHandler(buffer);
+
+void LoginPacketHandler(byte[] packet);
+{
+
+    MsgLogin msg = packet; //Deserialization
+
+    msg.UniqueId = Authenticate(msg.GetUsername(),msg.GetPassword());
+
+    Socket.Send(msg); // Serialization
+
+}
+```
+
+which is pretty fucking neat.
+
+Anyways, everything should be very straight forward to implement in lower level languages, I've tried to keep it very simple and friendly.
+
 
 # Login sequence:
 
