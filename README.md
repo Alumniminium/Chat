@@ -7,6 +7,84 @@ Discord sucks. It's constantly having problems or is down. The Discord client is
 
 I know this isn't going to take off and become the next big thing, im building this mainly to see if I can, and to have a fallback service to talk with my friends if discord dies again.
 
+# Protocol
+
+This is a custom binary based protocol, parsing and creating is unsafe code. I'm casting byte arrays directly into a struct, achieving sub 0.09ms speeds for deserialization paired with high performance SocketAsyncEventArgs based sockets. Including poorly implemented compression. Of course this entire thing runs completely GC neutral. No allocations during normal operation. 
+
+Here's the packet layout.
+
+```
+STRUCT
+{
+    SHORT LENGTH;
+    BYTE ID;
+    BYTE[] PAYLOAD;
+}
+```
+
+where `PAYLOAD` would be other fields.
+In C# that looks like this:
+
+```cs
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public unsafe struct MsgDataRequest
+    {
+        public short Length { get; private set; }
+        public PacketType Id { get; private set; }
+        public int UserId { get; set; }
+        public int TargetId { get; set; }
+        public int Param { get; set; }
+        public MsgDataRequestType Type { get; set; }
+
+        // Generic Create Method. Allocated on the stack, returning dereferenced pointer.
+
+        public static MsgDataRequest Create(int userId, int targetId,int param, MsgDataRequestType type)
+        {
+            var msg = stackalloc MsgDataRequest[1];
+            msg->Length = (short)sizeof(MsgDataRequest);
+            msg->Id = PacketType.MsgDataRequest;
+            msg->UserId = userId;
+            msg->TargetId = targetId;
+            msg->Param = param;
+            msg->Type = type;
+
+            return *msg;
+        }
+        public static MsgDataRequest CreateFriendListRequest(int userId)
+        {
+            var msg = stackalloc MsgDataRequest[1];
+            msg->Length = (short)sizeof(MsgDataRequest);
+            msg->Id = PacketType.MsgDataRequest;
+            msg->UserId = userId;
+            msg->Type = MsgDataRequestType.Friends;
+
+            return *msg;
+        }
+```
+
+Now, how about Serialization and Deserialization, that's usually alot of code... lets dig in..
+
+```
+
+        // Serialization :)
+
+        public static implicit operator byte[] (MsgDataRequest msg)
+        {
+            var buffer = new byte[sizeof(MsgDataRequest)];
+            fixed (byte* p = buffer)
+                *(MsgDataRequest*)p = *&msg;
+            return buffer;
+        }
+        
+        // Deserialization :)
+        public static implicit operator MsgDataRequest(byte[] msg)
+        {
+            fixed (byte* p = msg)
+                return *(MsgDataRequest*)p;
+        }
+
+```
+
 # Login sequence:
 
 Client sends MsgLogin with user/pass, server responds with MsgLogin. If it contains a UniqueId other than ZERO (0), assign this UniqueId to your client. You are now logged in.
