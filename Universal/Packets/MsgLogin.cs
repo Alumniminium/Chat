@@ -8,11 +8,14 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgLogin
     {
+        public const int MAX_USERNAME_LENGTH = 32;
+        public const int MAX_PASSWORD_LENGTH = 32;
+
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
-        public fixed byte Username[32];
-        public fixed byte Password[32];
+        public fixed byte Username[MAX_USERNAME_LENGTH];
+        public fixed byte Password[MAX_PASSWORD_LENGTH];
 
         public string GetUsername()
         {

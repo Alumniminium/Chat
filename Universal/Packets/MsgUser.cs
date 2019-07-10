@@ -7,14 +7,16 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgUser
     {
+        public const int MAX_NICKNAME_LENGTH = 32;
+        public const int MAX_AVATAR_URL_LENGTH = 128;
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public int ServerId { get; set; }
         public bool Online { get; set; }
 
-        public fixed byte Nickname[32];
-        public fixed byte AvatarUrl[64];
+        public fixed byte Nickname[MAX_NICKNAME_LENGTH];
+        public fixed byte AvatarUrl[MAX_AVATAR_URL_LENGTH];
 
         public string GetNickname()
         {

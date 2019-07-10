@@ -7,12 +7,13 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgChannel
     {
+        public const int MAX_NAME_ENGTH = 48;
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public int ServerId { get; set; }
 
-        public fixed byte Name[32];
+        public fixed byte Name[MAX_NAME_ENGTH];
 
         public string GetName()
         {

@@ -9,7 +9,7 @@ namespace Universal.Packets
     public unsafe struct MsgVServer
     {
         public const int MAX_SERVER_NAME_LENGTH = 32;
-        public const int MAX_SERVER_ICON_LENGTH = 64;
+        public const int MAX_SERVER_ICON_LENGTH = 128;
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }

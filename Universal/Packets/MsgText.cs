@@ -8,6 +8,7 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgText
     {
+        public const int MAX_TEXT_LENGTH = 2048;
         public int Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
@@ -16,7 +17,7 @@ namespace Universal.Packets
         public int AuthorId { get; set; }
         public long SentTime { get; set; }
 
-        public fixed byte Text[2048];
+        public fixed byte Text[MAX_TEXT_LENGTH];
 
         public string GetText()
         {

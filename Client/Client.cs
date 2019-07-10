@@ -32,6 +32,7 @@ namespace Client
             FConsole.WriteLine("Disconnected!");
             Socket.OnConnected -= Connected;
             Socket.OnDisconnect -= Disconnected;
+            Socket?.Socket?.Dispose();
             Thread.Sleep(5000);
             ConnectAsync();
         }
