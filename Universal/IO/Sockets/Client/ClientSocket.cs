@@ -115,12 +115,12 @@ namespace Universal.IO.Sockets.Client
                 cp.Write(packet);
                 cp.Flush();
 
-                cPacket = new byte[ms.Length + 4];
+                cPacket = new byte[ms.Length + 2];
                 var cData = ms.ToArray();
                 var cLengthBytes = BitConverter.GetBytes((short)(cPacket.Length));
 
                 System.Buffer.BlockCopy(cLengthBytes, 0, cPacket, 0, cLengthBytes.Length);
-                System.Buffer.BlockCopy(cData, 0, cPacket, 4, cData.Length);
+                System.Buffer.BlockCopy(cData, 0, cPacket, 2, cData.Length);
             }
 
             SendArgs.SetBuffer(cPacket, 0, cPacket.Length);

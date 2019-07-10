@@ -27,14 +27,15 @@ namespace Universal.IO.FastConsole
         {
             while (true)
             {
-                Builder.Clear();
                 Block.WaitOne();
 
+                //while (Queue.TryDequeue(out var msg))
+                //    Builder.AppendLine(msg);
+                //Console.WriteLine(Builder);
+                //Builder.Clear();
+
                 while (Queue.TryDequeue(out var msg))
-                {
-                    Builder.AppendLine(msg);
-                }
-                Console.WriteLine(Builder.ToString());
+                    Console.WriteLine(msg);
             }
         }
     }

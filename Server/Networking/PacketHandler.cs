@@ -35,7 +35,7 @@ namespace Server.Networking
         private static void ProcessDataRequest(User user, byte[] packet)
         {
             var msg = (MsgDataRequest)packet;
-            FConsole.WriteLine($"MsgDataRequest: {Oracle.GetUserFromId(msg.UserId)} requests {msg.Type} on {msg.TargetId} with param {msg.Param}");
+            FConsole.WriteLine($"MsgDataRequest: {Oracle.GetUserFromId(msg.UserId).Username} requests {msg.Type} on {msg.TargetId} with param {msg.Param}");
             if (user == null)
                 return;
             switch (msg.Type)

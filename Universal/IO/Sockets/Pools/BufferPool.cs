@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using Universal.IO.FastConsole;
 
 namespace Universal.IO.Sockets.Pools
 {
@@ -27,7 +27,7 @@ namespace Universal.IO.Sockets.Pools
                 Fill();
             if (_queue.TryDequeue(out var buffer))
                 return buffer;
-            Console.WriteLine("Fucking queue starved.");
+            FConsole.WriteLine("Fucking queue starved.");
             return new byte[320];
         }
 

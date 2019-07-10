@@ -5,7 +5,9 @@ using Universal.IO.Sockets.Queues;
 using Universal.IO.Sockets.Server;
 using Server.Database;
 using Server.Networking;
+using Universal.Extensions;
 using Universal.IO.FastConsole;
+using Universal.Performance;
 
 namespace Server
 {
@@ -14,9 +16,9 @@ namespace Server
         public static void Main()
         {
             FConsole.Title = "SERVER APP";
-
-            SetupCountermeasuresForShitCode();
-
+            GlobalExceptionHandler.Setup();
+            JIT.PreJIT();
+            
             Core.Db = new JsonDb();
             Core.Db.EnsureDbReady();
 
@@ -39,23 +41,6 @@ namespace Server
                         break;
                 }
             }
-        }
-
-        private static void SetupCountermeasuresForShitCode()
-        {
-            TaskScheduler.UnobservedTaskException += (_, exception) =>
-            {
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.Message}");
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {exception.Exception.StackTrace}");
-                exception.SetObserved();
-                Debugger.Break();
-            };
-            AppDomain.CurrentDomain.UnhandledException += (_, exception) =>
-            {
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.Message}");
-                FConsole.WriteLine($"Congrats you idiot. Look what you did: {(exception.ExceptionObject as Exception)?.StackTrace}");
-                Debugger.Break();
-            };
         }
     }
 }

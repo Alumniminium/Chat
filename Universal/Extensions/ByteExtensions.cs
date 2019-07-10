@@ -1,5 +1,4 @@
-﻿using System;
-using Universal.Packets.Enums;
+﻿using Universal.Packets.Enums;
 
 namespace Universal.Extensions
 {

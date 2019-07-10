@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Universal.Extensions;
 using Universal.IO.FastConsole;
+using Universal.Performance;
 
 namespace Client
 {
@@ -13,6 +14,7 @@ namespace Client
         {
             FConsole.Title = "CLIENT APP";
             GlobalExceptionHandler.Setup();
+            JIT.PreJIT();
             Core.Client.ConnectAsync();
 
             while (true)
@@ -31,36 +33,43 @@ namespace Client
 
             int counter = 0;
             var friends = user.Friends.Values.ToArray();
-            foreach (var kvp in user.Servers)
-            {
-                Console.SetCursorPosition(0, Console.CursorTop);
-                Console.Write($"|--- {kvp.Value.Name}");
-                Console.SetCursorPosition(27, Console.CursorTop);
-                if (friends.Length > counter)
-                    Console.Write($"|--- {friends[counter].Name}");
-                counter++;
-                Console.CursorTop++;
-            }
 
-            Console.SetCursorPosition(0, 6);
-            foreach (var server in user.Servers.Values)
+            try
             {
-                Console.WriteLine($"| - {server.Name} -");
-                foreach (var channel in server.Channels.Values)
+                foreach (var kvp in user.Servers)
                 {
-                    foreach (var message in channel.Messages)
-                    {
-                        Console.WriteLine($"| -   |--- {channel.Name} ---> {Core.MyUser.GetFriend(message.AuthorId).Name} says: {message.Text}");
-                    }
-
-                    if (channel.Messages.Count == 0)
-                        Console.WriteLine($"| -   |--- {channel.Name} ---> No new messages.");
+                    Console.SetCursorPosition(0, Console.CursorTop);
+                    Console.Write($"|--- {kvp.Value.Name}");
+                    Console.SetCursorPosition(27, Console.CursorTop);
+                    if (friends.Length > counter)
+                        Console.Write($"|--- {friends[counter].Name}");
+                    counter++;
+                    Console.CursorTop++;
                 }
-                if (server.Channels.Count == 0)
-                    Console.WriteLine($"| -   |--- No channels.");
+
+                Console.SetCursorPosition(0, 6);
+                foreach (var server in user.Servers.Values)
+                {
+                    Console.WriteLine($"| - {server.Name} -");
+                    foreach (var channel in server.Channels.Values)
+                    {
+                        foreach (var message in channel.Messages)
+                        {
+                            Console.WriteLine($"| -   |--- {channel.Name} ---> {Core.MyUser.GetFriend(message.AuthorId).Name} says: {message.Text}");
+                        }
+
+                        if (channel.Messages.Count == 0)
+                            Console.WriteLine($"| -   |--- {channel.Name} ---> No new messages.");
+                    }
+                    if (server.Channels.Count == 0)
+                        Console.WriteLine($"| -   |--- No channels.");
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
-            //Console.SetCursorPosition(0, Console.BufferHeight - 1);
+            catch (Exception e)
+            {
+                FConsole.WriteLine(e);
+            }
         }
     }
 }

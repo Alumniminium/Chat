@@ -44,7 +44,7 @@ namespace Server.Database
             if (File.Exists(VServersFile))
             {
                 var serversJson = File.ReadAllText(VServersFile);
-                Collections.Users = JsonConvert.DeserializeObject<ConcurrentDictionary<int, User>>(serversJson);
+                Collections.VirtualServers = JsonConvert.DeserializeObject<ConcurrentDictionary<int, VirtualServer>>(serversJson);
             }
 
             CreateDemoData();

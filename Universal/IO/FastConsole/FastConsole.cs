@@ -12,12 +12,12 @@ namespace Universal.IO.FastConsole
         }
         public static void WriteLine(object msg)
         {
-            FastConsoleThread.Add(msg.ToString());
+            FastConsoleThread.Add(msg + Environment.NewLine);
         }
 
         public static void WriteLine(Exception msg)
         {
-            FastConsoleThread.Add(msg.ToString());
+            FastConsoleThread.Add(msg + Environment.NewLine);
         }
 
         public static string ReadLine() => Console.ReadLine();
