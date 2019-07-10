@@ -8,7 +8,7 @@ namespace Universal.Packets
     public unsafe struct MsgChannel
     {
         public const int MAX_NAME_ENGTH = 48;
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public int ServerId { get; set; }
@@ -29,7 +29,7 @@ namespace Universal.Packets
         public static MsgChannel Create(int uniqueId,int serverId, string name)
         {
             var msg = stackalloc MsgChannel[1];
-            msg->Length = sizeof(MsgChannel);
+            msg->Length = (short)sizeof(MsgChannel);
             msg->Id = PacketType.MsgChannel;
             msg->UniqueId = uniqueId;
             msg->ServerId = serverId;

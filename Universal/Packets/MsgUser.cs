@@ -9,7 +9,7 @@ namespace Universal.Packets
     {
         public const int MAX_NICKNAME_LENGTH = 32;
         public const int MAX_AVATAR_URL_LENGTH = 128;
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public int ServerId { get; set; }
@@ -43,7 +43,7 @@ namespace Universal.Packets
         public static MsgUser Create(int uniqueId, int serverId, string nickname, string avatarUrl, string email, bool online)
         {
             var msg = stackalloc MsgUser[1];
-            msg->Length = sizeof(MsgUser);
+            msg->Length = (short)sizeof(MsgUser);
             msg->Id = PacketType.MsgUser;
 
             msg->UniqueId = uniqueId;
@@ -56,7 +56,7 @@ namespace Universal.Packets
         public static MsgUser Create(int uniqueId, string nickname, string avatarUrl, string email, bool online)
         {
             var msg = stackalloc MsgUser[1];
-            msg->Length = sizeof(MsgUser);
+            msg->Length = (short)sizeof(MsgUser);
             msg->Id = PacketType.MsgUser;
 
             msg->UniqueId = uniqueId;

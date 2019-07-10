@@ -14,7 +14,7 @@ namespace Universal.IO.Sockets.Queues
         private static readonly AutoResetEvent Sync = new AutoResetEvent(false);
         private static Thread _workerThread;
         private static Action<ClientSocket, byte[]> _onPacket;
-        private const int HEADER_SIZE = 4;
+        private const int HEADER_SIZE = 2;
         private static int _count;
         private static int _destOffset;
         private static int _recOffset;
@@ -64,7 +64,7 @@ namespace Universal.IO.Sockets.Queues
                 {
                     var receivedBytes = e.BytesTransferred - connection.Buffer.BytesProcessed;
                     if (receivedBytes >= HEADER_SIZE)
-                        connection.Buffer.BytesRequired = BitConverter.ToInt32(e.Buffer, connection.Buffer.BytesProcessed);
+                        connection.Buffer.BytesRequired = BitConverter.ToInt16(e.Buffer, connection.Buffer.BytesProcessed);
                 }
                 else if (connection.Buffer.BytesInBuffer > 0)
                 {
@@ -74,7 +74,7 @@ namespace Universal.IO.Sockets.Queues
                         Copy(e, connection, true);
                     }
                     else//?????
-                        connection.Buffer.BytesRequired = BitConverter.ToInt32(connection.Buffer.MergeBuffer, 0);
+                        connection.Buffer.BytesRequired = BitConverter.ToInt16(connection.Buffer.MergeBuffer, 0);
                 }
                 else
                 {

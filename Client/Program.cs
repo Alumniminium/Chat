@@ -17,6 +17,7 @@ namespace Client
 
             while (true)
             {
+                Thread.Sleep(2000);
                 DrawUI();
                 FConsole.ReadLine();
             }

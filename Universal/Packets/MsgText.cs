@@ -9,11 +9,12 @@ namespace Universal.Packets
     public unsafe struct MsgText
     {
         public const int MAX_TEXT_LENGTH = 2048;
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public int ServerId { get; set; } // 0 == Direct Message
         public int ChannelId { get; set; }// if ServerId == 0  then  ChannelId = FriendId
+        public int FriendId => ChannelId;
         public int AuthorId { get; set; }
         public long SentTime { get; set; }
 
@@ -31,12 +32,10 @@ namespace Universal.Packets
                 Text[i] = (byte)text[i];
         }
 
-        public int FriendId => ChannelId;
-
         public static byte[] Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)
         {
             var msg = stackalloc MsgText[1];
-            msg->Length = sizeof(MsgText);
+            msg->Length = (short)sizeof(MsgText);
             msg->Id = PacketType.MsgText;
 
             msg->UniqueId = uniqueId;
@@ -52,7 +51,7 @@ namespace Universal.Packets
         public static byte[] Create(int uniqueId, int authorId, string text, int channelId, DateTime createdTime)
         {
             var msg = stackalloc MsgText[1];
-            msg->Length = sizeof(MsgText);
+            msg->Length = (short)sizeof(MsgText);
             msg->Id = PacketType.MsgText;
 
             msg->UniqueId = uniqueId;

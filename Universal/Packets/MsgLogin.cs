@@ -11,7 +11,7 @@ namespace Universal.Packets
         public const int MAX_USERNAME_LENGTH = 32;
         public const int MAX_PASSWORD_LENGTH = 32;
 
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public fixed byte Username[MAX_USERNAME_LENGTH];
@@ -59,7 +59,7 @@ namespace Universal.Packets
         public static MsgLogin Create(string user, string pass)
         {
             var msg = stackalloc MsgLogin[1];
-            msg->Length = sizeof(MsgLogin);
+            msg->Length = (short)sizeof(MsgLogin);
             msg->Id = PacketType.MsgLogin;
 
             msg->SetUsername(user);

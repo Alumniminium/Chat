@@ -6,7 +6,7 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgDataRequest
     {
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UserId { get; set; }
         public int TargetId { get; set; }
@@ -16,7 +16,7 @@ namespace Universal.Packets
         public static MsgDataRequest Create(int userId, int targetId,int param, MsgDataRequestType type)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->TargetId = targetId;
@@ -28,7 +28,7 @@ namespace Universal.Packets
         public static MsgDataRequest CreateFriendListRequest(int userId)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->Type = MsgDataRequestType.Friends;
@@ -38,7 +38,7 @@ namespace Universal.Packets
         public static MsgDataRequest CreateServerListRequest(int userId)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->Type = MsgDataRequestType.VServers;
@@ -48,7 +48,7 @@ namespace Universal.Packets
         public static byte[] CreateServerChannelListRequest(int userId, int serverId)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->TargetId = serverId;
@@ -59,7 +59,7 @@ namespace Universal.Packets
         public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int serverId, int channelId)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->TargetId = serverId;
@@ -71,7 +71,7 @@ namespace Universal.Packets
         public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int friendId)
         {
             var msg = stackalloc MsgDataRequest[1];
-            msg->Length = sizeof(MsgDataRequest);
+            msg->Length = (short)sizeof(MsgDataRequest);
             msg->Id = PacketType.MsgDataRequest;
             msg->UserId = userId;
             msg->Param = friendId;

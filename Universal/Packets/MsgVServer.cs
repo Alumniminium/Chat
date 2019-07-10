@@ -10,7 +10,7 @@ namespace Universal.Packets
     {
         public const int MAX_SERVER_NAME_LENGTH = 32;
         public const int MAX_SERVER_ICON_LENGTH = 128;
-        public int Length { get; private set; }
+        public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
         public long Created { get; set; }
@@ -47,7 +47,7 @@ namespace Universal.Packets
         public static MsgVServer Create(int serverId, string name, string url, DateTime created, DateTime lastActivity)
         {
             var msg = stackalloc MsgVServer[1];
-            msg->Length = sizeof(MsgVServer);
+            msg->Length = (short)sizeof(MsgVServer);
             msg->Id = PacketType.MsgVServer;
 
             msg->UniqueId = serverId;

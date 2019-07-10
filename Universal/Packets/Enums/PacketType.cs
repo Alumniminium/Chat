@@ -1,12 +1,12 @@
 namespace Universal.Packets.Enums
 {
-    public enum PacketType : ushort
+    public enum PacketType : byte
     {
-        MsgLogin = 1000,
-        MsgDataRequest = 1001,
-        MsgUser = 1002,
-        MsgVServer = 1003,
-        MsgChannel = 1004,
-        MsgText = 1005,
+        MsgLogin = 1,
+        MsgDataRequest = 2,
+        MsgUser = 3,
+        MsgVServer = 4,
+        MsgChannel = 5,
+        MsgText = 6,
     }
 }

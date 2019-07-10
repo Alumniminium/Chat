@@ -5,6 +5,6 @@ namespace Universal.Extensions
 {
     public static class ByteExtensions
     {
-        public static PacketType GetPacketType(this byte[] packet) => (PacketType) BitConverter.ToUInt16(packet, 4);
+        public static PacketType GetPacketType(this byte[] packet) => (PacketType)packet[2];
     }
 }
