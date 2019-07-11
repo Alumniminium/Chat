@@ -3,7 +3,7 @@
 Inspired by IRC, master server hosts virtual servers with channels, users can create servers, friends, private messaging,..
 
 ### Why
-Discord sucks. It's constantly having problems or is down. The Discord client is a resource hog. It uses half a CPU core just to blink the fuckign cursor whit eating half a gig of ram.
+Discord sucks. It's constantly having problems or is down. The Discord client is a resource hog. It uses half a CPU core just to blink the fucking cursor while eating half a gig of ram.
 
 I know this isn't going to take off and become the next big thing, im building this mainly to see if I can, and to have a fallback service to talk with my friends if discord dies again.
 
