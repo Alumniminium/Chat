@@ -27,7 +27,7 @@ namespace Server.Networking
                     break;
                 default:
                     FConsole.WriteLine("Invalid packet received from " + user.Username);
-                    user.Socket.Disconnect("Server.PacketHandler.Handle() Invalid packet received");
+                    user.Socket.Disconnect("Server.Networking.PacketHandler.Handle() Invalid packet received");
                     break;
             }
         }
@@ -93,7 +93,7 @@ namespace Server.Networking
                     break;
                 default:
                     FConsole.WriteLine("Invalid packet received from " + user.Username);
-                    user.Socket.Disconnect("Server.PacketHandler.ProcessDataRequest() Invalid packet received");
+                    user.Socket.Disconnect("Server.Networking.PacketHandler.ProcessDataRequest() Invalid packet received");
                     break;
             }
 
@@ -103,14 +103,19 @@ namespace Server.Networking
         private static void ProcessLogin(ClientSocket userSocket, byte[] packet)
         {
             var msgLogin = (MsgLogin)packet;
-            FConsole.WriteLine($"MsgLogin: {msgLogin.GetUsername()} with password {msgLogin.GetPassword()} requesting login...");
-            var (username, password) = msgLogin.GetUserPass();
+            var username = msgLogin.GetUsername();
+            var password = msgLogin.GetPassword();
 
-            var user = new User();
-            user.Socket = userSocket;
+            FConsole.WriteLine($"MsgLogin: {username} with password {password} requesting login.");
+
+            var user = new User
+            {
+                Socket = userSocket,
+                Username = username,
+                Password = password
+            };
+
             user.Socket.StateObject = user;
-            user.Username = username;
-            user.Password = password;
 
             if (Core.Db.Authenticate(username, password))
             {
@@ -135,7 +140,7 @@ namespace Server.Networking
             }
             user.Send(userInfoPacket);
 
-            FConsole.WriteLine("MsgLogin: " + Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0000") + "ms");
+            FConsole.WriteLine($"MsgLogin: {Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }

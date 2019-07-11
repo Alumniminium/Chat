@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using Universal.Extensions;
 using Universal.Packets.Enums;
 
 namespace Universal.Packets
@@ -22,10 +23,9 @@ namespace Universal.Packets
         }
         public void SetName(string username)
         {
+            username = username.FillLength(MAX_NAME_ENGTH);
             for (var i = 0; i < username.Length; i++)
                 Name[i] = (byte)username[i];
-            for (var i = username.Length; i < MAX_NAME_ENGTH; i++)
-                Name[i] = (byte)'\0';
         }
 
         public static MsgChannel Create(int uniqueId, int serverId, string name)

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using Universal.Extensions;
 using Universal.Packets.Enums;
 
 namespace Universal.Packets
@@ -31,18 +32,15 @@ namespace Universal.Packets
 
         public void SetNickname(string nickname)
         {
+            nickname = nickname.FillLength(MAX_NICKNAME_LENGTH);
             for (var i = 0; i < nickname.Length; i++)
                 Nickname[i] = (byte)nickname[i];
-            for (var i = nickname.Length; i < MAX_NICKNAME_LENGTH; i++)
-                Nickname[i] = (byte)'\0';
-        }
+            }
         public void SetAvatarUrl(string url)
         {
+            url = url.FillLength(MAX_AVATAR_URL_LENGTH);
             for (var i = 0; i < url.Length; i++)
                 AvatarUrl[i] = (byte)url[i];
-
-            for (var i = url.Length; i < MAX_AVATAR_URL_LENGTH; i++)
-                AvatarUrl[i] = (byte)'\0';
         }
 
         public static MsgUser Create(int uniqueId, int serverId, string nickname, string avatarUrl, string email, bool online)

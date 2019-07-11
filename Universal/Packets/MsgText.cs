@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Universal.Extensions;
 using Universal.Packets.Enums;
 
 namespace Universal.Packets
@@ -28,11 +29,9 @@ namespace Universal.Packets
 
         public void SetText(string text)
         {
+            text = text.FillLength(MAX_TEXT_LENGTH);
             for (var i = 0; i < text.Length; i++)
                 Text[i] = (byte)text[i];
-            for (var i = text.Length; i < MAX_TEXT_LENGTH; i++)
-                Text[i] = (byte)'\0';
-
         }
 
         public static byte[] Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)
