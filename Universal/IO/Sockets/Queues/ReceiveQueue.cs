@@ -44,6 +44,9 @@ namespace Universal.IO.Sockets.Queues
                 {
                     var connection = (ClientSocket)e.UserToken;
 
+                    if (connection == null)
+                        continue;
+
                     AssemblePacket(e);
 
                     connection.ReceiveSync.Set();
@@ -55,23 +58,13 @@ namespace Universal.IO.Sockets.Queues
             while (true)
             {
                 var connection = (ClientSocket)e.UserToken;
-                if (connection == null)
-                    break;
-                _destOffset = connection.Buffer.BytesInBuffer;
-                _recOffset = connection.Buffer.BytesProcessed;
 
                 if (connection.Buffer.BytesInBuffer == 0)
                     StartNewPacket(e, connection);
-                else if (connection.Buffer.BytesInBuffer > 0)
+                if (connection.Buffer.BytesInBuffer > 0)
                     ReadHeader(e, connection);
-                else
-                    connection.Buffer.BytesRequired = e.BytesTransferred - connection.Buffer.BytesProcessed;
 
-                _destOffset = connection.Buffer.BytesInBuffer;
-                _recOffset = connection.Buffer.BytesProcessed;
-                _count = e.BytesTransferred - connection.Buffer.BytesProcessed;
-
-                Copy(e, connection);
+                MergeUnsafe(e);
 
                 if (connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired && connection.Buffer.BytesRequired > 4)
                     FinishPacket(connection);
@@ -84,42 +77,6 @@ namespace Universal.IO.Sockets.Queues
             }
         }
 
-        private static void ReadHeader(SocketAsyncEventArgs e, ClientSocket connection)
-        {
-            if (connection.Buffer.BytesInBuffer < MIN_HEADER_SIZE)
-            {
-                _count = MIN_HEADER_SIZE - connection.Buffer.BytesInBuffer;
-                Copy(e, connection, true);
-            }
-            else
-                connection.Buffer.BytesRequired = BitConverter.ToInt16(connection.Buffer.MergeBuffer, 0);
-        }
-
-        private static void FinishPacket(ClientSocket connection)
-        {
-            _onPacket(connection, connection.UseCompression ? Decompress(connection) : connection.Buffer.MergeBuffer);
-            connection.Buffer.BytesInBuffer = 0;
-        }
-
-        private static byte[] Decompress(ClientSocket connection)
-        {
-            var compressedArray = new byte[connection.Buffer.BytesRequired];
-            Array.Copy(connection.Buffer.MergeBuffer, MIN_HEADER_SIZE, compressedArray, 0, compressedArray.Length - MIN_HEADER_SIZE);
-
-            using (var decompressedStream = new MemoryStream())
-            {
-                using (var compressedStream = new MemoryStream(compressedArray))
-                {
-                    using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
-                    {
-                        deflateStream.CopyTo(decompressedStream);
-                    }
-                }
-
-                return decompressedStream.ToArray();
-            }
-        }
-
         private static void StartNewPacket(SocketAsyncEventArgs e, ClientSocket connection)
         {
             var receivedBytes = e.BytesTransferred - connection.Buffer.BytesProcessed;
@@ -127,18 +84,59 @@ namespace Universal.IO.Sockets.Queues
                 connection.Buffer.BytesRequired = BitConverter.ToInt16(e.Buffer, connection.Buffer.BytesProcessed);
         }
 
-        private static unsafe void Copy(SocketAsyncEventArgs e, ClientSocket connection, bool header = false)
+        private static void ReadHeader(SocketAsyncEventArgs e, ClientSocket connection)
         {
-            fixed (byte* dest = connection.Buffer.MergeBuffer)
-            fixed (byte* rec = e.Buffer)
+            if (connection.Buffer.BytesInBuffer < MIN_HEADER_SIZE)
+            {
+                _count = MIN_HEADER_SIZE - connection.Buffer.BytesInBuffer;
+                MergeUnsafe(e, true);
+            }
+            else
+                connection.Buffer.BytesRequired = BitConverter.ToInt16(connection.Buffer.MergeBuffer, 0);
+        }
+
+        private static void FinishPacket(ClientSocket connection)
+        {
+            if (connection.UseCompression)
+                Decompress(connection);
+
+            _onPacket(connection, connection.Buffer.MergeBuffer);
+            connection.Buffer.BytesInBuffer = 0;
+        }
+
+        private static void Decompress(ClientSocket connection)
+        {
+            var compressedArray = new byte[connection.Buffer.BytesRequired];
+            Buffer.BlockCopy(connection.Buffer.MergeBuffer, MIN_HEADER_SIZE, compressedArray, 0, compressedArray.Length - MIN_HEADER_SIZE);
+
+            using (var compressedStream = new MemoryStream(compressedArray))
+            using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+            {
+                deflateStream.Read(connection.Buffer.MergeBuffer, 0, connection.Buffer.MergeBuffer.Length);
+            }
+        }
+
+
+        private static unsafe void MergeUnsafe(SocketAsyncEventArgs e, bool header = false)
+        {
+            var connection = (ClientSocket)e.UserToken;
+            _count = e.BytesTransferred - connection.Buffer.BytesProcessed;
+            _destOffset = connection.Buffer.BytesInBuffer;
+            _recOffset = connection.Buffer.BytesProcessed;
+
+            fixed (byte* destination = connection.Buffer.MergeBuffer)
+            fixed (byte* source = e.Buffer)
             {
                 for (var i = 0; i < _count; i++)
                 {
-                    dest[i + _destOffset] = rec[i + _recOffset];
+                    destination[i + _destOffset] = source[i + _recOffset];
                     connection.Buffer.BytesInBuffer++;
                     connection.Buffer.BytesProcessed++;
 
-                    if (connection.Buffer.BytesInBuffer == (header ? MIN_HEADER_SIZE : connection.Buffer.BytesRequired))
+                    if(header && connection.Buffer.BytesInBuffer == MIN_HEADER_SIZE)
+                        break;
+
+                    if (!header && connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired)
                         break;
                 }
             }
