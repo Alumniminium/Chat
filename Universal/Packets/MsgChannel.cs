@@ -18,7 +18,7 @@ namespace Universal.Packets
         public string GetName()
         {
             fixed (byte* p = Name)
-                return Encoding.ASCII.GetString(p, 32).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_NAME_ENGTH).Trim('\0');
         }
         public void SetName(string username)
         {
@@ -26,7 +26,7 @@ namespace Universal.Packets
                 Name[i] = (byte)username[i];
         }
 
-        public static MsgChannel Create(int uniqueId,int serverId, string name)
+        public static MsgChannel Create(int uniqueId, int serverId, string name)
         {
             var msg = stackalloc MsgChannel[1];
             msg->Length = (short)sizeof(MsgChannel);
@@ -36,14 +36,14 @@ namespace Universal.Packets
             msg->SetName(name);
             return *msg;
         }
-        public static implicit operator byte[] (MsgChannel msg)
+        public static implicit operator byte[](MsgChannel msg)
         {
             var buffer = new byte[sizeof(MsgChannel)];
             fixed (byte* p = buffer)
                 *(MsgChannel*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte* (MsgChannel msg)
+        public static implicit operator byte*(MsgChannel msg)
         {
             var buffer = stackalloc byte[sizeof(MsgChannel)];
             *(MsgChannel*)buffer = msg;
