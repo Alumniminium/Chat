@@ -24,6 +24,8 @@ namespace Universal.Packets
         {
             for (var i = 0; i < username.Length; i++)
                 Name[i] = (byte)username[i];
+            for (var i = username.Length; i < MAX_NAME_ENGTH; i++)
+                Name[i] = (byte)'\0';
         }
 
         public static MsgChannel Create(int uniqueId, int serverId, string name)

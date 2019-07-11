@@ -21,23 +21,28 @@ namespace Universal.Packets
         public string GetNickname()
         {
             fixed (byte* p = Nickname)
-                return Encoding.ASCII.GetString(p, 32).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_NICKNAME_LENGTH).Trim('\0');
         }
         public string GetAvatarUrl()
         {
             fixed (byte* p = AvatarUrl)
-                return Encoding.ASCII.GetString(p, 64).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_AVATAR_URL_LENGTH).Trim('\0');
         }
 
         public void SetNickname(string nickname)
         {
             for (var i = 0; i < nickname.Length; i++)
                 Nickname[i] = (byte)nickname[i];
+            for (var i = nickname.Length; i < MAX_NICKNAME_LENGTH; i++)
+                Nickname[i] = (byte)'\0';
         }
         public void SetAvatarUrl(string url)
         {
             for (var i = 0; i < url.Length; i++)
                 AvatarUrl[i] = (byte)url[i];
+
+            for (var i = url.Length; i < MAX_AVATAR_URL_LENGTH; i++)
+                AvatarUrl[i] = (byte)'\0';
         }
 
         public static MsgUser Create(int uniqueId, int serverId, string nickname, string avatarUrl, string email, bool online)

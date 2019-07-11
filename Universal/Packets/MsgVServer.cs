@@ -36,12 +36,17 @@ namespace Universal.Packets
         {
             for (var i = 0; i < serverName.Length; i++)
                 ServerName[i] = (byte)serverName[i];
+            for (var i = serverName.Length; i < MAX_SERVER_NAME_LENGTH; i++)
+                ServerName[i] = (byte)'\0';
+
         }
 
         public void SetServerIconUrl(string url)
         {
             for (var i = 0; i < url.Length; i++)
                 ServerIconUrl[i] = (byte)url[i];
+            for (var i = url.Length; i < MAX_SERVER_ICON_LENGTH; i++)
+                ServerIconUrl[i] = (byte)'\0';
         }
 
         public static MsgVServer Create(int serverId, string name, string url, DateTime created, DateTime lastActivity)

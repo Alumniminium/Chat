@@ -30,6 +30,9 @@ namespace Universal.Packets
         {
             for (var i = 0; i < text.Length; i++)
                 Text[i] = (byte)text[i];
+            for (var i = text.Length; i < MAX_TEXT_LENGTH; i++)
+                Text[i] = (byte)'\0';
+
         }
 
         public static byte[] Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)

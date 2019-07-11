@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Sockets;
 using System.Threading;
+using Universal.Extensions;
 using Universal.IO.Sockets.Client;
 
 namespace Universal.IO.Sockets.Queues
@@ -107,7 +108,7 @@ namespace Universal.IO.Sockets.Queues
         private static void Decompress(ClientSocket connection)
         {
             var compressedArray = new byte[connection.Buffer.BytesRequired];
-            Buffer.BlockCopy(connection.Buffer.MergeBuffer, MIN_HEADER_SIZE, compressedArray, 0, compressedArray.Length - MIN_HEADER_SIZE);
+            connection.Buffer.MergeBuffer.VectorizedCopy(MIN_HEADER_SIZE, compressedArray, 0, compressedArray.Length - MIN_HEADER_SIZE);
 
             using (var compressedStream = new MemoryStream(compressedArray))
             using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))

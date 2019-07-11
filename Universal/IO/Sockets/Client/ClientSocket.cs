@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using Universal.Extensions;
 using Universal.IO.FastConsole;
 
 namespace Universal.IO.Sockets.Client
@@ -119,8 +120,8 @@ namespace Universal.IO.Sockets.Client
                 var cData = ms.ToArray();
                 var cLengthBytes = BitConverter.GetBytes((short)(cPacket.Length));
 
-                System.Buffer.BlockCopy(cLengthBytes, 0, cPacket, 0, cLengthBytes.Length);
-                System.Buffer.BlockCopy(cData, 0, cPacket, 2, cData.Length);
+                cLengthBytes.VectorizedCopy(0, cPacket, 0, cLengthBytes.Length);
+                cData.VectorizedCopy(0, cPacket, 2, cData.Length);
             }
 
             SendArgs.SetBuffer(cPacket, 0, cPacket.Length);

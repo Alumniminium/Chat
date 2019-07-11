@@ -20,12 +20,12 @@ namespace Universal.Packets
         public string GetUsername()
         {
             fixed (byte* p = Username)
-                return Encoding.ASCII.GetString(p, 32).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_USERNAME_LENGTH).Trim('\0');
         }
         public string GetPassword()
         {
             fixed (byte* p = Password)
-                return Encoding.ASCII.GetString(p, 32).Trim('\0');
+                return Encoding.ASCII.GetString(p, MAX_PASSWORD_LENGTH).Trim('\0');
         }
 
         public (string user, string pass) GetUserPass()
@@ -49,11 +49,15 @@ namespace Universal.Packets
         {
             for (var i = 0; i < username.Length; i++)
                 Username[i] = (byte)username[i];
+            for (var i = username.Length; i < MAX_USERNAME_LENGTH; i++)
+                Username[i] = (byte)'\0';
         }
         public void SetPassword(string password)
         {
             for (var i = 0; i < password.Length; i++)
                 Password[i] = (byte)password[i];
+            for (var i = password.Length; i < MAX_PASSWORD_LENGTH; i++)
+                Password[i] = (byte)'\0';
         }
 
         public static MsgLogin Create(string user, string pass)
