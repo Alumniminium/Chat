@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Universal.IO.FastConsole;
 
-namespace Universal.Extensions
+namespace Universal.Exceptions
 {
     public static class GlobalExceptionHandler
     {

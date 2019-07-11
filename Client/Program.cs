@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using Universal.Extensions;
+using Universal.Exceptions;
 using Universal.IO.FastConsole;
 using Universal.Performance;
 
@@ -31,7 +31,7 @@ namespace Client
             Console.Clear();
             Console.WriteLine("------ S E R V E R S ------|----- F r i e n d s ------");
 
-            int counter = 0;
+            var counter = 0;
             var friends = user.Friends.Values.ToArray();
 
             try

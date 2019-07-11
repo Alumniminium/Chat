@@ -1,9 +1,8 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Universal.Extensions
 {
-    public static class VectorizedCopyExtension
+    public static class ByteCopyVectorized
     {
         // Will be Jit'd to consts https://github.com/dotnet/coreclr/issues/1079
         private static readonly int VectorSpan = Vector<byte>.Count;
