@@ -6,9 +6,9 @@ namespace Client.Entities
 {
     public class Channel
     {
-        public int UniqueId { get; private set; }
+        public int Id { get; private set; }
         public string Name { get; private set; }
-        public List<Message> Messages { get; set; }
+        public Dictionary<int,Message> Messages { get; set; }
 
         public Action<Message> OnMessage { get; set; }
 
@@ -20,14 +20,14 @@ namespace Client.Entities
 
         public Channel(int id, string name)
         {
-            UniqueId = id;
+            Id = id;
             Name = name;
-            Messages = new List<Message>();
+            Messages = new Dictionary<int, Message>();
         }
 
         public void AddMessage(Message message)
         {
-            Messages.Add(message);
+            Messages.Add(message.Id, message);
             OnMessage?.Invoke(message);
         }
     }

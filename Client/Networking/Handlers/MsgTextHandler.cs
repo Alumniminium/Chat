@@ -5,9 +5,7 @@ using Universal.Packets;
 namespace Client.Networking.Handlers
 {
     public static class MsgTextHandler
-    {
-        // ! 
-        private static User User => Core.MyUser;
+    {        private static User User => Core.MyUser;
         public static void Process(byte[] buffer)
         {
             var msgTxt = (MsgText)buffer;
@@ -29,6 +27,15 @@ namespace Client.Networking.Handlers
             if (channel == null)
                 throw new ArgumentException("server.Channels didn't contain " + msgTxt.ChannelId);
 
+            foreach (var (key, value) in channel.Messages)
+            {
+                if (key != msgTxt.UniqueId)
+                    continue;
+
+                value.Text = msgTxt.GetText();
+                return;
+            }
+
             var message = Message.CreateFromMsg(msgTxt);
             channel.AddMessage(message);
         }
@@ -49,6 +56,15 @@ namespace Client.Networking.Handlers
                 var friendChannel = new Channel(msgTxt.FriendId, friend.Name);
                 directMessageServer.AddChannel(friendChannel);
                 channel = friendChannel;
+            }
+
+            foreach (var (key, value) in channel.Messages)
+            {
+                if (key != msgTxt.UniqueId)
+                    continue;
+
+                value.Text = msgTxt.GetText();
+                return;
             }
 
             var message = Message.CreateFromMsg(msgTxt);

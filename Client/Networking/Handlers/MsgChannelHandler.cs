@@ -19,6 +19,9 @@ namespace Client.Networking.Handlers
 
             server.AddChannel(channel);
 
+            if (Core.SelectedServer.Id == server.Id)
+                Core.SelectedChannel = channel;
+
             FConsole.WriteLine($"Received Server info for {channel.Name}!");
         }
     }

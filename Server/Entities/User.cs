@@ -26,8 +26,12 @@ namespace Server.Entities
         {
             VirtualServers = new List<int>();
             Friends = new List<int>();
-
             VirtualServers.Add(0);
+        }
+
+        public void OnDisconnect()
+        {
+            Collections.OnlineUsers.TryRemove(Id, out var _);
         }
 
         public void Send(byte[] packet) => Socket?.Send(packet);

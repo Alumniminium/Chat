@@ -5,7 +5,7 @@ namespace Server
 {
     public static class Core
     {
-        public static IDb Db = new JsonDb();
+        public static JsonDb Db = new JsonDb();
         public static ServerSettings Settings { get; set; }
     }
 }

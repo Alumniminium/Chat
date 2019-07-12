@@ -34,12 +34,12 @@ namespace Client.Entities
         }
         public void AddChannel(Channel channel)
         {
-            Channels.Add(channel.UniqueId, channel);
+            Channels.Add(channel.Id, channel);
             OnChannelAdded?.Invoke(channel);
         }
         public void RemoveChannel(Channel channel)
         {
-            Channels.Remove(channel.UniqueId, out channel);
+            Channels.Remove(channel.Id, out channel);
             OnChannelRemoved?.Invoke(channel);
         }
 

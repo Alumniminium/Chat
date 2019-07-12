@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
+using Client.UI;
+using Client.UI.Commands;
 using Universal.Exceptions;
 using Universal.IO.FastConsole;
 using Universal.Performance;
@@ -15,16 +16,37 @@ namespace Client
             FConsole.Title = "CLIENT APP";
             GlobalExceptionHandler.Setup();
             JIT.PreJIT();
-            Core.Client.ConnectAsync();
 
+            StartupScreen.Draw();
+            
             while (true)
             {
-                Thread.Sleep(2000);
                 DrawUI();
-                FConsole.ReadLine();
+                //HomeScreen.Draw();
+                var input = FConsole.ReadLine();
+
+                if (input.StartsWith('/'))
+                {
+                    var command = input.Split(' ')[0];
+                    switch (command)
+                    {
+                        case "/s":
+                            ServerCommandHandler.Process(input);
+                            break;
+                        case "/c":
+                            ChannelCommandHandler.Process(input);
+                            break;
+                        case "/dm":
+                            ServerCommandHandler.Process("/s 0");
+                            break;
+                    }
+                }
+                else
+                {
+                    Core.MyUser.SendMessage(input);
+                }
             }
         }
-
         public static void DrawUI()
         {
             var user = Core.MyUser;
@@ -51,19 +73,28 @@ namespace Client
                 Console.SetCursorPosition(0, 6);
                 foreach (var server in user.Servers.Values)
                 {
-                    Console.WriteLine($"| - {server.Name} -");
-                    foreach (var channel in server.Channels.Values)
+                    Console.WriteLine($"|  - {server.Name} -");
+
+                    if(Core.SelectedServer.Id != server.Id)
+                        continue;
+
+                    foreach (var (_, channel) in server.Channels)
                     {
-                        foreach (var message in channel.Messages)
+                        Console.WriteLine($"|  -   |--- {channel.Name}");
+
+                        if (Core.SelectedChannel.Id != channel.Id)
+                            continue;
+
+                        foreach (var (_, value) in channel.Messages)
                         {
-                            Console.WriteLine($"| -   |--- {channel.Name} ---> {Core.MyUser.GetFriend(message.AuthorId).Name} says: {message.Text}");
+                            Console.WriteLine($"|  -   |------- {Core.MyUser.GetFriend(value.AuthorId).Name} ---> {value.Text}");
                         }
 
                         if (channel.Messages.Count == 0)
-                            Console.WriteLine($"| -   |--- {channel.Name} ---> No new messages.");
+                            Console.WriteLine($"|  -   |--- {channel.Name} ---> No new messages.");
                     }
                     if (server.Channels.Count == 0)
-                        Console.WriteLine($"| -   |--- No channels.");
+                        Console.WriteLine($"|  -   |--- No channels.");
                 }
                 Console.WriteLine();
             }
