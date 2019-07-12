@@ -7,9 +7,27 @@
             "type": "process",
             "args": [
                 "build",
+                "${workspaceFolder}/Client/Client.csproj"
+            ],
+            "problemMatcher": "$tsc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
                 "${workspaceFolder}/Server/Server.csproj"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$tsc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "publish",
@@ -17,18 +35,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Server/Server.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/Server/Server.csproj"
+                "${workspaceFolder}/Client/Client.csproj"
             ],
             "problemMatcher": "$tsc"
         }

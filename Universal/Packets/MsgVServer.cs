@@ -35,14 +35,14 @@ namespace Universal.Packets
 
         public void SetServerName(string serverName)
         {
-            serverName=serverName.FillLength(MAX_SERVER_NAME_LENGTH);
+            serverName = serverName.ToLength(MAX_SERVER_NAME_LENGTH);
             for (var i = 0; i < serverName.Length; i++)
                 ServerName[i] = (byte)serverName[i];
         }
 
         public void SetServerIconUrl(string url)
         {
-            url = url.FillLength(MAX_SERVER_ICON_URL_LENGTH);
+            url = url.ToLength(MAX_SERVER_ICON_URL_LENGTH);
             for (var i = 0; i < url.Length; i++)
                 ServerIconUrl[i] = (byte)url[i];
         }

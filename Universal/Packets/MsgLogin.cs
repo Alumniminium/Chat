@@ -30,13 +30,13 @@ namespace Universal.Packets
 
         public void SetUsername(string username)
         {
-            username = username.FillLength(MAX_PASSWORD_LENGTH);
+            username = username.ToLength(MAX_PASSWORD_LENGTH);
             for (var i = 0; i < username.Length; i++)
                 Username[i] = (byte)username[i];
         }
         public void SetPassword(string password)
         {
-            password = password.FillLength(MAX_PASSWORD_LENGTH);
+            password = password.ToLength(MAX_PASSWORD_LENGTH);
             for (var i = 0; i < password.Length; i++)
                 Password[i] = (byte)password[i];
         }
@@ -51,14 +51,14 @@ namespace Universal.Packets
             msg->SetPassword(pass);
             return *msg;
         }
-        public static implicit operator byte[] (MsgLogin msg)
+        public static implicit operator byte[](MsgLogin msg)
         {
             var buffer = new byte[sizeof(MsgLogin)];
             fixed (byte* p = buffer)
                 *(MsgLogin*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte* (MsgLogin msg)
+        public static implicit operator byte*(MsgLogin msg)
         {
             var buffer = stackalloc byte[sizeof(MsgLogin)];
             *(MsgLogin*)buffer = msg;
