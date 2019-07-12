@@ -10,12 +10,17 @@ namespace Universal.Packets
     {
         public const int MAX_USERNAME_LENGTH = 32;
         public const int MAX_PASSWORD_LENGTH = 32;
+        public const int MAX_EMAIL_LENGTH = 32;
 
         public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
+        public bool ClientSupportCompression { get; set; }
+        public MsgLoginType Type { get; set; }
+
         public fixed byte Username[MAX_USERNAME_LENGTH];
         public fixed byte Password[MAX_PASSWORD_LENGTH];
+        public fixed byte Email[MAX_EMAIL_LENGTH];
 
         public string GetUsername()
         {
@@ -26,6 +31,11 @@ namespace Universal.Packets
         {
             fixed (byte* p = Password)
                 return Encoding.ASCII.GetString(p, MAX_PASSWORD_LENGTH).Trim('\0');
+        }
+        public string GetEmail()
+        {
+            fixed (byte* p = Email)
+                return Encoding.ASCII.GetString(p, MAX_EMAIL_LENGTH).Trim('\0');
         }
 
         public void SetUsername(string username)
@@ -40,15 +50,23 @@ namespace Universal.Packets
             for (var i = 0; i < password.Length; i++)
                 Password[i] = (byte)password[i];
         }
+        public void SetEmail(string email)
+        {
+            email = email.FillLength(MAX_EMAIL_LENGTH);
+            for (var i = 0; i < email.Length; i++)
+                Email[i] = (byte)email[i];
+        }
 
-        public static MsgLogin Create(string user, string pass)
+        public static MsgLogin Create(string user, string pass,string email, bool compression,MsgLoginType type)
         {
             var msg = stackalloc MsgLogin[1];
             msg->Length = (short)sizeof(MsgLogin);
             msg->Id = PacketType.MsgLogin;
+            msg->Type = type;
 
             msg->SetUsername(user);
             msg->SetPassword(pass);
+            msg->SetEmail(email);
             return *msg;
         }
         public static implicit operator byte[] (MsgLogin msg)

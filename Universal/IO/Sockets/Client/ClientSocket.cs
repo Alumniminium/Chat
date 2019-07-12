@@ -25,7 +25,7 @@ namespace Universal.IO.Sockets.Client
         internal readonly SocketAsyncEventArgs ReceiveArgs;
         internal readonly SocketAsyncEventArgs SendArgs;
 
-        public ClientSocket(object stateObject, bool useCompression=true)
+        public ClientSocket(object stateObject, bool useCompression=false)
         {
             Buffer = new NeutralBuffer();
             StateObject = stateObject;
@@ -108,23 +108,14 @@ namespace Universal.IO.Sockets.Client
         {
             SendSync.WaitOne();
 
-            byte[] cPacket;
+            var size = packet.Length;
 
-            using (var ms = new MemoryStream())
-            using (var cp = new DeflateStream(ms, CompressionMode.Compress))
-            {
-                cp.Write(packet);
-                cp.Flush();
+            if (UseCompression)
+                size = Compress(packet);
+            else
+                packet.VectorizedCopy(0, Buffer.SendBuffer, 0, packet.Length);
 
-                cPacket = new byte[ms.Length + 2];
-                var cData = ms.ToArray();
-                var cLengthBytes = BitConverter.GetBytes((short)(cPacket.Length));
-
-                cLengthBytes.VectorizedCopy(0, cPacket, 0, cLengthBytes.Length);
-                cData.VectorizedCopy(0, cPacket, 2, cData.Length);
-            }
-
-            SendArgs.SetBuffer(cPacket, 0, cPacket.Length);
+            SendArgs.SetBuffer(Buffer.SendBuffer, 0, size);
 
             try
             {
@@ -134,6 +125,23 @@ namespace Universal.IO.Sockets.Client
             catch (Exception e)
             {
                 Disconnect("ClientSocket.Send() Catch: " + e.Message + " #### " + e.StackTrace);
+            }
+        }
+
+        private int Compress(byte[] packet)
+        {
+            using (var ms = new MemoryStream())
+            using (var cp = new DeflateStream(ms, CompressionMode.Compress))
+            {
+                ms.Seek(2, SeekOrigin.Begin);
+                cp.Write(packet);
+                cp.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.Write(BitConverter.GetBytes((short) ms.Length));
+
+                var size = (int) ms.Length;
+                ms.ToArray().VectorizedCopy(0, Buffer.SendBuffer, 0, size);
+                return size;
             }
         }
 

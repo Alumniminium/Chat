@@ -19,6 +19,7 @@ namespace Client.Networking.Handlers
                 Core.MyUser.Name = msgUser.GetNickname();
                 Core.MyUser.AvatarUrl = msgUser.GetAvatarUrl();
                 Core.MyUser.Online = true;
+                Core.MyUser.Servers[0].IconUrl = msgUser.GetAvatarUrl();
             }
             else
             {

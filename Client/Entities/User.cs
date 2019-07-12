@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using Universal.Packets;
 
 namespace Client.Entities
 {
@@ -10,6 +11,7 @@ namespace Client.Entities
         public bool Online { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
         public string AvatarUrl { get; set; }
         public ConcurrentDictionary<int, User> Friends { get; set; }
         public ConcurrentDictionary<int, VirtualServer> Servers { get; set; }
@@ -21,7 +23,6 @@ namespace Client.Entities
             Servers = new ConcurrentDictionary<int, VirtualServer>();
             Servers.TryAdd(0, new VirtualServer());
             Servers[0].Name = "Direct";
-            Servers[0].IconUrl = AvatarUrl;
         }
 
         public VirtualServer GetServer(int serverId)
@@ -35,6 +36,14 @@ namespace Client.Entities
                 return this;
             Friends.TryGetValue(friendId, out var friend);
             return friend;
+        }
+
+        public void SendMessage(string input)
+        {
+            if(string.IsNullOrWhiteSpace(input))
+                return;
+            
+            Core.Client.Send(MsgText.Create(0, Id, input, Core.SelectedServer.Id, Core.SelectedChannel.Id, DateTime.Now));
         }
     }
 }

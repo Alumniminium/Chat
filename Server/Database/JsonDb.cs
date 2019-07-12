@@ -8,7 +8,7 @@ using Server.Entities;
 
 namespace Server.Database
 {
-    public class JsonDb : IDb
+    public class JsonDb
     {
         private static string VServersFile { get; set; }
         private static string UsersFile { get; set; }
@@ -55,29 +55,61 @@ namespace Server.Database
             if (Collections.VirtualServers.Count != 0)
                 return;
 
-            var demoServer = new VirtualServer { Id = GetNextServerId(), Name = "Virtual Server", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/1.jpg" };
+            var demoServer = new VirtualServer { Id = GetNextServerId(), Name = "C# Inn", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/1.jpg" };
             Collections.VirtualServers.TryAdd(demoServer.Id, demoServer);
-            var demoServer2 = new VirtualServer { Id = GetNextServerId(), Name = "C# Inn", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/2.jpg" };
+            var demoServer2 = new VirtualServer { Id = GetNextServerId(), Name = "Virtual Server", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/2.jpg" };
             Collections.VirtualServers.TryAdd(demoServer2.Id, demoServer2);
             var demoServer3 = new VirtualServer { Id = GetNextServerId(), Name = "Garbage Collectors", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/3.jpg" };
             Collections.VirtualServers.TryAdd(demoServer3.Id, demoServer3);
 
-            var channels = new Channel[2];
+            var channels = new Channel[10];
+            channels[0] = new Channel { Id = 0, Name = "# Welcome", Messages = new Dictionary<int,Message>() };
+            channels[1] = new Channel { Id = 1, Name = "# Rules", Messages = new Dictionary<int, Message>() };
+            channels[2] = new Channel { Id = 2, Name = "# Announcements", Messages = new Dictionary<int, Message>() };
+            channels[3] = new Channel { Id = 3, Name = "# General", Messages = new Dictionary<int, Message>() };
+            channels[4] = new Channel { Id = 4, Name = "# Random", Messages = new Dictionary<int, Message>() };
+            channels[5] = new Channel { Id = 5, Name = "# Questions", Messages = new Dictionary<int, Message>() };
+            channels[6] = new Channel { Id = 6, Name = "# Bots", Messages = new Dictionary<int, Message>() };
+            channels[7] = new Channel { Id = 7, Name = "# Offtopic", Messages = new Dictionary<int, Message>() };
+            channels[8] = new Channel { Id = 8, Name = "# Other Languages", Messages = new Dictionary<int, Message>() };
+            channels[9] = new Channel { Id = 9, Name = "# Partners", Messages = new Dictionary<int, Message>() };
 
-            for (var i = 0; i < channels.Length; i++)
-            {
-                channels[i] = new Channel {Id = i, Name = "Demo Channel " + i, Messages = new List<Message>()};
-                var message = new Message {Id = i, AuthorId = 1_000_000+i, Timestamp = DateTime.UtcNow, Text = "Hello World!"};
+            var m0 = new Message {Id = 0, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Welcome to C# Inn!"};
+            var m1 = new Message {Id = 1, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Please read our #Rules"};
+            channels[0].Messages.Add(m0.Id,m0);
+            channels[0].Messages.Add(m1.Id, m1);
 
-                channels[i].Messages.Add(message);
-                demoServer.Channels.Add(channels[i].Id, channels[i]);
-            }
+            var m2 = new Message
+                {Id = 0, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "1. Don't be a cunt"};
+            var m3 = new Message {Id = 1, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "2. Don't spam"};
+            var m4 = new Message { Id = 2, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "3. No NSFW" };
+            var m5 = new Message { Id = 3, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "4. See rule 1" };
+            var m6 = new Message { Id = 0, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "WE HAVE ALUMNI CHAT NOW" };
+            var m7 = new Message { Id = 1, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Sadly it doesn't work." };
+            var m8 = new Message {Id = 0, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Sup neko?"};
+            var m9 = new Message {Id = 1, AuthorId = 1_000_001, Timestamp = DateTime.UtcNow, Text = "Fuck off."};
+            var m10 = new Message {Id = 2, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Good talk."};
 
-            var demoUser = new User { Id = GetNextUserId(), Username = "demo", Password = "demo", Nickname = "Alumni", AvatarUrl = "http://h.img.alumni.re/img/1.jpg"};
+            channels[1].Messages.Add(m2.Id,m2);
+            channels[1].Messages.Add(m3.Id,m3);
+            channels[1].Messages.Add(m4.Id,m4);
+            channels[1].Messages.Add(m5.Id,m5);
+
+            channels[2].Messages.Add(m6.Id,m6);
+            channels[2].Messages.Add(m7.Id,m7);
+
+            channels[3].Messages.Add(m8.Id,m8);
+            channels[3].Messages.Add(m9.Id, m9);
+            channels[3].Messages.Add(m10.Id, m10);
+
+            foreach (var channel in channels)
+                demoServer.Channels.Add(channel.Id, channel);
+            
+            var demoUser = new User { Id = GetNextUserId(), Username = "demo", Password = "demo", Nickname = "Alumni", AvatarUrl = "http://h.img.alumni.re/img/1.jpg" };
             Collections.Users.TryAdd(demoUser.Id, demoUser);
             var demoUser2 = new User { Id = GetNextUserId(), Username = "demo2", Password = "demo2", Nickname = "Neko", AvatarUrl = "http://h.img.alumni.re/img/2.jpg" };
             Collections.Users.TryAdd(demoUser2.Id, demoUser2);
-            var demoUser3 = new User { Id = GetNextUserId(), Username = "demo3", Password = "demo3",Nickname = "Julian", AvatarUrl = "http://h.img.alumni.re/img/3.jpg" };
+            var demoUser3 = new User { Id = GetNextUserId(), Username = "demo3", Password = "demo3", Nickname = "Julian", AvatarUrl = "http://h.img.alumni.re/img/3.jpg" };
             Collections.Users.TryAdd(demoUser3.Id, demoUser3);
 
             demoUser.VirtualServers.Add(demoServer.Id);
@@ -90,7 +122,7 @@ namespace Server.Database
 
             demoUser.Friends.Add(demoUser3.Id);
             demoUser.Friends.Add(demoUser2.Id);
-            
+
             demoUser2.Friends.Add(demoUser3.Id);
             demoUser2.Friends.Add(demoUser.Id);
 
@@ -115,7 +147,7 @@ namespace Server.Database
 
         public bool UserExists(string user) => Collections.Users.Values.Any(u => u.Username == user);
         public bool AddUser(User user) => Collections.Users.TryAdd(user.Id, user);
-        public bool Authenticate(string username,string password) => Collections.Users.Values.Any(u => u.Username == username && u.Password == password);
+        public bool Authenticate(string username, string password) => Collections.Users.Values.Any(u => u.Username == username && u.Password == password);
         public User GetDbUser(string username) => Collections.Users.Values.First(u => u.Username == username);
 
         public void LoadUser(ref User user)
