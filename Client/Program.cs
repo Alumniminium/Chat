@@ -23,6 +23,8 @@ namespace Client
             {
                 DrawUI();
                 //HomeScreen.Draw();
+                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                Console.Write($"{Core.SelectedServer.Name}{Core.SelectedChannel.Name}: ");
                 var input = FConsole.ReadLine();
 
                 if (input.StartsWith('/'))
