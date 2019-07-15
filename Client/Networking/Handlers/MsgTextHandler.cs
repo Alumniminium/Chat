@@ -1,11 +1,13 @@
 using System;
 using Client.Entities;
+using Universal.IO.FastConsole;
 using Universal.Packets;
 
 namespace Client.Networking.Handlers
 {
     public static class MsgTextHandler
-    {        private static User User => Core.MyUser;
+    {
+        private static User User => Core.MyUser;
         public static void Process(byte[] buffer)
         {
             var msgTxt = (MsgText)buffer;
@@ -14,6 +16,8 @@ namespace Client.Networking.Handlers
                 HandleDirectMessage(msgTxt);
             else
                 HandleServerMessage(msgTxt);
+
+            FConsole.WriteLine($"MsgText: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
 
         private static void HandleServerMessage(MsgText msgTxt)

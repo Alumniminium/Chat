@@ -52,12 +52,12 @@ namespace Universal.Packets
         }
         public void SetEmail(string email)
         {
-            email = email.FillLength(MAX_EMAIL_LENGTH);
+            email = email.ToLength(MAX_EMAIL_LENGTH);
             for (var i = 0; i < email.Length; i++)
                 Email[i] = (byte)email[i];
         }
 
-        public static MsgLogin Create(string user, string pass,string email, bool compression,MsgLoginType type)
+        public static MsgLogin Create(string user, string pass, string email, bool compression, MsgLoginType type)
         {
             var msg = stackalloc MsgLogin[1];
             msg->Length = (short)sizeof(MsgLogin);
@@ -76,17 +76,10 @@ namespace Universal.Packets
                 *(MsgLogin*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte*(MsgLogin msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgLogin)];
-            *(MsgLogin*)buffer = msg;
-            return buffer;
-        }
         public static implicit operator MsgLogin(byte[] msg)
         {
             fixed (byte* p = msg)
                 return *(MsgLogin*)p;
         }
-        public static implicit operator MsgLogin(byte* msg) => *(MsgLogin*)msg;
     }
 }

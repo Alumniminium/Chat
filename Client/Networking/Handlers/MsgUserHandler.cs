@@ -38,6 +38,7 @@ namespace Client.Networking.Handlers
                 }
                 FConsole.WriteLine($"Received Friend info for {user.Name}!");
             }
+            FConsole.WriteLine($"MsgUser: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }

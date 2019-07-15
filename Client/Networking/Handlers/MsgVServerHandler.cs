@@ -19,6 +19,8 @@ namespace Client.Networking.Handlers
                 Core.SelectedServer = server;
 
             FConsole.WriteLine($"Received Server info for {server.Name}!");
+
+            FConsole.WriteLine($"MsgVServer: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }
