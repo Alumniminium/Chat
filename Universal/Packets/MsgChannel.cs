@@ -23,7 +23,7 @@ namespace Universal.Packets
         }
         public void SetName(string username)
         {
-            username = username.FillLength(MAX_NAME_ENGTH);
+            username = username.ToLength(MAX_NAME_ENGTH);
             for (var i = 0; i < username.Length; i++)
                 Name[i] = (byte)username[i];
         }

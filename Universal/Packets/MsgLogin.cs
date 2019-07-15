@@ -40,24 +40,24 @@ namespace Universal.Packets
 
         public void SetUsername(string username)
         {
-            username = username.FillLength(MAX_PASSWORD_LENGTH);
+            username = username.ToLength(MAX_PASSWORD_LENGTH);
             for (var i = 0; i < username.Length; i++)
                 Username[i] = (byte)username[i];
         }
         public void SetPassword(string password)
         {
-            password = password.FillLength(MAX_PASSWORD_LENGTH);
+            password = password.ToLength(MAX_PASSWORD_LENGTH);
             for (var i = 0; i < password.Length; i++)
                 Password[i] = (byte)password[i];
         }
         public void SetEmail(string email)
         {
-            email = email.FillLength(MAX_EMAIL_LENGTH);
+            email = email.ToLength(MAX_EMAIL_LENGTH);
             for (var i = 0; i < email.Length; i++)
                 Email[i] = (byte)email[i];
         }
 
-        public static MsgLogin Create(string user, string pass,string email, bool compression,MsgLoginType type)
+        public static MsgLogin Create(string user, string pass, string email, bool compression, MsgLoginType type)
         {
             var msg = stackalloc MsgLogin[1];
             msg->Length = (short)sizeof(MsgLogin);
@@ -69,17 +69,11 @@ namespace Universal.Packets
             msg->SetEmail(email);
             return *msg;
         }
-        public static implicit operator byte[] (MsgLogin msg)
+        public static implicit operator byte[](MsgLogin msg)
         {
             var buffer = new byte[sizeof(MsgLogin)];
             fixed (byte* p = buffer)
                 *(MsgLogin*)p = *&msg;
-            return buffer;
-        }
-        public static implicit operator byte* (MsgLogin msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgLogin)];
-            *(MsgLogin*)buffer = msg;
             return buffer;
         }
         public static implicit operator MsgLogin(byte[] msg)
@@ -87,6 +81,5 @@ namespace Universal.Packets
             fixed (byte* p = msg)
                 return *(MsgLogin*)p;
         }
-        public static implicit operator MsgLogin(byte* msg) => *(MsgLogin*)msg;
     }
 }

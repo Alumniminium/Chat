@@ -1,5 +1,6 @@
 using System.Linq;
 using Server.Entities;
+using Universal.IO.FastConsole;
 using Universal.Packets;
 
 namespace Server.Networking.Handler
@@ -14,6 +15,8 @@ namespace Server.Networking.Handler
                 HandleDirectMessage(msgTxt);
             else
                 HandleServerMessage(msgTxt);
+
+            FConsole.WriteLine($"MsgText: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
 
         private static void HandleServerMessage(MsgText msgTxt)

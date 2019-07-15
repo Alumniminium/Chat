@@ -14,6 +14,7 @@ namespace Server.Networking.Handler
             server.Name = msgVServer.GetServerName();
             server.IconUrl = msgVServer.GetServerIconUrl();
             FConsole.WriteLine($"Received Server info for {server.Name}!");
+            FConsole.WriteLine($"MsgVServer: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }

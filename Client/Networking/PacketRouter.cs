@@ -1,4 +1,5 @@
-﻿using Client.Networking.Handlers;
+﻿using System.Diagnostics;
+using Client.Networking.Handlers;
 using Universal.Extensions;
 using Universal.IO.FastConsole;
 using Universal.Packets.Enums;
@@ -7,8 +8,10 @@ namespace Client.Networking
 {
     public static class PacketRouter
     {
+        public static Stopwatch Stopwatch = Stopwatch.StartNew();
         public static void Route(Client client, byte[] buffer)
         {
+            Stopwatch.Restart();
             var packetId = buffer.GetPacketType();
 
             switch (packetId)

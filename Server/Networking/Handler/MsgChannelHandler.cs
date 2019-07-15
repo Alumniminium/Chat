@@ -12,6 +12,7 @@ namespace Server.Networking.Handler
 
 
             FConsole.WriteLine($"Received Server info for {msgChannel.GetName()}!");
+            FConsole.WriteLine($"MsgChannel: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }

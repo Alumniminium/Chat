@@ -32,13 +32,13 @@ namespace Universal.Packets
 
         public void SetNickname(string nickname)
         {
-            nickname = nickname.FillLength(MAX_NICKNAME_LENGTH);
+            nickname = nickname.ToLength(MAX_NICKNAME_LENGTH);
             for (var i = 0; i < nickname.Length; i++)
                 Nickname[i] = (byte)nickname[i];
-            }
+        }
         public void SetAvatarUrl(string url)
         {
-            url = url.FillLength(MAX_AVATAR_URL_LENGTH);
+            url = url.ToLength(MAX_AVATAR_URL_LENGTH);
             for (var i = 0; i < url.Length; i++)
                 AvatarUrl[i] = (byte)url[i];
         }
@@ -68,14 +68,14 @@ namespace Universal.Packets
             msg->SetAvatarUrl(avatarUrl);
             return *msg;
         }
-        public static implicit operator byte[] (MsgUser msg)
+        public static implicit operator byte[](MsgUser msg)
         {
             var buffer = new byte[sizeof(MsgUser)];
             fixed (byte* p = buffer)
                 *(MsgUser*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte* (MsgUser msg)
+        public static implicit operator byte*(MsgUser msg)
         {
             var buffer = stackalloc byte[sizeof(MsgUser)];
             *(MsgUser*)buffer = msg;

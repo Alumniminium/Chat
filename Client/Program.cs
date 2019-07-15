@@ -53,6 +53,7 @@ namespace Client
         {
             var user = Core.MyUser;
             Console.Clear();
+            Console.WriteLine($"W: {Console.WindowWidth} H:{Console.WindowHeight}");
             Console.WriteLine("------ S E R V E R S ------|----- F r i e n d s ------");
 
             var counter = 0;

@@ -29,7 +29,7 @@ namespace Universal.Packets
 
         public void SetText(string text)
         {
-            text = text.FillLength(MAX_TEXT_LENGTH);
+            text = text.ToLength(MAX_TEXT_LENGTH);
             for (var i = 0; i < text.Length; i++)
                 Text[i] = (byte)text[i];
         }

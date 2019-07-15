@@ -20,6 +20,8 @@ namespace Client.Networking.Handlers
             }
             else
                 FConsole.WriteLine("Authentication failed.");
+
+            FConsole.WriteLine($"MsgLogin: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
         }
     }
 }
