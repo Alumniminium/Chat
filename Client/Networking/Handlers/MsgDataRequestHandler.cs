@@ -1,3 +1,5 @@
+using System.Linq;
+using Client.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
 using Universal.Packets.Enums;
@@ -8,7 +10,6 @@ namespace Client.Networking.Handlers
     {
         public static void Process(MsgDataRequest msgDataRequest)
         {
-
             switch (msgDataRequest.Type)
             {
                 case MsgDataRequestType.Friends:
@@ -34,6 +35,9 @@ namespace Client.Networking.Handlers
                             var request = MsgDataRequest.CreateServerChannelListRequest(Core.MyUser.Id, server.Key);
                             Core.Client.Send(request);
                         }
+                        Core.MyUser.Servers.TryAdd(0, VirtualServer.CreateDMServer(Core.MyUser));
+                        Core.SelectedServer = Core.MyUser.Servers[0];
+                        Core.SelectedChannel = Core.MyUser.Servers[0].Channels.Values.FirstOrDefault();
                         break;
                     }
 

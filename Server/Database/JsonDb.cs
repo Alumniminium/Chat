@@ -129,8 +129,6 @@ namespace Server.Database
             demoUser3.Friends.Add(demoUser.Id);
             demoUser3.Friends.Add(demoUser2.Id);
 
-            Collections.Users.TryAdd(demoUser.Id, demoUser);
-
             var defaultSettings = new ServerSettings
             {
                 Port = 65535,

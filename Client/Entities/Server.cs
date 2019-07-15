@@ -52,5 +52,20 @@ namespace Client.Entities
         {
             return Channels[id];
         }
+
+        public static VirtualServer CreateDMServer(User user)
+        {
+            var vs = new VirtualServer {Id = 0};
+            foreach (var (id, friend) in user.Friends)
+            {
+                vs.Channels.Add(id, new Channel(id, friend.Name));
+                vs.AddUser(friend);
+            }
+
+            vs.IconUrl = user.AvatarUrl;
+            vs.Name = "DM";
+
+            return vs;
+        }
     }
 }

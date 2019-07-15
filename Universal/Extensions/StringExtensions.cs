@@ -5,7 +5,7 @@
         public static string ToLength(this string str, int length)
         {
             var newString = str;
-            for (int i = 0; i < length - str.Length; i++)
+            for (var i = 0; i < length - str.Length; i++)
             {
                 newString += '\0';
             }

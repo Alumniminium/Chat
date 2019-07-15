@@ -17,12 +17,11 @@ namespace Client.UI
             Console.WriteLine("|           SERVERS      |       FRIENDS          |");
             Console.SetCursorPosition(Console.WindowWidth / 2 - 25, 3);
             Console.WriteLine("|_________________________________________________|");
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 25, 4);
-            Console.WriteLine($"| 1. {serverArray[0].Name.CenterLength(20)}| 1. {friendArray[0].Name.CenterLength(20)}|");
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 25, 5);
-            Console.WriteLine($"| 2. {serverArray[1].Name.CenterLength(20)}| 2. {friendArray[1].Name.CenterLength(20)}|");
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 25, 6);
-            Console.WriteLine($"| 3. {serverArray[2].Name.CenterLength(20)}|                        |");
+            for (int i = 0; i < Math.Min(3,serverArray.Length); i++)
+            {
+                Console.SetCursorPosition(Console.WindowWidth / 2 - 25, 4+i);
+                Console.WriteLine($"| 1. {serverArray[0]?.Name?.CenterLength(20)}| 1. {friendArray[0]?.Name?.CenterLength(20)}|");
+            }
         }
     }
 }
