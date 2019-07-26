@@ -24,6 +24,18 @@
             "problemMatcher": [
                 "$msCompile"
             ]
+        },
+        {
+            "label": "Build AvaloniaClient",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AvaloniaClient/AvaloniaClient.csproj"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ]
         }
     ]
 }
