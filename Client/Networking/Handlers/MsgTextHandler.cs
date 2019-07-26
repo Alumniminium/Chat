@@ -46,10 +46,10 @@ namespace Client.Networking.Handlers
 
         private static void HandleDirectMessage(MsgText msgTxt)
         {
-            if (!User.Friends.ContainsKey(msgTxt.FriendId))
-                throw new ArgumentException("user.Friends didn't contain " + msgTxt.FriendId);
+            if (!User.Friends.ContainsKey(msgTxt.AuthorId))
+                throw new ArgumentException("user.Friends didn't contain " + msgTxt.AuthorId);
 
-            var friend = User.Friends[msgTxt.FriendId];
+            var friend = User.Friends[msgTxt.AuthorId];
             friend.LastActivity = DateTime.Now;
 
             var directMessageServer = User.Servers[0];
@@ -57,7 +57,7 @@ namespace Client.Networking.Handlers
 
             if (channel == null)
             {
-                var friendChannel = new Channel(msgTxt.FriendId, friend.Name);
+                var friendChannel = new Channel(msgTxt.AuthorId, friend.Name);
                 directMessageServer.AddChannel(friendChannel);
                 channel = friendChannel;
             }

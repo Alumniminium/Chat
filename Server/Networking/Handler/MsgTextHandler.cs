@@ -1,4 +1,3 @@
-using System.Linq;
 using Server.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;

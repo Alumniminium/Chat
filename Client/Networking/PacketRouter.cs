@@ -8,7 +8,7 @@ namespace Client.Networking
 {
     public static class PacketRouter
     {
-        public static Stopwatch Stopwatch = Stopwatch.StartNew();
+        public static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         public static void Route(Client client, byte[] buffer)
         {
             Stopwatch.Restart();
