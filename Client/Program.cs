@@ -18,13 +18,11 @@ namespace Client
             JIT.PreJIT();
 
             StartupScreen.Draw();
-            
+
             while (true)
             {
-                DrawUI();
-                //HomeScreen.Draw();
-                Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                Console.Write($"{Core.SelectedServer.Name}{Core.SelectedChannel.Name}: ");
+                //DrawUI();
+                HomeScreen.Draw();
                 var input = FConsole.ReadLine();
 
                 if (input.StartsWith('/'))
@@ -77,7 +75,7 @@ namespace Client
                 {
                     Console.WriteLine($"|  - {server.Name} -");
 
-                    if(Core.SelectedServer.Id != server.Id)
+                    if (Core.SelectedServer.Id != server.Id)
                         continue;
 
                     foreach (var (_, channel) in server.Channels)
