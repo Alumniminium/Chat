@@ -7,5 +7,13 @@ namespace Server.Entities
         public int Id{get;set;}
         public string Name {get;set;}
         public Dictionary<int,Message> Messages {get;set;}
+
+
+        public Channel(int id, string name)
+        {
+            Id = id;
+            Name = name;
+            Messages = new Dictionary<int, Message>();
+        }
     }
 }
