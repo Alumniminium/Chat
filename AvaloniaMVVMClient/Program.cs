@@ -2,6 +2,7 @@
 using Avalonia.Logging.Serilog;
 using AvaloniaMVVMClient.ViewModels;
 using AvaloniaMVVMClient.Views;
+using AvaloniaMVVMClient.Windows;
 
 namespace AvaloniaMVVMClient
 {
@@ -25,7 +26,7 @@ namespace AvaloniaMVVMClient
         {
             var window = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainWindowViewModel()
             };
 
             app.Run(window);

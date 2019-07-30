@@ -4,7 +4,6 @@
     <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -26,8 +25,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Views\LoginView.xaml">
+    <EmbeddedResource Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </None>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\SplashScreenView.xaml.cs">
+      <DependentUpon>SplashScreenView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

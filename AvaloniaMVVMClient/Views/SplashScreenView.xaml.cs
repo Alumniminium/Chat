@@ -3,27 +3,21 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaMVVMClient.ViewModels;
+using AvaloniaMVVMClient.Windows;
 
 namespace AvaloniaMVVMClient.Views
 {
-    public class MainWindow : Window
+    public class SplashScreenView : UserControl
     {
-        public MainWindow()
+        public SplashScreenView()
         {
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            HasSystemDecorations = false;
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
-
         private async void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
             await Task.Delay(2000);
-            Content = new LoginView();
-            DataContext = new LoginViewModel();
+            MainWindow.UpdateContent(new LoginView(), new LoginViewModel());
         }
     }
 }

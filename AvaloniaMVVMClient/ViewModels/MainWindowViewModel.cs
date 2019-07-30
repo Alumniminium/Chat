@@ -1,7 +1,18 @@
-﻿namespace AvaloniaMVVMClient.ViewModels
+﻿using AvaloniaMVVMClient.Views;
+using AvaloniaMVVMClient.Windows;
+using ReactiveUI;
+
+namespace AvaloniaMVVMClient.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string Greeting => "Welcome to Avalonia!";
+        public MainWindowViewModel()
+        {
+            MainWindow.UpdateContent(new SplashScreenView(), null);
+        }
+        public async void Login()
+        {
+
+        }
     }
 }
