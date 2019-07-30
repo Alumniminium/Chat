@@ -1,0 +1,20 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaMVVMClient.Views.LoginView">
+  <Grid>
+    <StackPanel>
+      <TextBlock  HorizontalAlignment="Center" Width="256" Height="64" FontSize="48" FontWeight="Bold"    Text="Welcome"     Background="#FFFFFFFF" />
+      <TextBlock  HorizontalAlignment="Center" Width="256" Height="48" FontSize="22" FontWeight="Bold"    Text="Username"    Background="#FFFFFFFF" />
+      <TextBox    HorizontalAlignment="Center" Width="256" Height="32" FontSize="16" FontWeight="Normal"  Text="asd@asd.cn"  Background="#FFFFFFFF" BorderBrush="#FFCDCFCD"/>
+      <TextBlock  HorizontalAlignment="Center" Width="256" Height="48" FontSize="22" FontWeight="Bold"    Text="Password"    Background="#FFFFFFFF" />
+      <TextBox    HorizontalAlignment="Center" Width="256" Height="32" FontSize="16" FontWeight="Normal"  PasswordChar="*"   Background="#FFFFFFFF" BorderBrush="#FFCDCFCD"/>
+      <CheckBox   HorizontalAlignment="Center" Width="256" Height="32" FontSize="16" FontWeight="Normal"  Content="Remember credentials?"/>
+      <Button     HorizontalAlignment="Center" Width="256" Height="32" FontSize="22" FontWeight="Normal"  Content="Login"    Background="#FFFFFFFF" BorderBrush="#FFCDCFCD"/>
+    </StackPanel>
+    <ProgressBar Height="1" IsIndeterminate="True" VerticalAlignment="Bottom" Foreground="#79DEF9" Background="#FFFFFFFF" BorderBrush="#79DEF9"/>
+  </Grid>
+
+</UserControl>

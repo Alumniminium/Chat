@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Universal.Performance
 {
-    public static class JIT
+    public static class Jit
     {
-        public static void PreJIT()
+        public static void PreJit()
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
@@ -16,6 +16,6 @@ namespace Universal.Performance
             }
 
         }
-        public static async Task PreJIT_Async() => await Task.Run(PreJIT);
+        public static async Task PreJIT_Async() => await Task.Run(PreJit);
     }
 }

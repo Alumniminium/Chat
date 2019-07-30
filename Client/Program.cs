@@ -15,7 +15,7 @@ namespace Client
         {
             FConsole.Title = "CLIENT APP";
             GlobalExceptionHandler.Setup();
-            JIT.PreJIT();
+            Jit.PreJit();
 
             StartupScreen.Draw();
 

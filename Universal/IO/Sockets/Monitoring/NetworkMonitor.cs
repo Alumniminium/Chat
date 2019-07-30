@@ -5,8 +5,8 @@ namespace Universal.IO.Sockets.Monitoring
 {
     public class NetworkMonitor
     {
-        public ulong PPSOut { get; private set; }
-        public ulong PPSIn { get; private set; }
+        public ulong PacketsPerSecondOutgoing { get; private set; }
+        public ulong PacketsPerSecondIncoming { get; private set; }
         public ulong BytesSent { get; private set; }
         public ulong BytesReceived { get; private set; }
         public ulong UploadSpeed { get; private set; }
@@ -37,9 +37,9 @@ namespace Universal.IO.Sockets.Monitoring
             Thread.Sleep(500);
             _packetPerSecondTimer.Elapsed += (sender, args) =>
             {
-                Console.Title = $"Packets per sec: Out: {PPSOut} In: {PPSIn} | DL: {DownloadSpeedAverage / 1024} UL: {UploadSpeedAverage / 1024}";
-                PPSOut = 0;
-                PPSIn = 0;
+                Console.Title = $"Packets per sec: Out: {PacketsPerSecondOutgoing} In: {PacketsPerSecondIncoming} | DL: {DownloadSpeedAverage / 1024} UL: {UploadSpeedAverage / 1024}";
+                PacketsPerSecondOutgoing = 0;
+                PacketsPerSecondIncoming = 0;
             };
             _packetPerSecondTimer.Enabled = true;
             _packetPerSecondTimer.Start();
@@ -50,12 +50,12 @@ namespace Universal.IO.Sockets.Monitoring
             switch (mode)
             {
                 case TrafficMode.In:
-                    PPSIn++;
+                    PacketsPerSecondIncoming++;
                     PacketsReceived++;
                     BytesReceived += (ulong)size;
                     break;
                 case TrafficMode.Out:
-                    PPSOut++;
+                    PacketsPerSecondOutgoing++;
                     PacketsSent++;
                     BytesSent += (ulong)size; break;
             }

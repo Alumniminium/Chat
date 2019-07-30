@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Universal.Extensions;
 
 namespace Client.UI
 {
@@ -14,8 +12,8 @@ namespace Client.UI
             var halfwidth = width / 2;
             var halfheight = height / 2;
 
-            ConsoleUI.DrawRectangle(0, 0, Console.WindowWidth, Console.WindowHeight);
-            ConsoleUI.DrawRectangle(4, 2, 10, 5);
+            ConsoleUi.DrawRectangle(0, 0, Console.WindowWidth, Console.WindowHeight);
+            ConsoleUi.DrawRectangle(4, 2, halfwidth, halfheight);
         }
     }
 }

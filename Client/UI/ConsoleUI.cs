@@ -2,9 +2,9 @@ using System;
 
 namespace Client.UI
 {
-    public static class ConsoleUI
+    public static class ConsoleUi
     {
-        private static readonly char[] lines = new[] { '┌', '─', '┐', '│', '└', '─', '┘' };
+        public static readonly char[] Lines = { '┌', '─', '┐', '│', '└', '─', '┘' };
         private static void DrawLine(int x, int y, int x2, int y2, LineType type)
         {
             var dist = Math.Max(Math.Abs(x - x2), Math.Abs(y - y2));
@@ -15,11 +15,11 @@ namespace Client.UI
                 {
                     Console.SetCursorPosition(x + i, y);
                     if (i == 0)
-                        Console.Write(lines[0]);
+                        Console.Write(Lines[0]);
                     else if (i == dist - 1)
-                        Console.Write(lines[2]);
+                        Console.Write(Lines[2]);
                     else
-                        Console.Write(lines[1]);
+                        Console.Write(Lines[1]);
                 }
             }
             if (type == LineType.Bottom)
@@ -28,11 +28,11 @@ namespace Client.UI
                 {
                     Console.SetCursorPosition(x + i, y - 1);
                     if (i == 0)
-                        Console.Write(lines[4]);
+                        Console.Write(Lines[4]);
                     else if (i == dist - 1)
-                        Console.Write(lines[6]);
+                        Console.Write(Lines[6]);
                     else
-                        Console.Write(lines[1]);
+                        Console.Write(Lines[1]);
                 }
             }
             if (type == LineType.Left)
@@ -41,11 +41,11 @@ namespace Client.UI
                 {
                     Console.SetCursorPosition(x, y + i);
                     if (i == 0)
-                        Console.Write(lines[0]);
+                        Console.Write(Lines[0]);
                     else if (i == dist - 1)
-                        Console.Write(lines[4]);
+                        Console.Write(Lines[4]);
                     else
-                        Console.Write(lines[3]);
+                        Console.Write(Lines[3]);
                 }
             }
             if (type == LineType.Right)
@@ -54,11 +54,11 @@ namespace Client.UI
                 {
                     Console.SetCursorPosition(x2 - 1, y + i);
                     if (i == 0)
-                        Console.Write(lines[2]);
+                        Console.Write(Lines[2]);
                     else if (i == dist - 1)
-                        Console.Write(lines[6]);
+                        Console.Write(Lines[6]);
                     else
-                        Console.Write(lines[3]);
+                        Console.Write(Lines[3]);
                 }
             }
         }

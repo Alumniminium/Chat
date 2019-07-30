@@ -1,7 +1,7 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaClient
+namespace AvaloniaMVVMClient
 {
     public class App : Application
     {
@@ -9,5 +9,5 @@ namespace AvaloniaClient
         {
             AvaloniaXamlLoader.Load(this);
         }
-   }
+    }
 }
