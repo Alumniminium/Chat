@@ -18,6 +18,7 @@ namespace AvaloniaMVVMClient.Windows
             this.AttachDevTools();
 #endif
             Instance = this;
+            Content = new SplashScreenView();
         }
 
         private void InitializeComponent()
@@ -25,7 +26,7 @@ namespace AvaloniaMVVMClient.Windows
             AvaloniaXamlLoader.Load(this);
         }
 
-        public static void UpdateContent(UserControl view, ViewModelBase model)
+        public static void UpdateContent(ViewModelBase model, UserControl view)
         {
             Instance.DataContext = model;
             Instance.Content = view;

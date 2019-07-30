@@ -5,5 +5,5 @@
         mc:Ignorable="d" Width="854" Height="480"
         x:Class="AvaloniaMVVMClient.Windows.MainWindow"
         Title="MainWindow">
-  
+  <Views.SplashScreenView/>
 </Window>

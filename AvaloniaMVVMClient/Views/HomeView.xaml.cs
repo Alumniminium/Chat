@@ -1,23 +1,23 @@
 ﻿using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaMVVMClient.ViewModels;
-using AvaloniaMVVMClient.Windows;
 
 namespace AvaloniaMVVMClient.Views
 {
-    public class SplashScreenView : UserControl
+    public class HomeView : UserControl
     {
-        public SplashScreenView()
+        public readonly HomeViewModel ViewModel;
+        public HomeView()
         {
             InitializeComponent();
+            DataContext = ViewModel = new HomeViewModel();
         }
-        private async void InitializeComponent()
+
+        private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            await Task.Delay(2000);
-            MainWindow.UpdateContent(new LoginViewModel(),new LoginView());
         }
+
     }
 }
