@@ -21,12 +21,7 @@ namespace AvaloniaMVVMClient.UI.Views
         }
         public void Login()
         {
-            var viewModel = (LoginViewModel) Core.Views[ViewModelEnum.Login].Item2;
-            if (viewModel.ProgressbarVisible)
-            {
-                Debugger.Break();
-                return;
-            }
+            var viewModel = (LoginViewModel) MainWindow.Instance.DataContext;
 
             if (viewModel.RememberCheckbox)
             {
@@ -38,24 +33,27 @@ namespace AvaloniaMVVMClient.UI.Views
             viewModel.ProgressbarVisible = true;
             viewModel.StatusLabel = "Connecting...";
             Core.Client.ConnectAsync(viewModel.Username, viewModel.Password);
-            Core.Client.Socket.OnConnected += () =>
+            Core.Client.Socket.OnConnected += async () =>
             {
-                viewModel.StatusLabel = "Connected! Logging in...";
-                viewModel.ProgressbarVisible = false;
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    viewModel.StatusLabel = "Connected! Logging in...";
+                    viewModel.ProgressbarVisible = false;
+                });
             };
             Core.Client.OnLoggedIn += async () =>
             {
-                viewModel.StatusLabel = "Logged in!";
-                await Task.Delay(2000);
+                await Task.Delay(1000);
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
+                    viewModel.StatusLabel = "Logged in!";
                     MainWindow.UpdateContent(ViewModelEnum.Home);
                 });
             };
-            Core.Client.Socket.OnDisconnect += () =>
-            {
-                viewModel.ProgressbarVisible = false;
-            };
+            Core.Client.Socket.OnDisconnect += async () =>
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() => { viewModel.ProgressbarVisible = false; });
+                };
         }
     }
 }

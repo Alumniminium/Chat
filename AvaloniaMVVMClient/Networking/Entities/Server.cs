@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Avalonia.Media.Imaging;
 using AvaloniaMVVMClient.Database;
 
 namespace AvaloniaMVVMClient.Networking.Entities
@@ -9,6 +10,7 @@ namespace AvaloniaMVVMClient.Networking.Entities
         private string _iconUrl;
         public int Id;
         public string Name { get; set; }= "";
+        public Bitmap Icon => new Bitmap(IconUrl);
         public string IconUrl
         {
             get

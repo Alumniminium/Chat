@@ -14,12 +14,5 @@ namespace AvaloniaMVVMClient
         public static Channel SelectedChannel = null;
         public static User MyUser = new User();
         public static StateFile StateFile = new StateFile();
-        public static readonly Dictionary<ViewModelEnum, (UserControl, ViewModelBase)> Views =
-            new Dictionary<ViewModelEnum, (UserControl, ViewModelBase)>
-            {
-                [ViewModelEnum.Splash] = (new SplashScreenView(), null),
-                [ViewModelEnum.Login] = (new LoginView(), new LoginViewModel()),
-                [ViewModelEnum.Home] = (new HomeView(), new HomeViewModel()),
-            };
     }
 }

@@ -5,28 +5,34 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:local="clr-namespace:AvaloniaMVVMClient.UI.Converters;assembly=AvaloniaMVVMClient"
              x:Class="AvaloniaMVVMClient.UI.Views.HomeView">
-  <Resources>
-    <local:StringToImageConverter  x:Key="StringToImageConverter"/>
-  </Resources>
-  <DockPanel>
-    <StackPanel Margin="4" Width="200" DockPanel.Dock="Left">
+  <DockPanel Background="#33333D">
+    <StackPanel Margin="4" Width="200" DockPanel.Dock="Left" Background="#373740">
       <ItemsControl Items="{Binding Servers}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <Image Width="64" Height="64" Source="{Binding IconUrl, Converter={StaticResource local:StringToImageConverter }}"/>
-              <TextBlock Text="{Binding Name}"/>
+                <Image Width="32" Height="32" Margin="4" Source="{Binding Icon}"/>
+              <TextBlock Foreground="#FFFFFF" FontSize="14" Text="{Binding Name}" Margin="4" VerticalAlignment="Center"/>
             </StackPanel>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>
     </StackPanel>
-    <StackPanel Margin="4" DockPanel.Dock="Top">
-      <TextBlock Width="550" TextWrapping="Wrap" Text="LOREM IPSUN AHSDJKHLAFUJGOLQWUIGP@(#GB#@(P"/>
 
-    </StackPanel>
-    <StackPanel Margin="4" DockPanel.Dock="Bottom">
-
-    </StackPanel>
+    <Border Margin="2" Height="32" DockPanel.Dock="Bottom" BorderThickness="1" BorderBrush="#FF4181">
+      <StackPanel Orientation="Horizontal">
+        <TextBox VerticalAlignment="Center" Foreground="#FFFFFF" Background="#33333D" FontSize="16" Watermark="type your message here..." Width="{Binding $parent[StackPanel].Bounds.Width}"/>        
+      </StackPanel>
+    </Border>
+    <Border Margin="2" BorderThickness="1" BorderBrush="#FF4181">
+      <StackPanel>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+      </StackPanel>
+    </Border>
   </DockPanel>
 </UserControl>

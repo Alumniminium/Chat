@@ -1,7 +1,9 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaMVVMClient.Database;
+using AvaloniaMVVMClient.UI.ViewModels;
 using AvaloniaMVVMClient.UI.Views;
 
 namespace AvaloniaMVVMClient.UI.Windows
@@ -31,10 +33,21 @@ namespace AvaloniaMVVMClient.UI.Windows
 
         public static void UpdateContent(ViewModelEnum model)
         {
-            if (!Core.Views.TryGetValue(model, out var pair))
-                return;
-            Instance.Content = pair.Item1;
-            Instance.DataContext = pair.Item2;
+            switch (model)
+            {
+                case ViewModelEnum.Splash:
+                    Instance.Content = new SplashScreenView();
+                    Instance.DataContext = null;
+                    break;
+                case ViewModelEnum.Login:
+                    Instance.Content = new LoginView();
+                    Instance.DataContext = new LoginViewModel();
+                    break;
+                case ViewModelEnum.Home:
+                    Instance.Content = new HomeView();
+                    Instance.DataContext = new HomeViewModel();
+                    break;
+            }
         }
     }
 }

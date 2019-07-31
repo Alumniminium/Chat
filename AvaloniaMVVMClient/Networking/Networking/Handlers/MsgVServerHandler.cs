@@ -1,6 +1,9 @@
+using System.Threading.Tasks;
+using Avalonia.Threading;
 using AvaloniaMVVMClient.Database;
 using AvaloniaMVVMClient.Networking.Entities;
 using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.UI.Windows;
 using Universal.IO.FastConsole;
 using Universal.Packets;
 
@@ -20,8 +23,12 @@ namespace AvaloniaMVVMClient.Networking.Networking.Handlers
             };
 
             Core.MyUser.Servers.TryAdd(server.Id, server);
-            (Core.Views[ViewModelEnum.Home].Item2 as HomeViewModel)?.Servers.Add(server);
-
+            Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                await Task.Delay(3000);
+                (MainWindow.Instance.DataContext as HomeViewModel)?.Servers.Add(server);
+            });
+            
             if (Core.SelectedServer == null)
                 Core.SelectedServer = server;
 
