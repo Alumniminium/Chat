@@ -15,23 +15,23 @@
             "stopAtEntry": false
         },
         {
-            "name": "AvaloniaClient",
+            "name": "AvaloniaMVVMClient",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "Build AvaloniaClient",
-            "program": "${workspaceFolder}/AvaloniaClient/bin/Debug/netcoreapp2.2/AvaloniaClient.dll",
+            "preLaunchTask": "Build AvaloniaMVVMClient",
+            "program": "${workspaceFolder}/AvaloniaMVVMClient/bin/Debug/netcoreapp2.2/AvaloniaMVVMClient.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/AvaloniaClient",
+            "cwd": "${workspaceFolder}/AvaloniaMVVMClient",
             "console": "externalTerminal",
             "stopAtEntry": false
         }
     ],
     "compounds": [
         {
-            "name": "Server/AvaloniaClient",
+            "name": "Server/AvaloniaMVVMClient",
             "configurations": [
                 "Server",
-                "AvaloniaClient"
+                "AvaloniaMVVMClient"
             ]
         }
     ]

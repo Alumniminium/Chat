@@ -18,7 +18,7 @@ namespace AvaloniaMVVMClient.Database
 
         public static void SaveConfig()
         {
-            File.WriteAllText("config.json", JsonConvert.SerializeObject(Core.StateFile));
+            File.WriteAllText("config.json", JsonConvert.SerializeObject(Core.StateFile, Formatting.Indented));
         }
 
         public static string GetCacheImage(string url)
@@ -32,7 +32,7 @@ namespace AvaloniaMVVMClient.Database
 
             using (var webclient = new WebClient())
             {
-                var cachePath = Path.Combine("file://",Environment.CurrentDirectory, "cache" , Path.ChangeExtension(Path.GetRandomFileName(),"jpg"));
+                var cachePath = Path.Combine("file://", Environment.CurrentDirectory, "cache", Path.ChangeExtension(Path.GetRandomFileName(), "jpg"));
                 if (!Directory.Exists(Path.GetDirectoryName(cachePath)))
                     Directory.CreateDirectory(Path.GetDirectoryName(cachePath));
                 webclient.DownloadFile(url, cachePath);
