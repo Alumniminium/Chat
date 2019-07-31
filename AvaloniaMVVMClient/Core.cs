@@ -13,8 +13,7 @@ namespace AvaloniaMVVMClient
         public static VirtualServer SelectedServer = null;
         public static Channel SelectedChannel = null;
         public static User MyUser = new User();
-        public static Config Config = new Config();
-
+        public static StateFile StateFile = new StateFile();
         public static readonly Dictionary<ViewModelEnum, (UserControl, ViewModelBase)> Views =
             new Dictionary<ViewModelEnum, (UserControl, ViewModelBase)>
             {

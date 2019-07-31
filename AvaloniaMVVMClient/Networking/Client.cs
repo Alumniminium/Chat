@@ -26,7 +26,7 @@ namespace AvaloniaMVVMClient.Networking
             Socket = new ClientSocket(this);
             Socket.OnDisconnect += Disconnected;
             Socket.OnConnected += Connected;
-            Socket.ConnectAsync(Core.SERVER_IP, Core.SERVER_PORT);
+            Socket.ConnectAsync(Core.StateFile.ServerIP, Core.StateFile.Port);
         }
 
         private void Connected()

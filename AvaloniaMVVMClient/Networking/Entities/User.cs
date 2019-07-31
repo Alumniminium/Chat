@@ -1,18 +1,26 @@
 using System;
 using System.Collections.Concurrent;
+using AvaloniaMVVMClient.Database;
 using Universal.Packets;
 
 namespace AvaloniaMVVMClient.Networking.Entities
 {
     public class User
     {
+        private string _avatarUrl;
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Online { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public string AvatarUrl { get; set; }
+
+        public string AvatarUrl
+        {
+            get => Db.GetCacheImage(_avatarUrl);
+            set => _avatarUrl = value;
+        }
+
         public ConcurrentDictionary<int, User> Friends { get; set; }
         public ConcurrentDictionary<int, VirtualServer> Servers { get; set; }
         public DateTime LastActivity { get; set; }

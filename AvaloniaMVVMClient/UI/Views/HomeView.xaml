@@ -11,7 +11,7 @@
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <Image Width="64" Height="64" Source="{Binding IconUrl}"/>
+              <Image Width="64" Height="64" Source="{Binding IconUrl, Converter=BitmapValueConverter}"/>
               <TextBlock Text="{Binding Name}"/>
             </StackPanel>
           </DataTemplate>

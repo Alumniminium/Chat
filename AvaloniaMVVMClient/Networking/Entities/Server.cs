@@ -1,13 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using AvaloniaMVVMClient.Database;
 
 namespace AvaloniaMVVMClient.Networking.Entities
 {
     public class VirtualServer
     {
+        private string _iconUrl;
         public int Id;
         public string Name { get; set; }= "";
-        public string IconUrl { get; set; }
+        public string IconUrl
+        {
+            get
+            {
+                var path = Db.GetCacheImage(_iconUrl);
+                return path;
+            }
+            set => _iconUrl = value;
+        }
+
         public readonly Dictionary<int, User> Users;
         public readonly Dictionary<int, Channel> Channels;
 

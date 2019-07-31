@@ -1,3 +1,4 @@
+using AvaloniaMVVMClient.Database;
 using AvaloniaMVVMClient.Networking.Entities;
 using AvaloniaMVVMClient.UI.ViewModels;
 using Universal.IO.FastConsole;

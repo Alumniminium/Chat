@@ -28,6 +28,13 @@ namespace AvaloniaMVVMClient.UI.Views
                 return;
             }
 
+            if (viewModel.RememberCheckbox)
+            {
+                Core.StateFile.Username = viewModel.Username;
+                Core.StateFile.Password = viewModel.Password;
+                Core.StateFile.RememberCredentials = true;
+            }
+
             viewModel.ProgressbarVisible = true;
             viewModel.StatusLabel = "Connecting...";
             Core.Client.ConnectAsync(viewModel.Username, viewModel.Password);
