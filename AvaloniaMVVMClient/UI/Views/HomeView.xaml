@@ -3,15 +3,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:local="clr-namespace:AvaloniaMVVMClient.UI.Converters;assembly=AvaloniaMVVMClient"
              x:Class="AvaloniaMVVMClient.UI.Views.HomeView">
-  
+  <Resources>
+    <local:StringToImageConverter  x:Key="StringToImageConverter"/>
+  </Resources>
   <DockPanel>
     <StackPanel Margin="4" Width="200" DockPanel.Dock="Left">
       <ItemsControl Items="{Binding Servers}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <Image Width="64" Height="64" Source="{Binding IconUrl, Converter=BitmapValueConverter}"/>
+              <Image Width="64" Height="64" Source="{Binding IconUrl, Converter={StaticResource local:StringToImageConverter }}"/>
               <TextBlock Text="{Binding Name}"/>
             </StackPanel>
           </DataTemplate>
