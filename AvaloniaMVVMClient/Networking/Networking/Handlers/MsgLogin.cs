@@ -15,6 +15,7 @@ namespace AvaloniaMVVMClient.Networking.Networking.Handlers
                 Core.MyUser.Username = msgLogin.GetUsername();
                 Core.MyUser.Password = msgLogin.GetPassword();
                 FConsole.WriteLine("Authentication successful. Your user Id is: " + Core.MyUser.Id);
+                Core.Client.OnLoggedIn?.Invoke();
                 var msgDataRequest = MsgDataRequest.CreateFriendListRequest(Core.MyUser.Id);
                 Core.Client.Send(msgDataRequest);
             }

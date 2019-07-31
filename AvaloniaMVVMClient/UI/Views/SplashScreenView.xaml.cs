@@ -15,8 +15,8 @@ namespace AvaloniaMVVMClient.UI.Views
         private async void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            await Task.Delay(2000);
-            MainWindow.UpdateContent(new LoginViewModel(),new LoginView());
+            await Task.Delay(1000);
+            MainWindow.UpdateContent(ViewModelEnum.Login);
         }
     }
 }

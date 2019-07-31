@@ -12,6 +12,7 @@ namespace AvaloniaMVVMClient.UI.ViewModels
         private string _username = "demo";
         private bool _rememberCheckbox = true;
         private bool _progressbarVisible;
+        private string _statusLabel;
 
         public string UsernameLabel
         {
@@ -57,6 +58,12 @@ namespace AvaloniaMVVMClient.UI.ViewModels
         {
             get => _progressbarVisible;
             set => this.RaiseAndSetIfChanged(ref _progressbarVisible, value);
+        }
+
+        public string StatusLabel
+        {
+            get => _statusLabel;
+            set => this.RaiseAndSetIfChanged(ref _statusLabel, value);
         }
     }
 }

@@ -1,4 +1,7 @@
 using AvaloniaMVVMClient.Networking.Entities;
+using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.UI.Views;
+using AvaloniaMVVMClient.UI.Windows;
 using Universal.IO.FastConsole;
 using Universal.Packets;
 
@@ -9,11 +12,16 @@ namespace AvaloniaMVVMClient.Networking.Networking.Handlers
         public static void Process(byte[] buffer)
         {
             var msgVServer = (MsgVServer)buffer;
-            var server = new VirtualServer();
-            server.Id = msgVServer.UniqueId;
-            server.Name = msgVServer.GetServerName();
-            server.IconUrl = msgVServer.GetServerIconUrl();
+
+            var server = new VirtualServer
+            {
+                Id = msgVServer.UniqueId,
+                Name = msgVServer.GetServerName(),
+                IconUrl = msgVServer.GetServerIconUrl()
+            };
+
             Core.MyUser.Servers.TryAdd(server.Id, server);
+            (Core.Views[ViewModelEnum.Home].Item2 as HomeViewModel)?.Servers.Add(server);
 
             if (Core.SelectedServer == null)
                 Core.SelectedServer = server;

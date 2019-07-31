@@ -50,11 +50,11 @@ namespace Server.Database
             if (Collections.VirtualServers.Count != 0)
                 return;
 
-            var demoServer = new VirtualServer { Id = GetNextServerId(), Name = "C# Inn", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/1.jpg" };
+            var demoServer = new VirtualServer { Id = GetNextServerId(), Name = "C# Inn", OwnerId = 0, IconUrl = "http://i.epvpimg.com/MvbWaab.jpg" };
             Collections.VirtualServers.TryAdd(demoServer.Id, demoServer);
-            var demoServer2 = new VirtualServer { Id = GetNextServerId(), Name = "Virtual Server", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/2.jpg" };
+            var demoServer2 = new VirtualServer { Id = GetNextServerId(), Name = "Virtual Server", OwnerId = 0, IconUrl = "http://i.epvpimg.com/Pkargab.jpg" };
             Collections.VirtualServers.TryAdd(demoServer2.Id, demoServer2);
-            var demoServer3 = new VirtualServer { Id = GetNextServerId(), Name = "Garbage Collectors", OwnerId = 0, IconUrl = "http://h.img.alumni.re/img/3.jpg" };
+            var demoServer3 = new VirtualServer { Id = GetNextServerId(), Name = "Garbage Collectors", OwnerId = 0, IconUrl = "http://i.epvpimg.com/PKDRbab.jpg" };
             Collections.VirtualServers.TryAdd(demoServer3.Id, demoServer3);
 
             var channels = new Channel[10];
@@ -100,11 +100,11 @@ namespace Server.Database
             foreach (var channel in channels)
                 demoServer.Channels.Add(channel.Id, channel);
             
-            var demoUser = new User { Id = GetNextUserId(), Username = "demo", Password = "demo", Nickname = "Alumni", AvatarUrl = "http://h.img.alumni.re/img/1.jpg" };
+            var demoUser = new User { Id = GetNextUserId(), Username = "demo", Password = "demo", Nickname = "Alumni", AvatarUrl = "https://i.epvpimg.com/MvbWaab.jpg" };
             Collections.Users.TryAdd(demoUser.Id, demoUser);
-            var demoUser2 = new User { Id = GetNextUserId(), Username = "demo2", Password = "demo2", Nickname = "Neko", AvatarUrl = "http://h.img.alumni.re/img/2.jpg" };
+            var demoUser2 = new User { Id = GetNextUserId(), Username = "demo2", Password = "demo2", Nickname = "Neko", AvatarUrl = "http://i.epvpimg.com/Pkargab.jpg" };
             Collections.Users.TryAdd(demoUser2.Id, demoUser2);
-            var demoUser3 = new User { Id = GetNextUserId(), Username = "demo3", Password = "demo3", Nickname = "Julian", AvatarUrl = "http://h.img.alumni.re/img/3.jpg" };
+            var demoUser3 = new User { Id = GetNextUserId(), Username = "demo3", Password = "demo3", Nickname = "Julian", AvatarUrl = "http://i.epvpimg.com/PKDRbab.jpg" };
             Collections.Users.TryAdd(demoUser3.Id, demoUser3);
 
             demoUser.VirtualServers.Add(demoServer.Id);

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using AvaloniaMVVMClient.Networking.Networking;
 using Universal.IO.FastConsole;
 using Universal.IO.Sockets.Client;
@@ -14,6 +15,8 @@ namespace AvaloniaMVVMClient.Networking
         public ClientSocket Socket;
         public string User;
         public string Pass;
+        public Action OnLoggedIn;
+
         public void ConnectAsync(string user, string pass)
         {
             User = user;

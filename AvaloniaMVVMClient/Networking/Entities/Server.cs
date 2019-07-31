@@ -6,7 +6,7 @@ namespace AvaloniaMVVMClient.Networking.Entities
     public class VirtualServer
     {
         public int Id;
-        public string Name = "";
+        public string Name { get; set; }= "";
         public string IconUrl { get; set; }
         public readonly Dictionary<int, User> Users;
         public readonly Dictionary<int, Channel> Channels;

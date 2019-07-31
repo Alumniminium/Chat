@@ -11,7 +11,6 @@ namespace AvaloniaMVVMClient.UI.Views
         public HomeView()
         {
             InitializeComponent();
-            DataContext = ViewModel = new HomeViewModel();
         }
 
         private void InitializeComponent()

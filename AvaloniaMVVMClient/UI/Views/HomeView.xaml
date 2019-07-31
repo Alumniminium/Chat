@@ -3,18 +3,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaMVVMClient.Views.LoginView">
-  <Grid>
-    <StackPanel>
-      <TextBlock  HorizontalAlignment="Center" Margin="24" TextAlignment="center" Width="256" Height="64" FontSize="48" FontWeight="Bold" Background="#FFFFFFFF" Text="{Binding WelcomeLabel, FallbackValue='Welcome'}"  />
-      <TextBlock  HorizontalAlignment="Center" Margin="0"  TextAlignment="Left" Width="256" Height="48" FontSize="22" FontWeight="Bold"   Background="#FFFFFFFF" Text="{Binding UsernameLabel, FallbackValue='Username'}"/>
-      <TextBox    HorizontalAlignment="Center" Margin="8"  TextAlignment="Left" Width="256" Height="32" FontSize="16" FontWeight="Normal" Background="#FFFFFFFF" BorderBrush="#FFCDCFCD" Watermark="user@example.com" Text="{Binding Username}"/>
-      <TextBlock  HorizontalAlignment="Center" Margin="0"  TextAlignment="Left" Width="256" Height="48" FontSize="22" FontWeight="Bold"   Background="#FFFFFFFF" Text="{Binding PasswordLabel, FallbackValue='Password'}"/>
-      <TextBox    HorizontalAlignment="Center" Margin="8"  TextAlignment="Left" Width="256" Height="32" FontSize="16" FontWeight="Normal" Background="#FFFFFFFF" BorderBrush="#FFCDCFCD" Watermark="supersecret" PasswordChar="*" Text="{Binding Password}"/>
-      <CheckBox   HorizontalAlignment="Center" Margin="8"  Width="256" Height="32" FontSize="16" FontWeight="Normal"  Content="{Binding RememberCheckboxContent, FallbackValue='Remember credentials?'}"      IsChecked="{Binding RememberCheckbox,FallbackValue=false}"/>
-      <Button     HorizontalAlignment="Center" Margin="8"  Width="256" Height="48" FontSize="22" FontWeight="Normal"  Background="#FFFFFFFF" BorderBrush="#FFCDCFCD" Content="{Binding LoginButtonContent, FallbackValue='Login'}" Command="{Binding $parent[UserControl].Login}"/>
+             x:Class="AvaloniaMVVMClient.UI.Views.HomeView">
+  
+  <DockPanel>
+    <StackPanel Margin="4" Width="200" DockPanel.Dock="Left">
+      <ItemsControl Items="{Binding Servers}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+              <Image Width="64" Height="64" Source="{Binding IconUrl}"/>
+              <TextBlock Text="{Binding Name}"/>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
     </StackPanel>
-    <ProgressBar Height="1" IsIndeterminate="{Binding ProgressbarVisible}" VerticalAlignment="Bottom" Foreground="#79DEF9" Background="#FFFFFFFF" BorderBrush="#79DEF9"/>
-  </Grid>
+    <StackPanel Margin="4" DockPanel.Dock="Top">
+      <TextBlock Width="550" TextWrapping="Wrap" Text="LOREM IPSUN AHSDJKHLAFUJGOLQWUIGP@(#GB#@(P"/>
 
+    </StackPanel>
+    <StackPanel Margin="4" DockPanel.Dock="Bottom">
+
+    </StackPanel>
+  </DockPanel>
 </UserControl>

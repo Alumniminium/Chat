@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaMVVMClient.UI.ViewModels;
@@ -9,6 +11,8 @@ namespace AvaloniaMVVMClient.UI.Windows
     public class MainWindow : Window
     {
         public static MainWindow Instance;
+
+
         public MainWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -26,10 +30,12 @@ namespace AvaloniaMVVMClient.UI.Windows
             AvaloniaXamlLoader.Load(this);
         }
 
-        public static void UpdateContent(ViewModelBase model, UserControl view)
+        public static void UpdateContent(ViewModelEnum model)
         {
-            Instance.DataContext = model;
-            Instance.Content = view;
+            if (!Core.Views.TryGetValue(model, out var pair))
+                return;
+            Instance.Content = pair.Item1;
+            Instance.DataContext = pair.Item2;
         }
     }
 }

@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.UI.Windows;
 
 namespace AvaloniaMVVMClient.UI.Views
 {
     public class LoginView : UserControl
     {
-        public readonly LoginViewModel ViewModel;
         public LoginView()
         {
             InitializeComponent();
-            DataContext = ViewModel = new LoginViewModel();
         }
 
         private void InitializeComponent()
@@ -20,9 +21,34 @@ namespace AvaloniaMVVMClient.UI.Views
         }
         public void Login()
         {
-            ViewModel.ProgressbarVisible = true;
-            Core.Client.ConnectAsync(ViewModel.Username, ViewModel.Password);
-            Core.Client.Socket.OnConnected += () => { ViewModel.ProgressbarVisible = false; };
+            var viewModel = (LoginViewModel) Core.Views[ViewModelEnum.Login].Item2;
+            if (viewModel.ProgressbarVisible)
+            {
+                Debugger.Break();
+                return;
+            }
+
+            viewModel.ProgressbarVisible = true;
+            viewModel.StatusLabel = "Connecting...";
+            Core.Client.ConnectAsync(viewModel.Username, viewModel.Password);
+            Core.Client.Socket.OnConnected += () =>
+            {
+                viewModel.StatusLabel = "Connected! Logging in...";
+                viewModel.ProgressbarVisible = false;
+            };
+            Core.Client.OnLoggedIn += async () =>
+            {
+                viewModel.StatusLabel = "Logged in!";
+                await Task.Delay(2000);
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    MainWindow.UpdateContent(ViewModelEnum.Home);
+                });
+            };
+            Core.Client.Socket.OnDisconnect += () =>
+            {
+                viewModel.ProgressbarVisible = false;
+            };
         }
     }
 }
