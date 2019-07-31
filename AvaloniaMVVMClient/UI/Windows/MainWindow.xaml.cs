@@ -1,10 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaMVVMClient.ViewModels;
-using AvaloniaMVVMClient.Views;
+using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.UI.Views;
 
-namespace AvaloniaMVVMClient.Windows
+namespace AvaloniaMVVMClient.UI.Windows
 {
     public class MainWindow : Window
     {

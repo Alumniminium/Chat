@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Logging.Serilog;
-using AvaloniaMVVMClient.ViewModels;
-using AvaloniaMVVMClient.Views;
-using AvaloniaMVVMClient.Windows;
+using AvaloniaMVVMClient.UI;
+using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.UI.Windows;
 
 namespace AvaloniaMVVMClient
 {

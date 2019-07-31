@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaMVVMClient.ViewModels;
+using AvaloniaMVVMClient.UI.ViewModels;
 
-namespace AvaloniaMVVMClient.Views
+namespace AvaloniaMVVMClient.UI.Views
 {
     public class LoginView : UserControl
     {

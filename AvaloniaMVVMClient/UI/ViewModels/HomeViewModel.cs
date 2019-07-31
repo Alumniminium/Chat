@@ -1,10 +1,8 @@
-﻿using Avalonia.Controls;
-using AvaloniaMVVMClient.Views;
-using ReactiveUI;
+﻿using ReactiveUI;
 
-namespace AvaloniaMVVMClient.ViewModels
+namespace AvaloniaMVVMClient.UI.ViewModels
 {
-    public class LoginViewModel : ViewModelBase
+    public class HomeViewModel : ViewModelBase
     {
         private string _usernameLabel = "Username";
         private string _passwordLabel = "Username";
