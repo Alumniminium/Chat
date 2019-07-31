@@ -25,14 +25,9 @@ namespace AvaloniaMVVMClient.Database
         {
             if (Core.StateFile.Cache.TryGetValue(url, out var cachePath))
                 return cachePath;
-            return CacheImage(url);
-        }
-        private static string CacheImage(string url)
-        {
-
             using (var webclient = new WebClient())
             {
-                var cachePath = Path.Combine("file://", Environment.CurrentDirectory, "cache", Path.ChangeExtension(Path.GetRandomFileName(), "jpg"));
+                cachePath = Path.Combine("file://", Environment.CurrentDirectory, "cache", Path.ChangeExtension(Path.GetRandomFileName(), "jpg"));
                 if (!Directory.Exists(Path.GetDirectoryName(cachePath)))
                     Directory.CreateDirectory(Path.GetDirectoryName(cachePath));
                 webclient.DownloadFile(url, cachePath);
