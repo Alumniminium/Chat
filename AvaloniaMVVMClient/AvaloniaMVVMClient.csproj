@@ -41,9 +41,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Networking\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Universal\Universal.csproj" />
   </ItemGroup>
 </Project>

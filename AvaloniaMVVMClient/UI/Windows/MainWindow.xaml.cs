@@ -13,7 +13,7 @@ namespace AvaloniaMVVMClient.UI.Windows
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             HasSystemDecorations = false;
-            this.InitializeComponent();
+            InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif

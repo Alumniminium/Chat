@@ -18,13 +18,11 @@ namespace AvaloniaMVVMClient.UI.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
-        public async void Login()
+        public void Login()
         {
             ViewModel.ProgressbarVisible = true;
-            await Task.Delay(3000);
-            var user = ViewModel.Username;
-            var pass = ViewModel.Password;
-            ViewModel.ProgressbarVisible = false;
+            Core.Client.ConnectAsync(ViewModel.Username, ViewModel.Password);
+            Core.Client.Socket.OnConnected += () => { ViewModel.ProgressbarVisible = false; };
         }
     }
 }

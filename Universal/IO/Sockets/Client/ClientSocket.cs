@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 using Universal.Extensions;
 using Universal.IO.FastConsole;
 

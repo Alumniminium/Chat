@@ -8,9 +8,9 @@ namespace AvaloniaMVVMClient.UI.ViewModels
         private string _passwordLabel = "Username";
         private string _rememberCheckboxContent = "Remember credentials?";
         private string _loginButtonContent = "Login";
-        private string _password;
-        private string _username;
-        private bool _rememberCheckbox;
+        private string _password = "demo";
+        private string _username = "demo";
+        private bool _rememberCheckbox = true;
         private bool _progressbarVisible;
 
         public string UsernameLabel
