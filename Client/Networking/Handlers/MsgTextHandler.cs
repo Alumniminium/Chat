@@ -23,7 +23,7 @@ namespace Client.Networking.Handlers
         private static void HandleServerMessage(MsgText msgTxt)
         {
             if (!User.Servers.ContainsKey(msgTxt.ServerId))
-                throw new ArgumentException("user.Servers didn't contain " + msgTxt.ServerId);
+                throw new ArgumentException("Username.Servers didn't contain " + msgTxt.ServerId);
 
             var server = User.Servers[msgTxt.ServerId];
             var channel = server.GetChannel(msgTxt.ChannelId);
@@ -47,7 +47,7 @@ namespace Client.Networking.Handlers
         private static void HandleDirectMessage(MsgText msgTxt)
         {
             if (!User.Friends.ContainsKey(msgTxt.AuthorId))
-                throw new ArgumentException("user.Friends didn't contain " + msgTxt.AuthorId);
+                throw new ArgumentException("Username.Friends didn't contain " + msgTxt.AuthorId);
 
             var friend = User.Friends[msgTxt.AuthorId];
             friend.LastActivity = DateTime.Now;

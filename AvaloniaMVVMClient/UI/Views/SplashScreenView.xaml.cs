@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaMVVMClient.UI.ViewModels;
 using AvaloniaMVVMClient.UI.Windows;
 
 namespace AvaloniaMVVMClient.UI.Views

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaMVVMClient.UI.ViewModels;
+using AvaloniaMVVMClient.Database;
 using AvaloniaMVVMClient.UI.Views;
 
 namespace AvaloniaMVVMClient.UI.Windows
@@ -23,6 +21,7 @@ namespace AvaloniaMVVMClient.UI.Windows
 #endif
             Instance = this;
             Content = new SplashScreenView();
+            Closing += (sender, args) => Db.SaveConfig();
         }
 
         private void InitializeComponent()

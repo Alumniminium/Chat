@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using AvaloniaMVVMClient.Networking.Entities;
-using ReactiveUI;
 
 namespace AvaloniaMVVMClient.UI.ViewModels
 {

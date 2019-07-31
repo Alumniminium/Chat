@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Logging.Serilog;
+using AvaloniaMVVMClient.Database;
 using AvaloniaMVVMClient.UI;
 using AvaloniaMVVMClient.UI.ViewModels;
 using AvaloniaMVVMClient.UI.Windows;
@@ -24,6 +25,7 @@ namespace AvaloniaMVVMClient
         // container, etc.
         private static void AppMain(Application app, string[] args)
         {
+            Db.LoadConfig();
             var window = new MainWindow
             {
                 DataContext = new MainWindowViewModel()

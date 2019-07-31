@@ -1,7 +1,5 @@
 using AvaloniaMVVMClient.Networking.Entities;
 using AvaloniaMVVMClient.UI.ViewModels;
-using AvaloniaMVVMClient.UI.Views;
-using AvaloniaMVVMClient.UI.Windows;
 using Universal.IO.FastConsole;
 using Universal.Packets;
 
