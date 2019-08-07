@@ -4,34 +4,44 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:local="clr-namespace:AvaloniaMVVMClient.UI.Converters;assembly=AvaloniaMVVMClient"
+             xmlns:controls="clr-namespace:AvaloniaMVVMClient.UI.Controls;assembly=AvaloniaMVVMClient"
              x:Class="AvaloniaMVVMClient.UI.Views.HomeView">
   <DockPanel Background="#33333D">
-    <StackPanel Margin="4" Width="200" DockPanel.Dock="Left" Background="#373740">
-      <ItemsControl Items="{Binding Servers}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-                <Image Width="32" Height="32" Margin="4" Source="{Binding Icon}"/>
-              <TextBlock Foreground="#FFFFFF" FontSize="14" Text="{Binding Name}" Margin="4" VerticalAlignment="Center"/>
-            </StackPanel>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </StackPanel>
-
-    <Border Margin="2" Height="32" DockPanel.Dock="Bottom" BorderThickness="1" BorderBrush="#FF4181">
-      <StackPanel Orientation="Horizontal">
+    <Border DockPanel.Dock="Left" BorderThickness="1" BorderBrush="#FF4181">
+      <StackPanel Margin="4" Width="200" DockPanel.Dock="Left" Background="#373740">
+        <ItemsControl Items="{Binding Servers}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Button Height="48" HorizontalAlignment="Left" Command="{Binding $parent[UserControl].ServerClick}">
+                <StackPanel HorizontalAlignment="Left" Width="{Binding $parent[StackPanel].Width}" Orientation="Horizontal">
+                  <Image Width="32" Height="32" Margin="8,0,8,0" Source="{Binding Icon}" />
+                  <TextBlock Foreground="#FFFFFF" Text="{Binding Name}" VerticalAlignment="Center"/>
+                </StackPanel>
+              </Button>             
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+    <Border Height="32" DockPanel.Dock="Bottom" BorderThickness="1" BorderBrush="#FF4181">
+      <StackPanel Margin="4" Orientation="Horizontal">
         <TextBox VerticalAlignment="Center" Foreground="#FFFFFF" Background="#33333D" FontSize="16" Watermark="type your message here..." Width="{Binding $parent[StackPanel].Bounds.Width}"/>        
       </StackPanel>
     </Border>
-    <Border Margin="2" BorderThickness="1" BorderBrush="#FF4181">
-      <StackPanel>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
-        <TextBlock Foreground="#FFFFFF" FontSize="16" Margin="8,0,8,0" TextWrapping="Wrap" Text="asdasdasdasd" Width="{Binding $parent[StackPanel].Bounds.Width}"/>
+    <Border BorderThickness="1" BorderBrush="#FF4181">
+      <StackPanel Background="#373740">
+        <ItemsControl Items="{Binding SelectedServer}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Button Height="48" HorizontalAlignment="Left" Command="{Binding $parent[UserControl].ServerClick}">
+                <StackPanel HorizontalAlignment="Left" Width="{Binding $parent[StackPanel].Width}" Orientation="Horizontal">
+                  <Image Width="32" Height="32" Margin="8,0,8,0" Source="{Binding Icon}" />
+                  <TextBlock Foreground="#FFFFFF" Text="{Binding Name}" VerticalAlignment="Center"/>
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
       </StackPanel>
     </Border>
   </DockPanel>
