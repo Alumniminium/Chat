@@ -26,16 +26,20 @@
             ]
         },
         {
-            "label": "Build AvaloniaClient",
+            "label": "Build AvaloniaMVVMClient",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AvaloniaClient/AvaloniaClient.csproj"
+                "${workspaceFolder}/AvaloniaMVVMClient/AvaloniaMVVMClient.csproj"
             ],
             "problemMatcher": [
                 "$msCompile"
-            ]
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

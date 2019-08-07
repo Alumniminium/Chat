@@ -15,13 +15,7 @@
     <AvaloniaResource Include="**\*.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\*" />
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaResource Remove="UI\Controls\ChatMessage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="UI\Controls\ChatMessage.xaml" />
+    <AvaloniaResource Include="Assets\*"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.8.0" />
@@ -29,8 +23,8 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\avalonia-logo.ico" />
-    <EmbeddedResource Include="Assets\splash.png" />
+    <EmbeddedResource Include="Assets\avalonia-logo.ico"/>
+    <EmbeddedResource Include="Assets\splash.png"/>
     <EmbeddedResource Include="UI\Views\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -47,14 +41,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Universal\Universal.csproj" />
+    <ProjectReference Include="..\Universal\Universal.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="UI\Controls\ChatMessage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1"/>
   </ItemGroup>
 </Project>

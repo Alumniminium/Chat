@@ -18,7 +18,7 @@ namespace AvaloniaMVVMClient.Database
 
         public static void SaveConfig()
         {
-            File.WriteAllText("config.json", JsonConvert.SerializeObject(Core.StateFile));
+            File.WriteAllText("config.json", JsonConvert.SerializeObject(Core.StateFile, Formatting.Indented));
         }
 
         public static string GetCacheImage(string url)

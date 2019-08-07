@@ -7,20 +7,9 @@ namespace AvaloniaMVVMClient.Networking.Entities
 {
     public class VirtualServer
     {
-        private string _iconUrl;
         public int Id;
-        public string Name { get; set; }= "";
-        public Bitmap Icon => new Bitmap(IconUrl);
-        public string IconUrl
-        {
-            get
-            {
-                var path = Db.GetCacheImage(_iconUrl);
-                return path;
-            }
-            set => _iconUrl = value;
-        }
-
+        public string Name { get; set; } = "";
+        public string IconUrl { get; set; }
         public readonly Dictionary<int, User> Users;
         public readonly Dictionary<int, Channel> Channels;
 
@@ -68,7 +57,7 @@ namespace AvaloniaMVVMClient.Networking.Entities
 
         public static VirtualServer CreateDMServer(User user)
         {
-            var vs = new VirtualServer {Id = 0};
+            var vs = new VirtualServer { Id = 0 };
             foreach (var (id, friend) in user.Friends)
             {
                 vs.Channels.Add(id, new Channel(id, friend.Name));
