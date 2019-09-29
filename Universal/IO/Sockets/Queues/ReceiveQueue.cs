@@ -11,8 +11,7 @@ namespace Universal.IO.Sockets.Queues
 {
     public static class ReceiveQueue
     {
-        private static readonly ConcurrentQueue<SocketAsyncEventArgs> Queue = new ConcurrentQueue<SocketAsyncEventArgs>();
-        private static readonly AutoResetEvent Sync = new AutoResetEvent(false);
+        private static readonly BlockingCollection<SocketAsyncEventArgs> Queue = new BlockingCollection<SocketAsyncEventArgs>();
         private static Thread _workerThread;
         private static Action<ClientSocket, byte[]> _onPacket;
         private const int MIN_HEADER_SIZE = 2;
@@ -30,28 +29,20 @@ namespace Universal.IO.Sockets.Queues
                 _workerThread.Start();
         }
 
-        public static void Add(SocketAsyncEventArgs e)
-        {
-            Queue.Enqueue(e);
-            Sync.Set();
-        }
+        public static void Add(SocketAsyncEventArgs e) => Queue.Add(e);
 
         private static void WorkLoop()
         {
-            while (true)
+            foreach (var e in Queue.GetConsumingEnumerable())
             {
-                Sync.WaitOne();
-                while (Queue.TryDequeue(out var e))
-                {
-                    var connection = (ClientSocket)e.UserToken;
+                var connection = (ClientSocket)e.UserToken;
 
-                    if (connection == null)
-                        continue;
+                if (connection == null)
+                    continue;
 
-                    AssemblePacket(e);
+                AssemblePacket(e);
 
-                    connection.ReceiveSync.Set();
-                }
+                connection.ReceiveSync.Set();
             }
         }
         private static void AssemblePacket(SocketAsyncEventArgs e)

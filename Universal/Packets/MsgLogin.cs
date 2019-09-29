@@ -84,10 +84,10 @@ namespace Universal.Packets
         }
         public static implicit operator byte[](MsgLogin msg)
         {
-            Span<byte> buffer = stackalloc byte[sizeof(MsgLogin)];
+            var buffer = new byte[sizeof(MsgLogin)];
             fixed (byte* p = buffer)
                 *(MsgLogin*)p = *&msg;
-            return buffer.ToArray();
+            return buffer;
         }
         public static implicit operator MsgLogin(byte[] msg)
         {
