@@ -16,7 +16,7 @@ namespace Server
             FConsole.Title = "SERVER APP";
             GlobalExceptionHandler.Setup();
             Jit.PreJit();
-            
+
             Core.Db = new JsonDb();
             Core.Db.EnsureDbReady();
 

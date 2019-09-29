@@ -13,7 +13,7 @@ namespace Client
         public ClientSocket Socket;
         public string User;
         public string Pass;
-        public void ConnectAsync(string user,string pass)
+        public void ConnectAsync(string user, string pass)
         {
             User = user;
             Pass = pass;
@@ -28,7 +28,7 @@ namespace Client
         private void Connected()
         {
             FConsole.WriteLine("Connected!");
-            Core.Client.Send(MsgLogin.Create(User, Pass,"", true, MsgLoginType.Login));
+            Core.Client.Send(MsgLogin.CreateFAST(User, Pass, "", true, MsgLoginType.Login));
         }
 
         private void Disconnected()
@@ -38,7 +38,7 @@ namespace Client
             Socket.OnDisconnect -= Disconnected;
             Socket?.Socket?.Dispose();
             Thread.Sleep(5000);
-            ConnectAsync(User,Pass);
+            ConnectAsync(User, Pass);
         }
 
         private void OnPacket(ClientSocket client, byte[] buffer) => PacketRouter.Route((Client)client.StateObject, buffer);

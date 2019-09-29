@@ -4,6 +4,8 @@
     {
         public static string ToLength(this string str, int length)
         {
+            if (str == null)
+                str = string.Empty;
             var newString = str;
             for (var i = 0; i < length - str.Length; i++)
             {

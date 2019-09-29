@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using Universal.Extensions;
 using Universal.Packets.Enums;
@@ -69,12 +70,24 @@ namespace Universal.Packets
             msg->SetEmail(email);
             return *msg;
         }
+        public static MsgLogin CreateFAST(string user, string pass, string email, bool compression, MsgLoginType type)
+        {
+            Span<MsgLogin> span = stackalloc MsgLogin[1];
+            ref var ptr = ref MemoryMarshal.GetReference(span);
+            ptr.Length = (short)sizeof(MsgLogin);
+            ptr.Id = PacketType.MsgLogin;
+            ptr.Type = type;
+            ptr.SetUsername(user);
+            ptr.SetPassword(pass);
+            ptr.SetEmail(email);
+            return ptr;
+        }
         public static implicit operator byte[](MsgLogin msg)
         {
-            var buffer = new byte[sizeof(MsgLogin)];
+            Span<byte> buffer = stackalloc byte[sizeof(MsgLogin)];
             fixed (byte* p = buffer)
                 *(MsgLogin*)p = *&msg;
-            return buffer;
+            return buffer.ToArray();
         }
         public static implicit operator MsgLogin(byte[] msg)
         {

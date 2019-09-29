@@ -134,7 +134,7 @@ namespace Universal.IO.Sockets.Queues
                     connection.Buffer.BytesInBuffer++;
                     connection.Buffer.BytesProcessed++;
 
-                    if(header && connection.Buffer.BytesInBuffer == MIN_HEADER_SIZE)
+                    if (header && connection.Buffer.BytesInBuffer == MIN_HEADER_SIZE)
                         break;
 
                     if (!header && connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired)
