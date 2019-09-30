@@ -4,16 +4,11 @@
     {
         public static string ToLength(this string str, int length)
         {
-            if (str == null)
-                str = string.Empty;
-            var newString = str;
-            for (var i = 0; i < length - str.Length; i++)
-            {
-                newString += '\0';
-            }
-
-            return newString;
+            if (string.IsNullOrEmpty(str))
+                str = "STRING NULL";
+            return str.PadRight(length, '\0');
         }
+
         public static string CenterLength(this string str, int length)
         {
             var newString = str;

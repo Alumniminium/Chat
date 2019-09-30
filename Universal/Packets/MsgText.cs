@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using Universal.Extensions;
 using Universal.Packets.Enums;
 
@@ -9,7 +8,7 @@ namespace Universal.Packets
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct MsgText
     {
-        public const int MAX_TEXT_LENGTH = 2048;
+        public const int MAX_TEXT_LENGTH = 1024;
         public short Length { get; private set; }
         public PacketType Id { get; private set; }
         public int UniqueId { get; set; }
@@ -19,51 +18,32 @@ namespace Universal.Packets
         public int AuthorId { get; set; }
         public long SentTime { get; set; }
 
-        public fixed byte Text[MAX_TEXT_LENGTH];
+        public fixed char Text[MAX_TEXT_LENGTH];
 
         public string GetText()
         {
-            fixed (byte* p = Text)
-                return Encoding.ASCII.GetString(p, 2048).Trim('\0');
+            fixed (char* bptr = Text)
+                return new string(bptr);
         }
-
         public void SetText(string text)
         {
             text = text.ToLength(MAX_TEXT_LENGTH);
             for (var i = 0; i < text.Length; i++)
-                Text[i] = (byte)text[i];
+                Text[i] = text[i];
         }
-
-        public static byte[] Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)
+        public static MsgText Create(int uniqueId, int authorId, string text, int serverId, int channelId, DateTime createdTime)
         {
-            var msg = stackalloc MsgText[1];
-            msg->Length = (short)sizeof(MsgText);
-            msg->Id = PacketType.MsgText;
-
-            msg->UniqueId = uniqueId;
-            msg->ServerId = serverId;
-            msg->AuthorId = authorId;
-            msg->ChannelId = channelId;
-            msg->SentTime = createdTime.Ticks;
-
-            msg->SetText(text);
-
-            return *msg;
-        }
-        public static byte[] Create(int uniqueId, int authorId, string text, int channelId, DateTime createdTime)
-        {
-            var msg = stackalloc MsgText[1];
-            msg->Length = (short)sizeof(MsgText);
-            msg->Id = PacketType.MsgText;
-
-            msg->UniqueId = uniqueId;
-            msg->AuthorId = authorId;
-            msg->ChannelId = channelId;
-            msg->SentTime = createdTime.Ticks;
-
-            msg->SetText(text);
-
-            return *msg;
+            Span<MsgText> span = stackalloc MsgText[1];
+            ref var ptr = ref MemoryMarshal.GetReference(span);
+            ptr.Length = (short)sizeof(MsgText);
+            ptr.Id = PacketType.MsgText;
+            ptr.UniqueId = uniqueId;
+            ptr.ServerId = serverId;
+            ptr.AuthorId = authorId;
+            ptr.ChannelId = channelId;
+            ptr.SentTime = createdTime.Ticks;
+            ptr.SetText(text);
+            return ptr;
         }
 
         public static implicit operator byte[](MsgText msg)
@@ -73,18 +53,10 @@ namespace Universal.Packets
                 *(MsgText*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte*(MsgText msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgText)];
-            *(MsgText*)buffer = msg;
-            return buffer;
-        }
         public static implicit operator MsgText(byte[] msg)
         {
             fixed (byte* p = msg)
                 return *(MsgText*)p;
         }
-        public static implicit operator MsgText(byte* msg) => *(MsgText*)msg;
-
     }
 }

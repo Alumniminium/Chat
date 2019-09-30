@@ -58,16 +58,16 @@ namespace Server.Database
             Collections.VirtualServers.TryAdd(demoServer3.Id, demoServer3);
 
             var channels = new Channel[10];
-            channels[0] = new Channel(0, "# Welcome");
-            channels[1] = new Channel(1, "# Rules");
-            channels[2] = new Channel(2, "# Announcements");
-            channels[3] = new Channel(3, "# General");
-            channels[4] = new Channel(4, "# Random");
-            channels[5] = new Channel(5, "# Questions");
-            channels[6] = new Channel(6, "# Bots");
-            channels[7] = new Channel(7, "# Offtopic");
-            channels[8] = new Channel(8, "# Other Languages");
-            channels[9] = new Channel(9, "# Partners");
+            channels[0] = new Channel(0, "#Welcome");
+            channels[1] = new Channel(1, "#Rules");
+            channels[2] = new Channel(2, "#Announcements");
+            channels[3] = new Channel(3, "#General");
+            channels[4] = new Channel(4, "#Random");
+            channels[5] = new Channel(5, "#Questions");
+            channels[6] = new Channel(6, "#Bots");
+            channels[7] = new Channel(7, "#Offtopic");
+            channels[8] = new Channel(8, "#Other Languages");
+            channels[9] = new Channel(9, "#Partners");
 
             var m0 = new Message { Id = 0, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Welcome to C# Inn!" };
             var m1 = new Message { Id = 1, AuthorId = 1_000_000, Timestamp = DateTime.UtcNow, Text = "Please read our #Rules" };

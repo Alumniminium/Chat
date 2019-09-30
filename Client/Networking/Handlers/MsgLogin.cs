@@ -14,6 +14,7 @@ namespace Client.Networking.Handlers
                 Core.MyUser.Id = msgLogin.UniqueId;
                 Core.MyUser.Username = msgLogin.GetUsername();
                 Core.MyUser.Password = msgLogin.GetPassword();
+                //Core.Client.Socket.UseCompression = true;
                 FConsole.WriteLine("Authentication successful. Your Username Id is: " + Core.MyUser.Id);
                 var msgDataRequest = MsgDataRequest.CreateFriendListRequest(Core.MyUser.Id);
                 Core.Client.Send(msgDataRequest);

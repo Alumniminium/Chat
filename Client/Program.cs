@@ -21,8 +21,8 @@ namespace Client
 
             while (true)
             {
-                //DrawUI();
-                HomeScreen.Draw();
+                DrawUI();
+                //HomeScreen.Draw();
                 var input = FConsole.ReadLine();
 
                 if (input.StartsWith('/'))

@@ -15,6 +15,7 @@ namespace Client.Entities
         public string AvatarUrl { get; set; }
         public ConcurrentDictionary<int, User> Friends { get; set; }
         public ConcurrentDictionary<int, VirtualServer> Servers { get; set; }
+
         public DateTime LastActivity { get; set; }
 
         public User()

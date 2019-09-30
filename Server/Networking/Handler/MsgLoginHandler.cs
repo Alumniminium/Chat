@@ -14,7 +14,7 @@ namespace Server.Networking.Handler
             var msgLogin = (MsgLogin)packet;
             var username = msgLogin.GetUsername();
             var password = msgLogin.GetPassword();
-            var useCompression = msgLogin.ClientSupportCompression;
+            //userSocket.UseCompression = msgLogin.ClientSupportCompression;
             FConsole.WriteLine($"MsgLogin: {username} with password {password} requesting login.");
 
             var user = new User
@@ -37,7 +37,6 @@ namespace Server.Networking.Handler
                 msgLogin.UniqueId = user.Id;
             }
 
-            user.Socket.UseCompression = useCompression;
             Collections.OnlineUsers.TryAdd(user.Id, user);
             user.Send(msgLogin);
 

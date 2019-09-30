@@ -28,7 +28,7 @@ namespace Client
         private void Connected()
         {
             FConsole.WriteLine("Connected!");
-            Core.Client.Send(MsgLogin.CreateFAST(User, Pass, "", true, MsgLoginType.Login));
+            Core.Client.Send(MsgLogin.Create(User, Pass, "", true, MsgLoginType.Login));
         }
 
         private void Disconnected()

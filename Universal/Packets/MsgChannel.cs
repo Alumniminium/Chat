@@ -1,5 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿using System;
+using System.Runtime.InteropServices;
 using Universal.Extensions;
 using Universal.Packets.Enums;
 
@@ -14,30 +14,32 @@ namespace Universal.Packets
         public int UniqueId { get; set; }
         public int ServerId { get; set; }
 
-        public fixed byte Name[MAX_NAME_ENGTH];
+        public fixed char Name[MAX_NAME_ENGTH];
 
         public string GetName()
         {
-            fixed (byte* p = Name)
-                return Encoding.ASCII.GetString(p, MAX_NAME_ENGTH).Trim('\0');
+            fixed (char* bptr = Name)
+                return new string(bptr);
         }
         public void SetName(string username)
         {
             username = username.ToLength(MAX_NAME_ENGTH);
             for (var i = 0; i < username.Length; i++)
-                Name[i] = (byte)username[i];
+                Name[i] = username[i];
         }
 
         public static MsgChannel Create(int uniqueId, int serverId, string name)
         {
-            var msg = stackalloc MsgChannel[1];
-            msg->Length = (short)sizeof(MsgChannel);
-            msg->Id = PacketType.MsgChannel;
-            msg->UniqueId = uniqueId;
-            msg->ServerId = serverId;
-            msg->SetName(name);
-            return *msg;
+            Span<MsgChannel> span = stackalloc MsgChannel[1];
+            ref var ptr = ref MemoryMarshal.GetReference(span);
+            ptr.Length = (short)sizeof(MsgChannel);
+            ptr.Id = PacketType.MsgChannel;
+            ptr.UniqueId = uniqueId;
+            ptr.ServerId = serverId;
+            ptr.SetName(name);
+            return ptr;
         }
+
         public static implicit operator byte[](MsgChannel msg)
         {
             var buffer = new byte[sizeof(MsgChannel)];

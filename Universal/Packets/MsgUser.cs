@@ -1,5 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿using System;
+using System.Runtime.InteropServices;
 using Universal.Extensions;
 using Universal.Packets.Enums;
 
@@ -16,76 +16,60 @@ namespace Universal.Packets
         public int ServerId { get; set; }
         public bool Online { get; set; }
 
-        public fixed byte Nickname[MAX_NICKNAME_LENGTH];
-        public fixed byte AvatarUrl[MAX_AVATAR_URL_LENGTH];
-
+        public fixed char Nickname[MAX_NICKNAME_LENGTH];
+        public fixed char AvatarUrl[MAX_AVATAR_URL_LENGTH];
+        
         public string GetNickname()
         {
-            fixed (byte* p = Nickname)
-                return Encoding.ASCII.GetString(p, MAX_NICKNAME_LENGTH).Trim('\0');
+            fixed (char* bptr = Nickname)
+                return new string(bptr);
         }
         public string GetAvatarUrl()
         {
-            fixed (byte* p = AvatarUrl)
-                return Encoding.ASCII.GetString(p, MAX_AVATAR_URL_LENGTH).Trim('\0');
+            fixed (char* bptr = AvatarUrl)
+                return new string(bptr);
         }
 
         public void SetNickname(string nickname)
         {
             nickname = nickname.ToLength(MAX_NICKNAME_LENGTH);
             for (var i = 0; i < nickname.Length; i++)
-                Nickname[i] = (byte)nickname[i];
+                Nickname[i] = nickname[i];
         }
         public void SetAvatarUrl(string url)
         {
             url = url.ToLength(MAX_AVATAR_URL_LENGTH);
             for (var i = 0; i < url.Length; i++)
-                AvatarUrl[i] = (byte)url[i];
+                AvatarUrl[i] = url[i];
         }
-
         public static MsgUser Create(int uniqueId, int serverId, string nickname, string avatarUrl, string email, bool online)
         {
-            var msg = stackalloc MsgUser[1];
-            msg->Length = (short)sizeof(MsgUser);
-            msg->Id = PacketType.MsgUser;
+            Span<MsgUser> span = stackalloc MsgUser[1];
+            ref var ptr = ref MemoryMarshal.GetReference(span);
+            ptr.Length = (short)sizeof(MsgUser);
+            ptr.Id = PacketType.MsgUser;
+            ptr.UniqueId = uniqueId;
+            ptr.ServerId = serverId;
+            ptr.Online = online;
+            ptr.SetNickname(nickname);
+            ptr.SetAvatarUrl(avatarUrl);
 
-            msg->UniqueId = uniqueId;
-            msg->ServerId = serverId;
-            msg->Online = online;
-            msg->SetNickname(nickname);
-            msg->SetAvatarUrl(avatarUrl);
-            return *msg;
+            return ptr;
         }
-        public static MsgUser Create(int uniqueId, string nickname, string avatarUrl, string email, bool online)
-        {
-            var msg = stackalloc MsgUser[1];
-            msg->Length = (short)sizeof(MsgUser);
-            msg->Id = PacketType.MsgUser;
 
-            msg->UniqueId = uniqueId;
-            msg->Online = online;
-            msg->SetNickname(nickname);
-            msg->SetAvatarUrl(avatarUrl);
-            return *msg;
-        }
+        public static MsgUser Create(int uniqueId, string nickname, string avatarUrl, string email, bool online) => Create(uniqueId, 0, nickname, avatarUrl, email, online);
+        
         public static implicit operator byte[](MsgUser msg)
         {
             var buffer = new byte[sizeof(MsgUser)];
             fixed (byte* p = buffer)
                 *(MsgUser*)p = *&msg;
             return buffer;
-        }
-        public static implicit operator byte*(MsgUser msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgUser)];
-            *(MsgUser*)buffer = msg;
-            return buffer;
-        }
+        }        
         public static implicit operator MsgUser(byte[] msg)
         {
             fixed (byte* p = msg)
                 return *(MsgUser*)p;
         }
-        public static implicit operator MsgUser(byte* msg) => *(MsgUser*)msg;
     }
 }

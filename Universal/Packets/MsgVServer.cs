@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using Universal.Extensions;
 using Universal.Packets.Enums;
 
@@ -17,49 +16,45 @@ namespace Universal.Packets
         public long Created { get; set; }
         public long LastActivity { get; set; }
 
-        public fixed byte ServerName[MAX_SERVER_NAME_LENGTH];
-        public fixed byte ServerIconUrl[MAX_SERVER_ICON_URL_LENGTH];
-
+        public fixed char ServerName[MAX_SERVER_NAME_LENGTH];
+        public fixed char ServerIconUrl[MAX_SERVER_ICON_URL_LENGTH];
 
         public string GetServerName()
         {
-            fixed (byte* p = ServerName)
-                return Encoding.ASCII.GetString(p, MAX_SERVER_NAME_LENGTH).Trim('\0');
+            fixed (char* bptr = ServerName)
+                return new string(bptr);
         }
-
         public string GetServerIconUrl()
         {
-            fixed (byte* p = ServerIconUrl)
-                return Encoding.ASCII.GetString(p, MAX_SERVER_ICON_URL_LENGTH).Trim('\0');
+            fixed (char* bptr = ServerIconUrl)
+                return new string(bptr);
         }
 
         public void SetServerName(string serverName)
         {
             serverName = serverName.ToLength(MAX_SERVER_NAME_LENGTH);
             for (var i = 0; i < serverName.Length; i++)
-                ServerName[i] = (byte)serverName[i];
+                ServerName[i] = serverName[i];
         }
 
         public void SetServerIconUrl(string url)
         {
             url = url.ToLength(MAX_SERVER_ICON_URL_LENGTH);
             for (var i = 0; i < url.Length; i++)
-                ServerIconUrl[i] = (byte)url[i];
+                ServerIconUrl[i] = url[i];
         }
-
         public static MsgVServer Create(int serverId, string name, string url, DateTime created, DateTime lastActivity)
         {
-            var msg = stackalloc MsgVServer[1];
-            msg->Length = (short)sizeof(MsgVServer);
-            msg->Id = PacketType.MsgVServer;
-
-            msg->UniqueId = serverId;
-            msg->Created = created.Ticks;
-            msg->LastActivity = lastActivity.Ticks;
-            msg->SetServerName(name);
-            msg->SetServerIconUrl(url);
-
-            return *msg;
+            Span<MsgVServer> span = stackalloc MsgVServer[1];
+            ref var ptr = ref MemoryMarshal.GetReference(span);
+            ptr.Length = (short)sizeof(MsgVServer);
+            ptr.Id = PacketType.MsgVServer;
+            ptr.UniqueId = serverId;
+            ptr.Created = created.Ticks;
+            ptr.LastActivity = lastActivity.Ticks;
+            ptr.SetServerName(name);
+            ptr.SetServerIconUrl(url);
+            return ptr;
         }
 
         public static implicit operator byte[](MsgVServer msg)
@@ -68,18 +63,11 @@ namespace Universal.Packets
             fixed (byte* p = buffer)
                 *(MsgVServer*)p = *&msg;
             return buffer;
-        }
-        public static implicit operator byte*(MsgVServer msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgVServer)];
-            *(MsgVServer*)buffer = msg;
-            return buffer;
-        }
+        }        
         public static implicit operator MsgVServer(byte[] msg)
         {
             fixed (byte* p = msg)
                 return *(MsgVServer*)p;
         }
-        public static implicit operator MsgVServer(byte* msg) => *(MsgVServer*)msg;
     }
 }
