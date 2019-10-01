@@ -14,7 +14,7 @@ namespace Client.Networking.Handlers
                 Core.MyUser.Id = msgLogin.UniqueId;
                 Core.MyUser.Username = msgLogin.GetUsername();
                 Core.MyUser.Password = msgLogin.GetPassword();
-                //Core.Client.Socket.UseCompression = true;
+                Core.Client.Socket.UseCompression = msgLogin.ClientSupportCompression;
                 FConsole.WriteLine("Authentication successful. Your Username Id is: " + Core.MyUser.Id);
                 var msgDataRequest = MsgDataRequest.CreateFriendListRequest(Core.MyUser.Id);
                 Core.Client.Send(msgDataRequest);
@@ -22,7 +22,7 @@ namespace Client.Networking.Handlers
             else
                 FConsole.WriteLine("Authentication failed.");
 
-            FConsole.WriteLine($"MsgLogin: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
     }
 }

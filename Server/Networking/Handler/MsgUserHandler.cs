@@ -11,7 +11,7 @@ namespace Server.Networking.Handler
             var msgUser = (MsgUser)buffer;
 
 
-            FConsole.WriteLine($"MsgUser: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgUser Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
     }
 }

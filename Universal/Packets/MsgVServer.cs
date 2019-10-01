@@ -21,13 +21,13 @@ namespace Universal.Packets
 
         public string GetServerName()
         {
-            fixed (char* bptr = ServerName)
-                return new string(bptr);
+            fixed (char* p = ServerName)
+                return new string(p);
         }
         public string GetServerIconUrl()
         {
-            fixed (char* bptr = ServerIconUrl)
-                return new string(bptr);
+            fixed (char* p = ServerIconUrl)
+                return new string(p);
         }
 
         public void SetServerName(string serverName)
@@ -63,7 +63,7 @@ namespace Universal.Packets
             fixed (byte* p = buffer)
                 *(MsgVServer*)p = *&msg;
             return buffer;
-        }        
+        }
         public static implicit operator MsgVServer(byte[] msg)
         {
             fixed (byte* p = msg)

@@ -18,8 +18,8 @@ namespace Universal.Packets
 
         public string GetName()
         {
-            fixed (char* bptr = Name)
-                return new string(bptr);
+            fixed (char* p = Name)
+                return new string(p);
         }
         public void SetName(string username)
         {
@@ -47,17 +47,10 @@ namespace Universal.Packets
                 *(MsgChannel*)p = *&msg;
             return buffer;
         }
-        public static implicit operator byte*(MsgChannel msg)
-        {
-            var buffer = stackalloc byte[sizeof(MsgChannel)];
-            *(MsgChannel*)buffer = msg;
-            return buffer;
-        }
         public static implicit operator MsgChannel(byte[] msg)
         {
             fixed (byte* p = msg)
                 return *(MsgChannel*)p;
         }
-        public static implicit operator MsgChannel(byte* msg) => *(MsgChannel*)msg;
     }
 }

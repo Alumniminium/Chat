@@ -60,7 +60,6 @@ namespace Universal.IO.Sockets.Server
 
         internal static void Received(object sender, SocketAsyncEventArgs e)
         {
-        Start:
             var token = (ClientSocket)e.UserToken;
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
@@ -69,7 +68,7 @@ namespace Universal.IO.Sockets.Server
                     ReceiveQueue.Add(e);
                     token.ReceiveSync.WaitOne();
                     if (!token.Socket.ReceiveAsync(e))
-                        goto Start;
+                        Received(null, e);
                 }
                 catch (Exception exception)
                 {

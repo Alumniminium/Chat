@@ -15,7 +15,7 @@ namespace Server.Networking.Handler
             else
                 HandleServerMessage(msgTxt);
 
-            FConsole.WriteLine($"MsgText: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
 
         private static void HandleServerMessage(MsgText msgTxt)

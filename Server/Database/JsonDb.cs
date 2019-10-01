@@ -126,7 +126,7 @@ namespace Server.Database
 
             var defaultSettings = new ServerSettings
             {
-                Port = 65535,
+                Port = 65534,
                 PerUserCreateServerAllowance = 3,
                 MaxMessagesPerUserPerSecond = 3,
                 MaxLoginAttempts = 3,

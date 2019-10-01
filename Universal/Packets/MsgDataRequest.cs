@@ -29,11 +29,11 @@ namespace Universal.Packets
 
         public static MsgDataRequest CreateFriendListRequest(int userId) => Create(userId, 0, 0, MsgDataRequestType.Friends);
         public static MsgDataRequest CreateServerListRequest(int userId) => Create(userId, 0, 0, MsgDataRequestType.VServers);
-        public static byte[] CreateServerChannelListRequest(int userId, int serverId) => Create(userId, serverId, 0, MsgDataRequestType.Channels);
+        public static MsgDataRequest CreateServerChannelListRequest(int userId, int serverId) => Create(userId, serverId, 0, MsgDataRequestType.Channels);
         public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int serverId, int channelId) => Create(userId, serverId, channelId, MsgDataRequestType.Messages);
         public static MsgDataRequest CreateRequestMissedMessagesPacket(int userId, int friendId) => Create(userId, 0, friendId, MsgDataRequestType.Messages);
-        
-        public static implicit operator byte[] (MsgDataRequest msg)
+
+        public static implicit operator byte[](MsgDataRequest msg)
         {
             var buffer = new byte[sizeof(MsgDataRequest)];
             fixed (byte* p = buffer)

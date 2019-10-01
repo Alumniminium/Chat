@@ -24,18 +24,18 @@ namespace Universal.Packets
 
         public string GetUsername()
         {
-            fixed (char* bptr = Username)
-                return new string(bptr);
+            fixed (char* p = Username)
+                return new string(p);
         }
         public string GetPassword()
         {
-            fixed (char* bptr = Password)
-                return new string(bptr);
+            fixed (char* p = Password)
+                return new string(p);
         }
         public string GetEmail()
         {
-            fixed (char* bptr = Email)
-                return new string(bptr);
+            fixed (char* p = Email)
+                return new string(p);
         }
 
         public void SetUsername(string username)

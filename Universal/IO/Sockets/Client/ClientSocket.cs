@@ -104,13 +104,13 @@ namespace Universal.IO.Sockets.Client
                 Disconnect("ClientSocket.Received() Catch: " + ex.Message + " #### " + ex.StackTrace);
             }
         }
-        public void Send(byte[] packet)
+        public void Send(byte[] packet, bool dontCompress = false)
         {
             SendSync.WaitOne();
 
             var size = packet.Length;
 
-            if (UseCompression)
+            if (UseCompression && !dontCompress)
                 size = Compress(packet);
             else
             {

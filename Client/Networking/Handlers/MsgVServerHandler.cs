@@ -20,7 +20,7 @@ namespace Client.Networking.Handlers
 
             FConsole.WriteLine($"Received Server info for {server.Name}!");
 
-            FConsole.WriteLine($"MsgVServer: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgVServer Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
     }
 }

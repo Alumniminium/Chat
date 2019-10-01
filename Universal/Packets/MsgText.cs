@@ -22,8 +22,8 @@ namespace Universal.Packets
 
         public string GetText()
         {
-            fixed (char* bptr = Text)
-                return new string(bptr);
+            fixed (char* p = Text)
+                return new string(p);
         }
         public void SetText(string text)
         {

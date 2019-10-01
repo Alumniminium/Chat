@@ -34,7 +34,7 @@ namespace Server.Entities
             Collections.OnlineUsers.TryRemove(Id, out var _);
         }
 
-        public void Send(byte[] packet) => Socket?.Send(packet);
+        public void Send(byte[] packet, bool dontCompress = false) => Socket?.Send(packet, dontCompress);
         public string GetIp() => ((IPEndPoint)Socket.Socket.RemoteEndPoint).Address.ToString();
 
         public override string ToString() => $"UserId: {Id} | Name: {Username} | Password: {Password} | Online: {Socket != null && Socket.IsConnected}";

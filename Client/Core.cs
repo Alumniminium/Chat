@@ -6,9 +6,10 @@ namespace Client
     {
         public static readonly Client Client = new Client();
         public static VirtualServer SelectedServer = null;
-        public static Channel SelectedChannel =null;
+        public static Channel SelectedChannel = null;
         public static User MyUser = new User();
         public const string SERVER_IP = "127.0.0.1";
-        public const ushort SERVER_PORT = 65535;
+        //public const string SERVER_IP = "89.163.230.146";
+        public const ushort SERVER_PORT = 65534;
     }
 }

@@ -60,7 +60,7 @@ namespace Client.Networking.Handlers
                     break;
             }
 
-            FConsole.WriteLine($"MsgDataRequest: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgDataRequest Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
     }
 }

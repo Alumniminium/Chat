@@ -18,16 +18,16 @@ namespace Universal.Packets
 
         public fixed char Nickname[MAX_NICKNAME_LENGTH];
         public fixed char AvatarUrl[MAX_AVATAR_URL_LENGTH];
-        
+
         public string GetNickname()
         {
-            fixed (char* bptr = Nickname)
-                return new string(bptr);
+            fixed (char* p = Nickname)
+                return new string(p);
         }
         public string GetAvatarUrl()
         {
-            fixed (char* bptr = AvatarUrl)
-                return new string(bptr);
+            fixed (char* p = AvatarUrl)
+                return new string(p);
         }
 
         public void SetNickname(string nickname)
@@ -58,14 +58,14 @@ namespace Universal.Packets
         }
 
         public static MsgUser Create(int uniqueId, string nickname, string avatarUrl, string email, bool online) => Create(uniqueId, 0, nickname, avatarUrl, email, online);
-        
+
         public static implicit operator byte[](MsgUser msg)
         {
             var buffer = new byte[sizeof(MsgUser)];
             fixed (byte* p = buffer)
                 *(MsgUser*)p = *&msg;
             return buffer;
-        }        
+        }
         public static implicit operator MsgUser(byte[] msg)
         {
             fixed (byte* p = msg)

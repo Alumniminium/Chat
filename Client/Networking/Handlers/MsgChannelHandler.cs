@@ -23,7 +23,7 @@ namespace Client.Networking.Handlers
                 Core.SelectedChannel = channel;
 
             FConsole.WriteLine($"Received Server info for {channel.Name}!");
-            FConsole.WriteLine($"MsgChannel: {PacketRouter.Stopwatch.Elapsed.TotalMilliseconds:0.0000}ms");
+            FConsole.WriteLine($"MsgChannel Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
         }
     }
 }
