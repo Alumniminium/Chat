@@ -33,6 +33,7 @@ namespace Universal.IO.Sockets.Client
             UseCompression = useCompression;
 
             SendArgs = new SocketAsyncEventArgs();
+            SendArgs.UserToken = this;
             SendArgs.Completed += Sent;
 
             ReceiveArgs = new SocketAsyncEventArgs();
@@ -107,52 +108,7 @@ namespace Universal.IO.Sockets.Client
         }
         public void Send(byte[] packet, bool dontCompress = false)
         {
-            SendSync.WaitOne();
-
-            var size = packet.Length;
-
-            if (UseCompression && !dontCompress)
-                size = Compress(packet);
-            else
-            {
-                //ref var packetRef = ref MemoryMarshal.GetReference(packet.AsSpan());
-                //ref var sendBufferRef = ref MemoryMarshal.GetReference(Buffer.SendBuffer.AsSpan());
-                //System.Runtime.CompilerServices.Unsafe.CopyBlock(ref sendBufferRef, ref packetRef, (uint)packet.Length);
-                packet.VectorizedCopy(0, Buffer.SendBuffer, 0, packet.Length);
-            }
-
-            SendArgs.SetBuffer(Buffer.SendBuffer, 0, size);
-
-            try
-            {
-                if (!Socket.SendAsync(SendArgs))
-                    Sent(null, SendArgs);
-            }
-            catch (Exception e)
-            {
-                Disconnect("ClientSocket.Send() Catch: " + e.Message + " #### " + e.StackTrace);
-            }
-        }
-
-        private int Compress(byte[] packet)
-        {
-            using (var ms = new MemoryStream())
-            using (var cp = new DeflateStream(ms, CompressionMode.Compress))
-            {
-                ms.Seek(2, SeekOrigin.Begin);
-                cp.Write(packet);
-                cp.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.Write(BitConverter.GetBytes((short)ms.Length));
-
-                var size = (int)ms.Length;
-                var cpacket = ms.ToArray();//.VectorizedCopy(0, Buffer.SendBuffer, 0, size);
-
-                ref var cpacketRef = ref MemoryMarshal.GetReference(cpacket.AsSpan());
-                ref var sendBufferRef = ref MemoryMarshal.GetReference(Buffer.SendBuffer.AsSpan());
-                System.Runtime.CompilerServices.Unsafe.CopyBlock(ref sendBufferRef, ref cpacketRef, (uint)size);
-                return size;
-            }
+            SendQueue.Add(SendArgs, packet, dontCompress);
         }
 
         private void Sent(object sender, SocketAsyncEventArgs e)

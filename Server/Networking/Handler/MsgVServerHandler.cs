@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Server.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -14,7 +15,7 @@ namespace Server.Networking.Handler
             server.Name = msgVServer.GetServerName();
             server.IconUrl = msgVServer.GetServerIconUrl();
             FConsole.WriteLine($"Received Server info for {server.Name}!");
-            FConsole.WriteLine($"MsgVServer Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgVServer Deserializing & Processing took {((((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000):0} microsec");
         }
     }
 }

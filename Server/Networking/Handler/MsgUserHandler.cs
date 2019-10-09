@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Server.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -11,7 +12,7 @@ namespace Server.Networking.Handler
             var msgUser = (MsgUser)buffer;
 
 
-            FConsole.WriteLine($"MsgUser Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgUser Deserializing & Processing took {((((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000):0} microsec");
         }
     }
 }

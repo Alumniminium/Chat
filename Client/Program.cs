@@ -62,15 +62,20 @@ namespace Client
                 foreach (var kvp in user.Servers)
                 {
                     Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write($"|--- {kvp.Value.Name}");
+                    Console.Write($"{kvp.Value.Name}");
                     Console.SetCursorPosition(27, Console.CursorTop);
                     if (friends.Length > counter)
-                        Console.Write($"|--- {friends[counter].Name}");
+                        Console.Write($"| {friends[counter].Name}");
+                    else
+                        Console.Write($"|");
+
                     counter++;
                     Console.CursorTop++;
                 }
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.WriteLine("___________________________|__________________________");
 
-                Console.SetCursorPosition(0, 6);
+                Console.SetCursorPosition(0, 9);
                 foreach (var server in user.Servers.Values)
                 {
                     Console.WriteLine($"|  - {server.Name} -");
@@ -91,7 +96,7 @@ namespace Client
                         }
 
                         if (channel.Messages.Count == 0)
-                            Console.WriteLine($"|  -   |--- {channel.Name} ---> No new messages.");
+                            Console.WriteLine($"|  -           |---> No new messages.");
                     }
                     if (server.Channels.Count == 0)
                         Console.WriteLine($"|  -   |--- No channels.");

@@ -13,7 +13,6 @@ namespace Client.Networking
         {
             Stopwatch.Restart();
             var packetId = buffer.GetPacketType();
-
             switch (packetId)
             {
                 case PacketType.MsgLogin:

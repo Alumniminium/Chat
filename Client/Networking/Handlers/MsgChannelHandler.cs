@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Client.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -23,7 +24,7 @@ namespace Client.Networking.Handlers
                 Core.SelectedChannel = channel;
 
             FConsole.WriteLine($"Received Server info for {channel.Name}!");
-            FConsole.WriteLine($"MsgChannel Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgChannel Deserializing & Processing took {(((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000000} ns");
         }
     }
 }

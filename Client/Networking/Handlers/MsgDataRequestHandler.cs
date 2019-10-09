@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using Client.Entities;
 using Universal.IO.FastConsole;
@@ -60,7 +61,7 @@ namespace Client.Networking.Handlers
                     break;
             }
 
-            FConsole.WriteLine($"MsgDataRequest Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgDataRequest Deserializing & Processing took {(((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000000} ns");
         }
     }
 }

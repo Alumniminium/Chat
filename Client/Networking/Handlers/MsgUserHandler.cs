@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Client.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -38,7 +39,7 @@ namespace Client.Networking.Handlers
                 }
                 FConsole.WriteLine($"Received Friend info for {user.Name}!");
             }
-            FConsole.WriteLine($"MsgUser Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgUser Deserializing & Processing took {(((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000000} ns");
         }
     }
 }

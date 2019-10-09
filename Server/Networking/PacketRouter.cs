@@ -14,8 +14,8 @@ namespace Server.Networking
 
         public static void Route(ClientSocket userSocket, byte[] packet)
         {
-            Stopwatch.Restart();
             var user = (User)userSocket.StateObject;
+            Stopwatch.Restart();
 
             switch (packet.GetPacketType())
             {
@@ -44,6 +44,6 @@ namespace Server.Networking
             }
         }
 
-        
+
     }
 }

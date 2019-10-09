@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Client.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -22,7 +23,7 @@ namespace Client.Networking.Handlers
             else
                 FConsole.WriteLine("Authentication failed.");
 
-            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {(((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000000} ns");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Client
         {
             User = user;
             Pass = pass;
-            ProcessingQueue.onPacket += OnPacket;
+            ReceiveQueue.OnPacket += OnPacket;
 
             Socket = new ClientSocket(this);
             Socket.OnDisconnect += Disconnected;

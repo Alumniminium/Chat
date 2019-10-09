@@ -12,38 +12,27 @@ namespace Universal.IO.Sockets.Queues
 {
     public static class ReceiveQueue
     {
-        private static readonly BlockingCollection<SocketAsyncEventArgs>[] Queue = new BlockingCollection<SocketAsyncEventArgs>[Environment.ProcessorCount];
-        private static Thread[] _workerThread = new Thread[Environment.ProcessorCount];
+        private static readonly BlockingCollection<SocketAsyncEventArgs> Queue = new BlockingCollection<SocketAsyncEventArgs>();
+        private static Thread _workerThread;
+        public static Action<ClientSocket, byte[]> OnPacket;
         private const int MIN_HEADER_SIZE = 2;
 
         static ReceiveQueue()
         {
-            for (int i = 0; i < 1; i++)
-            {
-                Queue[i] = new BlockingCollection<SocketAsyncEventArgs>();
-                _workerThread[i] = new Thread(WorkLoop);
-                _workerThread[i].Priority = ThreadPriority.AboveNormal;
-                _workerThread[i].IsBackground = true;
-                _workerThread[i].Start(i);
-            }
+            if (_workerThread == null)
+                _workerThread = new Thread(WorkLoop) { IsBackground = true, Priority = ThreadPriority.Highest };
+            if (!_workerThread.IsAlive)
+                _workerThread.Start();
         }
 
-        public static void Add(SocketAsyncEventArgs e)
-        {
-            var queueId = 0;//Queue.Min(q => q.Count);
-            Queue[queueId].Add(e);
-        }
+        public static void Add(SocketAsyncEventArgs e) => Queue.Add(e);
 
-        private static void WorkLoop(object queueId)
+        private static void WorkLoop()
         {
-            int id = (int)queueId;
-            foreach (var e in Queue[id].GetConsumingEnumerable())
+            foreach (var e in Queue.GetConsumingEnumerable())
             {
-                var cli = (ClientSocket)e.UserToken;
-                if (cli.Buffer.Ready)
-                    AssemblePacket(e);
-                else
-                    Add(e);
+                AssemblePacket(e);
+                ((ClientSocket)e.UserToken).ReceiveSync.Set();
             }
         }
         private static void AssemblePacket(SocketAsyncEventArgs e)
@@ -60,11 +49,7 @@ namespace Universal.IO.Sockets.Queues
                 MergeUnsafe(e);
 
                 if (connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired && connection.Buffer.BytesRequired > 4)
-                {
                     FinishPacket(connection);
-                    Add(e);
-                    break;
-                }
                 if (connection.Buffer.BytesProcessed != e.BytesTransferred)
                     continue;
 
@@ -93,7 +78,7 @@ namespace Universal.IO.Sockets.Queues
             if (connection.UseCompression)
                 Decompress(connection);
 
-            ProcessingQueue.Enqueue(connection);
+            OnPacket?.Invoke(connection, connection.Buffer.MergeBuffer);
             connection.Buffer.BytesInBuffer = 0;
         }
 

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Server.Entities;
 using Universal.IO.FastConsole;
 using Universal.Packets;
@@ -15,7 +16,7 @@ namespace Server.Networking.Handler
             else
                 HandleServerMessage(msgTxt);
 
-            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {(PacketRouter.Stopwatch.Elapsed.TotalMilliseconds * 1000):0.00} microsecs");
+            FConsole.WriteLine($"MsgLogin Deserializing & Processing took {((((float)PacketRouter.Stopwatch.ElapsedTicks) / Stopwatch.Frequency) * 1000000):0}microsec");
         }
 
         private static void HandleServerMessage(MsgText msgTxt)
