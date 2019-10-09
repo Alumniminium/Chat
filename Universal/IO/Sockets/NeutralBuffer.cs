@@ -9,12 +9,14 @@ namespace Universal.IO.Sockets
         public int BytesInBuffer { get; set; }
         public int BytesRequired { get; set; }
         public int BytesProcessed { get; set; }
+        public bool Ready { get; set; }
 
         public NeutralBuffer(int receiveBufferSize = 3072, int sendBufferSize = 3072)
         {
             ReceiveBuffer = new byte[receiveBufferSize];
             SendBuffer = new byte[sendBufferSize];
             MergeBuffer = new byte[receiveBufferSize];
+            Ready = true;
         }
     }
 }

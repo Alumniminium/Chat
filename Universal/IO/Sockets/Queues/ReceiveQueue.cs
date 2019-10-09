@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using Universal.Extensions;
@@ -11,38 +12,38 @@ namespace Universal.IO.Sockets.Queues
 {
     public static class ReceiveQueue
     {
-        private static readonly BlockingCollection<SocketAsyncEventArgs> Queue = new BlockingCollection<SocketAsyncEventArgs>();
-        private static Thread _workerThread;
-        private static Action<ClientSocket, byte[]> _onPacket;
+        private static readonly BlockingCollection<SocketAsyncEventArgs>[] Queue = new BlockingCollection<SocketAsyncEventArgs>[Environment.ProcessorCount];
+        private static Thread[] _workerThread = new Thread[Environment.ProcessorCount];
         private const int MIN_HEADER_SIZE = 2;
-        private static int _count;
-        private static int _destOffset;
-        private static int _recOffset;
 
-        public static void Start(Action<ClientSocket, byte[]> onPacket)
+        static ReceiveQueue()
         {
-            if (_onPacket == null)
-                _onPacket = onPacket;
-            if (_workerThread == null)
-                _workerThread = new Thread(WorkLoop) { IsBackground = true, Priority = ThreadPriority.Highest };
-            if (!_workerThread.IsAlive)
-                _workerThread.Start();
+            for (int i = 0; i < 1; i++)
+            {
+                Queue[i] = new BlockingCollection<SocketAsyncEventArgs>();
+                _workerThread[i] = new Thread(WorkLoop);
+                _workerThread[i].Priority = ThreadPriority.AboveNormal;
+                _workerThread[i].IsBackground = true;
+                _workerThread[i].Start(i);
+            }
         }
 
-        public static void Add(SocketAsyncEventArgs e) => Queue.Add(e);
-
-        private static void WorkLoop()
+        public static void Add(SocketAsyncEventArgs e)
         {
-            foreach (var e in Queue.GetConsumingEnumerable())
+            var queueId = 0;//Queue.Min(q => q.Count);
+            Queue[queueId].Add(e);
+        }
+
+        private static void WorkLoop(object queueId)
+        {
+            int id = (int)queueId;
+            foreach (var e in Queue[id].GetConsumingEnumerable())
             {
-                var connection = (ClientSocket)e.UserToken;
-
-                if (connection == null)
-                    continue;
-
-                AssemblePacket(e);
-
-                connection.ReceiveSync.Set();
+                var cli = (ClientSocket)e.UserToken;
+                if (cli.Buffer.Ready)
+                    AssemblePacket(e);
+                else
+                    Add(e);
             }
         }
         private static void AssemblePacket(SocketAsyncEventArgs e)
@@ -59,8 +60,11 @@ namespace Universal.IO.Sockets.Queues
                 MergeUnsafe(e);
 
                 if (connection.Buffer.BytesInBuffer == connection.Buffer.BytesRequired && connection.Buffer.BytesRequired > 4)
+                {
                     FinishPacket(connection);
-
+                    Add(e);
+                    break;
+                }
                 if (connection.Buffer.BytesProcessed != e.BytesTransferred)
                     continue;
 
@@ -79,10 +83,7 @@ namespace Universal.IO.Sockets.Queues
         private static void ReadHeader(SocketAsyncEventArgs e, ClientSocket connection)
         {
             if (connection.Buffer.BytesInBuffer < MIN_HEADER_SIZE)
-            {
-                _count = MIN_HEADER_SIZE - connection.Buffer.BytesInBuffer;
                 MergeUnsafe(e, true);
-            }
             else
                 connection.Buffer.BytesRequired = BitConverter.ToInt16(connection.Buffer.MergeBuffer, 0);
         }
@@ -92,7 +93,7 @@ namespace Universal.IO.Sockets.Queues
             if (connection.UseCompression)
                 Decompress(connection);
 
-            _onPacket(connection, connection.Buffer.MergeBuffer);
+            ProcessingQueue.Enqueue(connection);
             connection.Buffer.BytesInBuffer = 0;
         }
 
@@ -112,9 +113,9 @@ namespace Universal.IO.Sockets.Queues
         private static unsafe void MergeUnsafe(SocketAsyncEventArgs e, bool header = false)
         {
             var connection = (ClientSocket)e.UserToken;
-            _count = e.BytesTransferred - connection.Buffer.BytesProcessed;
-            _destOffset = connection.Buffer.BytesInBuffer;
-            _recOffset = connection.Buffer.BytesProcessed;
+            var _count = e.BytesTransferred - connection.Buffer.BytesProcessed;
+            var _destOffset = connection.Buffer.BytesInBuffer;
+            var _recOffset = connection.Buffer.BytesProcessed;
 
             fixed (byte* destination = connection.Buffer.MergeBuffer)
             fixed (byte* source = e.Buffer)

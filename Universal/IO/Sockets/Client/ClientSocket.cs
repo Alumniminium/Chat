@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Universal.IO.FastConsole;
 using System.Runtime.InteropServices;
+using Universal.Extensions;
 
 namespace Universal.IO.Sockets.Client
 {
@@ -114,10 +115,10 @@ namespace Universal.IO.Sockets.Client
                 size = Compress(packet);
             else
             {
-                ref var packetRef = ref MemoryMarshal.GetReference(packet.AsSpan());
-                ref var sendBufferRef = ref MemoryMarshal.GetReference(Buffer.SendBuffer.AsSpan());
-                System.Runtime.CompilerServices.Unsafe.CopyBlock(ref sendBufferRef, ref packetRef, (uint)packet.Length);
-                //packet.VectorizedCopy(0, Buffer.SendBuffer, 0, packet.Length);
+                //ref var packetRef = ref MemoryMarshal.GetReference(packet.AsSpan());
+                //ref var sendBufferRef = ref MemoryMarshal.GetReference(Buffer.SendBuffer.AsSpan());
+                //System.Runtime.CompilerServices.Unsafe.CopyBlock(ref sendBufferRef, ref packetRef, (uint)packet.Length);
+                packet.VectorizedCopy(0, Buffer.SendBuffer, 0, packet.Length);
             }
 
             SendArgs.SetBuffer(Buffer.SendBuffer, 0, size);

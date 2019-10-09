@@ -17,7 +17,7 @@ namespace Client
         {
             User = user;
             Pass = pass;
-            ReceiveQueue.Start(OnPacket);
+            ProcessingQueue.onPacket += OnPacket;
 
             Socket = new ClientSocket(this);
             Socket.OnDisconnect += Disconnected;
@@ -28,7 +28,7 @@ namespace Client
         private void Connected()
         {
             FConsole.WriteLine("Connected!");
-            Core.Client.Send(MsgLogin.Create(User, Pass, "", true, MsgLoginType.Login));
+            Core.Client.Send(MsgLogin.Create(User, Pass, "", false, MsgLoginType.Login));
         }
 
         private void Disconnected()

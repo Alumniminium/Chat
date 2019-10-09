@@ -20,7 +20,7 @@ namespace Server
             Core.Db = new JsonDb();
             Core.Db.EnsureDbReady();
 
-            ReceiveQueue.Start(PacketRouter.Route);
+            ProcessingQueue.onPacket += PacketRouter.Route;
 
             ServerSocket.Start(Core.Settings.Port);
 
