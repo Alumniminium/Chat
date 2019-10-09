@@ -3,26 +3,31 @@ using System.Net.Sockets;
 
 namespace Universal.IO.Sockets.Pools
 {
-    public static class SocketAsyncEventArgsPool
+    public class SocketAsyncEventArgsPool
     {
-        private static readonly Queue<SocketAsyncEventArgs> Pool = new Queue<SocketAsyncEventArgs>();
+        Stack<SocketAsyncEventArgs> _pool;
 
-        public static void Fill(int amount = 16)
+        public SocketAsyncEventArgsPool(int capacity)
         {
-            for (var i = 0; i < amount; i++)
-                Pool.Enqueue(new SocketAsyncEventArgs());
+            _pool = new Stack<SocketAsyncEventArgs>(capacity);
         }
 
-        public static SocketAsyncEventArgs Get()
+        public void Push(SocketAsyncEventArgs item)
         {
-            if (Pool.Count == 0)
-                Fill();
-            return Pool.Dequeue();
+            lock (_pool)
+                _pool.Push(item);
         }
-        public static void Return(SocketAsyncEventArgs args)
+
+        public SocketAsyncEventArgs Pop()
         {
-            args.AcceptSocket = null;
-            Pool.Enqueue(args);
+            lock (_pool)
+                return _pool.Pop();
         }
+
+        public int Count
+        {
+            get { return _pool.Count; }
+        }
+
     }
 }

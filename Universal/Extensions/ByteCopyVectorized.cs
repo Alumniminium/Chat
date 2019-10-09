@@ -24,12 +24,12 @@ namespace Universal.Extensions
         {
             if (Vector.IsHardwareAccelerated)
             {
-                if (count > 512 + 64)
+                /*if (count > 512 + 64)
                 {
                     // In-built copy faster for large arrays (vs repeated bounds checks on Vector.ctor?)
                     Buffer.BlockCopy(src, srcOffset, dst, dstOffset, count);
                     return;
-                }
+                }*/
 
                 while (count >= VectorSpan4)
                 {
@@ -72,8 +72,8 @@ namespace Universal.Extensions
 
                         if (count >= LONG_SPAN)
                         {
-                            var lpSrc = (long*) pSrc;
-                            var ldSrc = (long*) dSrc;
+                            var lpSrc = (long*)pSrc;
+                            var ldSrc = (long*)dSrc;
 
                             if (count < LONG_SPAN2)
                             {
@@ -103,8 +103,8 @@ namespace Universal.Extensions
 
                         if (count >= INT_SPAN)
                         {
-                            var ipSrc = (int*) pSrc;
-                            var idSrc = (int*) dSrc;
+                            var ipSrc = (int*)pSrc;
+                            var idSrc = (int*)dSrc;
                             count -= INT_SPAN;
                             pSrc += INT_SPAN;
                             dSrc += INT_SPAN;

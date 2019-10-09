@@ -8,8 +8,7 @@ namespace Client.Entities
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
-        public Dictionary<int,Message> Messages { get; set; }
-
+        public Dictionary<int, Message> Messages { get; set; }
         public Action<Message> OnMessage { get; set; }
 
         public static Channel FromMsg(MsgChannel msg)

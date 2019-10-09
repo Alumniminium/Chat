@@ -26,11 +26,10 @@ namespace Server.Networking.Handler
             user.Socket.StateObject = user;
 
             if (Core.Db.Authenticate(username, password))
-            {
                 Core.Db.LoadUser(ref user);
-            }
             else
                 Core.Db.AddUser(user);
+
             msgLogin.UniqueId = user.Id;
             Collections.OnlineUsers.TryAdd(user.Id, user);
             user.Send(msgLogin, true);

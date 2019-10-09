@@ -12,24 +12,26 @@ namespace Universal.IO.Sockets.Queues
 {
     public static class ReceiveQueue
     {
-        private static readonly BlockingCollection<SocketAsyncEventArgs> Queue = new BlockingCollection<SocketAsyncEventArgs>();
-        private static Thread _workerThread;
         public static Action<ClientSocket, byte[]> OnPacket;
+        private static readonly BlockingCollection<SocketAsyncEventArgs> _queue = new BlockingCollection<SocketAsyncEventArgs>();
+        private static Thread _workerThread;
         private const int MIN_HEADER_SIZE = 2;
 
         static ReceiveQueue()
         {
-            if (_workerThread == null)
-                _workerThread = new Thread(WorkLoop) { IsBackground = true, Priority = ThreadPriority.Highest };
-            if (!_workerThread.IsAlive)
-                _workerThread.Start();
+            _workerThread = new Thread(WorkLoop)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Highest
+            };
+            _workerThread.Start();
         }
 
-        public static void Add(SocketAsyncEventArgs e) => Queue.Add(e);
+        public static void Add(SocketAsyncEventArgs e) => _queue.Add(e);
 
         private static void WorkLoop()
         {
-            foreach (var e in Queue.GetConsumingEnumerable())
+            foreach (var e in _queue.GetConsumingEnumerable())
             {
                 AssemblePacket(e);
                 ((ClientSocket)e.UserToken).ReceiveSync.Set();
