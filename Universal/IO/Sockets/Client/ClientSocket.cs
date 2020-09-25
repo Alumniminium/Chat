@@ -1,13 +1,9 @@
 ﻿using Universal.IO.Sockets.Queues;
 using System;
-using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Universal.IO.FastConsole;
-using System.Runtime.InteropServices;
-using Universal.Extensions;
 
 namespace Universal.IO.Sockets.Client
 {
@@ -56,9 +52,9 @@ namespace Universal.IO.Sockets.Client
                 {
                     RemoteEndPoint = new IPEndPoint(IPAddress.Parse(host), port)
                 };
-                connectArgs.Completed += Connected;
+                connectArgs.Completed += ConnectionCallback;
                 if (!Socket.ConnectAsync(connectArgs))
-                    Connected(null, connectArgs);
+                    ConnectionCallback(null, connectArgs);
             }
             catch (Exception e)
             {
@@ -66,7 +62,7 @@ namespace Universal.IO.Sockets.Client
             }
         }
 
-        private void Connected(object o, SocketAsyncEventArgs e)
+        private void ConnectionCallback(object o, SocketAsyncEventArgs e)
         {
             if (e.SocketError == SocketError.Success)
             {

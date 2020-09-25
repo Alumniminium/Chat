@@ -5,21 +5,38 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Server/bin/Debug/netcoreapp2.2/Server.dll",
+            "program": "${workspaceFolder}/Server/bin/Debug/netcoreapp3.1/Server.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Server",
             "console": "internalConsole",
             "stopAtEntry": false
         },
         {
-            "name": ".NET Core Attach",
+            "name": "Client",
             "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/Client/bin/Debug/netcoreapp3.1/Client.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Client",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "GUI",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/GUI/bin/Debug/netcoreapp3.1/GUI.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/GUI",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
         }
+        
     ]
 }
