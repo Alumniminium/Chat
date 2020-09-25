@@ -36,7 +36,7 @@ namespace Server.Networking.Handler
         private static void HandleDirectMessage(MsgText msgTxt)
         {
             var friend = Oracle.GetUserFromId(msgTxt.FriendId);
-            friend.Send(msgTxt);
+            friend?.Send(msgTxt);
         }
     }
 }

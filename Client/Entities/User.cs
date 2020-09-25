@@ -43,8 +43,14 @@ namespace Client.Entities
         {
             if(string.IsNullOrWhiteSpace(input))
                 return;
-            
-            Core.Client.Send(MsgText.Create(0, Id, input, Core.SelectedServer.Id, Core.SelectedChannel.Id, DateTime.Now));
+            var channelId = 0;
+            var serverId = 0;
+            if(Core.SelectedChannel !=null)
+                channelId = Core.SelectedChannel.Id;
+            if(Core.SelectedServer != null)
+                serverId = Core.SelectedServer.Id;
+                
+            Core.Client.Send(MsgText.Create(0, Id, input, serverId, channelId, DateTime.Now));
         }
     }
 }
